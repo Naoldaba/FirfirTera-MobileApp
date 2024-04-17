@@ -39,7 +39,11 @@ class _DetailedViewState extends State<DetailedView> {
                         ],
                       ),
                     ),
-                    const Icon(Icons.heart_broken)
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/comment');
+                        },
+                        icon: Icon(Icons.comment))
                   ],
                 ),
                 const SizedBox(

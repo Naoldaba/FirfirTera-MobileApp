@@ -1,3 +1,4 @@
+import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/presentation/screens/discover.dart';
 import 'package:firfir_tera/presentation/screens/profile.dart';
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
       case 0:
         return const Discover();
       case 1:
-        return Container();
+        return CreateRecipe();
       case 2:
         return const Profile();
       default:

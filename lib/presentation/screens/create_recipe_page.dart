@@ -2,9 +2,9 @@
 
 import 'dart:io';
 
-import 'package:addtional_screen/screens/adding_ingredient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateRecipe extends StatefulWidget {
@@ -58,7 +58,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
   );
   late PickedFile _image;
   final ImagePicker _picker = ImagePicker();
-  final primeryColor = Color(0xFFf96060);
+  final primeryColor = Colors.orange;
 
   void take_photo(ImageSource source) async {
     // ignore: deprecated_member_use
@@ -111,25 +111,21 @@ class _CreateRecipeState extends State<CreateRecipe> {
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz))
-            ],
-          ),
           body: Padding(
               padding: const EdgeInsets.all(20),
               child: ListView(
                 children: [
+                  Row(
+                    children: [
+                      Icon(Icons.arrow_back),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Text(
                     'Create Recipe',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.firaSans(fontSize: 40),
                   ),
                   SizedBox(height: 20),
                   Stack(
@@ -239,7 +235,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Container(
-                    height: 200,
+                    height: 250,
                     child: Column(
                       children: [
                         Expanded(
