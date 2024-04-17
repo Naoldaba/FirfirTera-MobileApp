@@ -69,7 +69,7 @@ class _UserDetailsState extends State<UserDetails> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: isBanned ? Colors.red : Colors.green,
+                  backgroundColor: isBanned ? Colors.red : Colors.green,
                   elevation: 5,
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
@@ -92,7 +92,7 @@ class _UserDetailsState extends State<UserDetails> {
                   ));
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
+                  backgroundColor: Colors.red,
                   elevation: 5,
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(

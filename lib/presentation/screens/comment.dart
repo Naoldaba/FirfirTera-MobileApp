@@ -1,5 +1,6 @@
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CreateComment extends StatefulWidget {
   const CreateComment({super.key});
@@ -88,21 +89,25 @@ class _CreateCommentState extends State<CreateComment> {
       padding: const EdgeInsets.all(20),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back))
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
               "Comment",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: GoogleFonts.firaSans(fontSize: 40),
             ),
             const SizedBox(
               height: 15,
@@ -136,7 +141,7 @@ class _CreateCommentState extends State<CreateComment> {
                 },
                 formKey: formKey,
                 commentController: commentController,
-                backgroundColor: Colors.pink,
+                backgroundColor: Colors.orange,
                 textColor: Colors.white,
                 sendWidget:
                     Icon(Icons.send_sharp, size: 30, color: Colors.white),
