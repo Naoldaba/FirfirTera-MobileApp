@@ -1,4 +1,5 @@
 import 'package:firfir_tera/presentation/screens/admin.dart';
+import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:firfir_tera/presentation/screens/register_3.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/presentation/screens/home.dart';
@@ -37,9 +38,9 @@ class MyApp extends StatelessWidget {
         '/register_2': (context) => const Register_2(),
         '/register_3': (context) => const Register_3(),
         '/home/detailed_view': (context) => const DetailedView(),
-        '/admin': (context) => AdminPanel()
-        '/create_recipe':(context)=>CreateRecipe(),
-        '/comment':(context)=>CreateComment(),
+        '/admin': (context) => AdminPanel(),
+        '/create_recipe': (context) => CreateRecipe(),
+        '/comment': (context) => CreateComment(),
       },
     );
   }
