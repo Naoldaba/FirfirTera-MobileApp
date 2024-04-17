@@ -137,14 +137,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(10)),
                         // ignore: unnecessary_null_comparison
-                        // child: _image == null
-                        //     ? _tempImage
-                        //     : Container(child: Image.file(File(_image.path), fit: BoxFit.cover),decoration: BoxDecoration(borderRadius: BorderRadius.circular(10))
-                        child: Container(
-                          child: _tempImage,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
+                        child: _image == null
+                            ? _tempImage
+                            : Container(
+                                child: Image.file(File(_image.path),
+                                    fit: BoxFit.cover),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10))),
                       ),
                       Positioned(
                         top: 10,
