@@ -52,7 +52,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
     borderRadius: BorderRadius.circular(
         10.0), // Adjust the radius to get the curve you want
     child: Image.asset(
-      'assets/images/food.jpg',
+      'assets/images/kikil.jpg',
       fit: BoxFit.cover,
     ),
   );

@@ -31,7 +31,7 @@ class _CreateCommentState extends State<CreateComment> {
       },
       {
         'name': 'Tunde Martins',
-        'pic': 'assets/images/food.jpg',
+        'pic': 'assets/images/kikil.jpg',
         'message': 'Very cool',
         'date': '2021-01-01 12:00:00'
       },
@@ -110,7 +110,7 @@ class _CreateCommentState extends State<CreateComment> {
             Expanded(
               child: CommentBox(
                 userImage: CommentBox.commentImageParser(
-                    imageURLorPath: "assets/images/food.jpg"),
+                    imageURLorPath: "assets/images/kikil.jpg"),
                 child: commentChild(filedata),
                 labelText: 'Write a comment...',
                 errorText: 'Comment cannot be blank',
