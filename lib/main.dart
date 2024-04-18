@@ -11,6 +11,8 @@ import 'package:firfir_tera/presentation/screens/onboarding_1.dart';
 import 'package:firfir_tera/presentation/screens/onboarding_2.dart';
 import 'package:firfir_tera/presentation/screens/onboarding_3.dart';
 
+import 'presentation/screens/comment.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/home/detailed_view': (context) => const DetailedView(),
         '/admin': (context) => AdminPanel()
         '/create_recipe':(context)=>CreateRecipe(),
+        '/comment':(context)=>CreateComment(),
       },
     );
   }
