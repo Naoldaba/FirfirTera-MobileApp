@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/register_3': (context) => const Register_3(),
         '/home/detailed_view': (context) => const DetailedView(),
         '/admin': (context) => AdminPanel()
+        '/create_recipe':(context)=>CreateRecipe(),
       },
     );
   }
