@@ -62,8 +62,8 @@ class _LoginState extends State<Login> {
                                 labelText: 'email',
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.horizontal(
-                                        left: Radius.circular(50),
-                                        right: Radius.circular(50)))),
+                                        left: Radius.circular(20),
+                                        right: Radius.circular(20)))),
                           ),
                           const SizedBox(
                             height: 20.0,
@@ -121,7 +121,7 @@ class _LoginState extends State<Login> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text('Don\'t have Account?'),
+                              const Text('Don\'t have Account? '),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pushReplacementNamed(

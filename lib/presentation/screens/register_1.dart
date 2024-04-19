@@ -154,6 +154,20 @@ class _Register_1State extends State<Register_1> {
                             "Next",
                           ),
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Already have an account?'),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                    context, '/login');
+                              },
+                              child: Text('Login',
+                                  style: TextStyle(color: Colors.orange)),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   )

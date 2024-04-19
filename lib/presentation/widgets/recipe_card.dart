@@ -23,7 +23,7 @@ class _RecipeCardState extends State<RecipeCard> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-      height: widget.height,
+      height: 100,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -37,7 +37,8 @@ class _RecipeCardState extends State<RecipeCard> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12.0)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(12.0)),
                 child: Image.asset(
                   widget.imagePath,
                   height: widget.height * 0.9,
