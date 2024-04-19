@@ -40,120 +40,126 @@ class _Register_2State extends State<Register_2> {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/register_1');
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, '/register_1');
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          size: 40,
+                        ),
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Column(
+                    children: [
+                      Text(
+                        "Fill in Your Bio to get Started",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(color: Colors.white, fontSize: 40),
+                      ),
+                      Text(
+                        "The data will be displayed in your account profile ",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 70,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 30.0,
+                        ),
+                        TextField(
+                          controller: _firstName,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person),
+                            labelText: "first name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                left: Radius.circular(20),
+                                right: Radius.circular(20),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        TextField(
+                          controller: _lastName,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person),
+                            labelText: "last name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                left: Radius.circular(20),
+                                right: Radius.circular(20),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                            controller: _bio,
+                            decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.message),
+                                labelText: 'bio',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(20),
+                                  right: Radius.circular(20),
+                                )))),
+                        const SizedBox(height: 50),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, '/register_3');
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.orange),
+                            minimumSize:
+                                MaterialStateProperty.all(const Size(130, 60)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40.0),
+                              ),
+                            ),
+                          ),
+                          child: const Text(
+                            "Next",
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Column(
-                children: [
-                  Text(
-                    "Fill in Your Bio to get Started",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(color: Colors.white, fontSize: 40),
-                  ),
-                  Text(
-                    "The data will be displayed in your account profile ",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 70,
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 30.0,
-                    ),
-                    TextField(
-                      controller: _firstName,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.person),
-                        labelText: "first_name",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(50),
-                            right: Radius.circular(50),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    TextField(
-                      controller: _lastName,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.person),
-                        labelText: "last_name",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(50),
-                            right: Radius.circular(50),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                        controller: _bio,
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.message),
-                            labelText: 'bio',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(50),
-                              right: Radius.circular(50),
-                            )))),
-                    const SizedBox(height: 50),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/register_3');
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.orange),
-                        minimumSize:
-                            MaterialStateProperty.all(const Size(130, 60)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.0),
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        "Next",
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+            ),
           ),
         ),
       ),
