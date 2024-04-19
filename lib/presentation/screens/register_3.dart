@@ -142,6 +142,7 @@ class _Register_3State extends State<Register_3> {
                     ),
                     child: const Text(
                       "Finish",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
