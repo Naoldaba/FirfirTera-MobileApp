@@ -12,6 +12,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _email_controller = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  bool _passwordVisible = false;
 
   @override
   void dispose() {
@@ -48,6 +49,7 @@ class _LoginState extends State<Login> {
                           fontWeight: FontWeight.normal,
                         )),
                     Container(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
                       child: Column(
                         children: [
                           const SizedBox(
@@ -68,14 +70,29 @@ class _LoginState extends State<Login> {
                           ),
                           TextField(
                             controller: _password,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                                prefixIcon: Icon(Icons.password),
-                                labelText: "password",
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.horizontal(
-                                        left: Radius.circular(50),
-                                        right: Radius.circular(50)))),
+                            obscureText: !_passwordVisible,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.lock),
+                              labelText: "Password",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.horizontal(
+                                    left: Radius.circular(50),
+                                    right: Radius.circular(50)),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
+                              ),
+                            ),
                           ),
                           const SizedBox(
                             height: 30.0,

@@ -31,10 +31,11 @@ class _HomeState extends State<Home> {
           ],
         ),
         child: MotionTabBar(
-          labels: const ["Discover", "Ingredients", "Profile"],
+          labels: const ["Discover", "Add Recipe", "Profile"],
           icons: const [Icons.home, Icons.local_grocery_store, Icons.person],
-          tabIconSelectedColor: Colors.orange,
+          tabIconSelectedColor: Colors.white,
           initialSelectedTab: "Discover",
+          tabSelectedColor: Colors.orange,
           tabSize: 50,
           tabBarHeight: 60,
           textStyle: const TextStyle(color: Colors.grey),

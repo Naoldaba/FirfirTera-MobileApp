@@ -55,7 +55,6 @@ class _CreateCommentState extends State<CreateComment> {
             child: ListTile(
               leading: GestureDetector(
                 onTap: () async {
-                  // Display the image in large form.
                   print("Comment Clicked");
                 },
                 child: Container(
