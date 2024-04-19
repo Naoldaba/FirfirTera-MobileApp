@@ -1,7 +1,7 @@
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/presentation/screens/discover.dart';
-import 'package:firfir_tera/presentation/screens/profile.dart';
+// import 'package:firfir_tera/presentation/screens/profile.dart';
 import 'package:motion_tab_bar/MotionTabBar.dart';
 
 class Home extends StatefulWidget {
@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
       case 1:
         return CreateRecipe();
       case 2:
-        return const Profile();
+      // return const Profile();
       default:
         return Container();
     }

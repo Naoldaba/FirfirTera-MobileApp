@@ -56,7 +56,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
       fit: BoxFit.cover,
     ),
   );
-  late PickedFile _image;
+  PickedFile? _image;
   final ImagePicker _picker = ImagePicker();
   final primeryColor = Colors.orange;
 
@@ -140,7 +140,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                         child: _image == null
                             ? _tempImage
                             : Container(
-                                child: Image.file(File(_image.path),
+                                child: Image.file(File(_image!.path),
                                     fit: BoxFit.cover),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10))),
