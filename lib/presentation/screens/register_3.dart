@@ -52,6 +52,7 @@ class _Register_3State extends State<Register_3> {
                     },
                     icon: const Icon(
                       Icons.arrow_back,
+                      size: 40,
                     ),
                     color: Colors.white,
                   )
