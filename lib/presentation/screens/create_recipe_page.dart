@@ -1,6 +1,10 @@
-import 'dart:convert';
-import 'dart:typed_data';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateRecipe extends StatefulWidget {
@@ -12,7 +16,6 @@ class CreateRecipe extends StatefulWidget {
 
 class _CreateRecipeState extends State<CreateRecipe> {
   List<TextEditingController> _controllers = [];
-  String? _base64Image;
 
   @override
   void initState() {
@@ -45,43 +48,59 @@ class _CreateRecipeState extends State<CreateRecipe> {
     });
   }
 
-  Future<void> takePhoto(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: source);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      final base64Image = base64Encode(bytes);
-      setState(() {
-        _base64Image = base64Image;
-      });
-    }
+  final _tempImage = ClipRRect(
+    borderRadius: BorderRadius.circular(
+        10.0), // Adjust the radius to get the curve you want
+    child: Image.asset(
+      'assets/images/kikil.jpg',
+      fit: BoxFit.cover,
+    ),
+  );
+  PickedFile? _image;
+  final ImagePicker _picker = ImagePicker();
+  final primeryColor = Colors.orange;
+
+  void take_photo(ImageSource source) async {
+    // ignore: deprecated_member_use
+    final pickedFile = await _picker.getImage(source: source);
+    setState(() {
+      if (pickedFile != null) {
+        _image = pickedFile;
+      }
+    });
   }
 
   Widget bottomSheet() {
     return Container(
       height: 100,
       width: double.infinity,
-      margin: const EdgeInsets.all(20),
+      margin: EdgeInsets.all(20),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Choose Image',
             style: TextStyle(fontSize: 20),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton.icon(
-                onPressed: () => takePhoto(ImageSource.camera),
-                icon: const Icon(Icons.camera),
-                label: const Text('Camera'),
-              ),
+                  onPressed: () {
+                    // Add your logic here
+                    take_photo(ImageSource.camera);
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.camera),
+                  label: Text('Camera')),
               TextButton.icon(
-                onPressed: () => takePhoto(ImageSource.gallery),
-                icon: const Icon(Icons.image),
-                label: const Text('Gallery'),
-              ),
+                  onPressed: () {
+                    // Add your logic here
+                    take_photo(ImageSource.gallery);
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.image),
+                  label: Text('Gallery'))
             ],
           )
         ],
@@ -93,87 +112,90 @@ class _CreateRecipeState extends State<CreateRecipe> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: ListView(
-            children: [
-              Row(
+          backgroundColor: Colors.white,
+          body: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ListView(
                 children: [
-                  const Icon(Icons.arrow_back),
-                ],
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                'Create Recipe',
-                style: TextStyle(fontSize: 40),
-              ),
-              const SizedBox(height: 20),
-              Stack(
-                children: [
-                  Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _base64Image != null
-                        ? Image.memory(
-                            Uint8List.fromList(base64Decode(_base64Image!)),
-                            fit: BoxFit.cover,
-                          )
-                        : const SizedBox(), 
+                  Row(
+                    children: [
+                      Icon(Icons.arrow_back),
+                    ],
                   ),
-                  Positioned(
-                    top: 10,
-                    right: 20,
-                    child: IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.orange),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (builder) {
-                            return bottomSheet();
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Create Recipe',
+                    style: GoogleFonts.firaSans(fontSize: 40),
+                  ),
+                  SizedBox(height: 20),
+                  Stack(
+                    children: [
+                      Container(
+                        height: 200,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10)),
+                        // ignore: unnecessary_null_comparison
+                        child: _image == null
+                            ? _tempImage
+                            : Container(
+                                child: Image.file(File(_image!.path),
+                                    fit: BoxFit.cover),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10))),
+                      ),
+                      Positioned(
+                        top: 10,
+                        right: 20,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            color: primeryColor,
+                          ),
+                          onPressed: () {
+                            // Add your editing logic here
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (builder) {
+                                  return bottomSheet();
+                                });
                           },
-                        );
-                      },
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const TextField(
-                textAlign: TextAlign.end,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(20),
-                  prefixIcon: Icon(
-                    Icons.local_dining,
-                    color: Colors.orange,
+                  SizedBox(height: 20),
+                  TextField(
+                    textAlign: TextAlign.end,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(20),
+                        prefixIcon: Icon(
+                          Icons.local_dining,
+                          color: primeryColor,
+                        ),
+                        prefixText: "Recipe Name    ",
+                        prefixStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        hintText: "Enter Recipe Name",
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: primeryColor))),
                   ),
-                  prefixText: "Recipe Name    ",
-                  prefixStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  hintText: "Enter Recipe Name",
-                  filled: true,
-                  
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange),
-                  ),
-                ),
-              ),
-              
-              SizedBox(height: 20),
+                  SizedBox(height: 20),
                   TextField(
                     textAlign: TextAlign.end,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(20),
                         prefixIcon: Icon(
                           Icons.person,
-                          color:Colors.orange,
+                          color: primeryColor,
                         ),
                         prefixText: "Serves    ",
                         prefixStyle: TextStyle(
@@ -185,7 +207,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                         fillColor: Colors.grey[100],
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color:Colors.orange))),
+                            borderSide: BorderSide(color: primeryColor))),
                   ),
                   SizedBox(height: 20),
                   TextField(
@@ -194,7 +216,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                         contentPadding: EdgeInsets.all(20),
                         prefixIcon: Icon(
                           Icons.access_time,
-                          color:Colors.orange,
+                          color: primeryColor,
                         ),
                         prefixText: "Cooking Time    ",
                         prefixStyle: TextStyle(
@@ -206,7 +228,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                         fillColor: Colors.grey[100],
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color:Colors.orange))),
+                            borderSide: BorderSide(color: primeryColor))),
                   ),
                   SizedBox(height: 20),
                   Text("Ingredients",
@@ -295,19 +317,19 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                          color:Colors.orange,
+                          color: primeryColor,
                           borderRadius: BorderRadius.circular(15)),
                       child: Stack(
                         children: <Widget>[
-                          
+                          // Your other widgets go here
                           Positioned(
                             bottom: 0,
                             child: Container(
-                              height: 50.0, 
+                              height: 50.0, // You can adjust this as needed
                               width: MediaQuery.of(context)
                                   .size
-                                  .width, 
-                              
+                                  .width, // This will make the container full width
+                              // Add your desired color
                               child: Center(child: Text('Save My Recipe')),
                             ),
                           ),
@@ -315,10 +337,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
                       ),
                     ),
                   )
-            ],
-          ),
-        ),
-      ),
+                ],
+              ))),
     );
   }
 }

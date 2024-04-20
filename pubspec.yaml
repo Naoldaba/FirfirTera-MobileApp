@@ -40,7 +40,6 @@ dependencies:
   motion_tab_bar: ^2.0.4
   google_fonts: ^5.1.0
   image_picker: ^0.8.4+4
-  comment_box: ^0.0.18
 
 dev_dependencies:
   flutter_test:
