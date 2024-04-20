@@ -10,7 +10,7 @@ class RecipeCard extends StatefulWidget {
     required this.imagePath,
     required this.recipeName,
     this.width = 200,
-    this.height = 270,
+    this.height = 250,
     Key? key,
   }) : super(key: key);
 
@@ -63,3 +63,53 @@ class _RecipeCardState extends State<RecipeCard> {
     );
   }
 }
+
+class Recipe {
+  final String imagePath;
+  final String recipeName;
+
+  Recipe({
+    required this.imagePath,
+    required this.recipeName,
+  });
+}
+
+List<Recipe> recipeList = [
+  Recipe(
+    imagePath: 'assets/images/kikil.jpg',
+    recipeName: 'Kikil',
+  ),
+  Recipe(
+    imagePath: 'assets/images/tibs.jpg',
+    recipeName: 'Tibs',
+  ),
+  Recipe(
+    imagePath: 'assets/images/beyaynet_fisik.jpg',
+    recipeName: "Yefisik Beyaynet",
+  ),
+  Recipe(
+    imagePath: 'assets/images/shiro.webp',
+    recipeName: "Shiro",
+  ),
+  Recipe(
+    imagePath: 'assets/images/pasta.jpg',
+    recipeName: "Pasta",
+  ),
+  Recipe(
+    imagePath: 'assets/images/beyaynet_tsom.jpg',
+    recipeName: "Yetsom Beyaynet",
+  ),
+  Recipe(
+    imagePath: 'assets/images/firfir.jpg',
+    recipeName: "Firfir",
+  ),
+  Recipe(
+    imagePath: 'assets/images/Tegabino.png',
+    recipeName: "Tegabino",
+  ),
+  Recipe(
+    imagePath: 'assets/images/sambusa.jpg',
+    recipeName: "Sambusa",
+  ),
+  
+];

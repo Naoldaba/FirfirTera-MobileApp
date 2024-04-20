@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/recipe_card.dart';
 
@@ -66,48 +67,19 @@ class _DiscoverState extends State<Discover> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              SizedBox(
+              Container(
                 height: 280,
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children: const [
-                    RecipeCard(
-                      imagePath: 'assets/images/kikil.jpg',
-                      recipeName: "Kikil",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/tibs.jpg',
-                      recipeName: "Tibs",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/beyaynet_fisik.jpg',
-                      recipeName: "Yefisik Beyaynet",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/shiro.webp',
-                      recipeName: "Shiro",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/pasta.jpg',
-                      recipeName: "Pasta",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/beyaynet_tsom.jpg',
-                      recipeName: "Yetsom Beyaynet",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/firfir.jpg',
-                      recipeName: "Firfir",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/Tegabino.png',
-                      recipeName: "Tegabino",
-                    ),
-                    RecipeCard(
-                      imagePath: 'assets/images/sambusa.jpg',
-                      recipeName: "Sambusa",
-                    ),
-                  ],
+                  itemCount: recipeList.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      child: RecipeCard(
+                        imagePath: recipeList[index].imagePath,
+                        recipeName: recipeList[index].recipeName,
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

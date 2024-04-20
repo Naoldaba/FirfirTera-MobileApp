@@ -76,8 +76,8 @@ class _LoginState extends State<Login> {
                               labelText: "Password",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.horizontal(
-                                    left: Radius.circular(50),
-                                    right: Radius.circular(50)),
+                                    left: Radius.circular(20),
+                                    right: Radius.circular(20)),
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
