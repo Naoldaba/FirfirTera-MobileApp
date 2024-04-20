@@ -16,16 +16,16 @@ class Profile extends StatelessWidget {
             children: <Widget>[
               const CircleAvatar(
                 radius: 80,
-                backgroundImage: AssetImage('assets/profile_pic/profile_1.jpg'),
+                backgroundImage: AssetImage('assets/profile_pic/profile_2.jpg'),
               ),
               const SizedBox(height: 20),
               const Text(
-                'Naol Daba',
+                'Aregawi Fikre',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               const Text(
-                'naoldaba@gmail.com',
+                'aregawifikre@gmail.com',
                 style: TextStyle(fontSize: 20, color: Colors.grey),
               ),
               const SizedBox(height: 30),

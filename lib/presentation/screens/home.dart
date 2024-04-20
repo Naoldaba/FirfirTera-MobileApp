@@ -1,8 +1,7 @@
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/presentation/screens/discover.dart';
-// import 'package:firfir_tera/presentation/screens/profile.dart';
-import 'package:motion_tab_bar/MotionTabBar.dart';
+import 'package:firfir_tera/presentation/screens/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,53 +13,38 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
+  static const List<Widget> _pages = <Widget>[
+    Discover(), CreateRecipe(), Profile(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getScreen(_selectedIndex),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 7,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: MotionTabBar(
-          labels: const ["Discover", "Add Recipe", "Profile"],
-          icons: const [Icons.home, Icons.local_grocery_store, Icons.person],
-          tabIconSelectedColor: Colors.white,
-          initialSelectedTab: "Discover",
-          tabSelectedColor: Colors.orange,
-          tabSize: 50,
-          tabBarHeight: 60,
-          textStyle: const TextStyle(color: Colors.grey),
-          tabIconColor: Colors.grey,
-          tabIconSize: 24,
-          onTabItemSelected: (int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Discover',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_box_rounded),
+            label: 'Add Recipe',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        selectedItemColor: Colors.orange, 
+        unselectedItemColor: Colors.grey,
       ),
     );
-  }
-
-  Widget _getScreen(int index) {
-    switch (index) {
-      case 0:
-        return const Discover();
-      case 1:
-        return CreateRecipe();
-      case 2:
-      // return const Profile();
-      default:
-        return Container();
-    }
   }
 }
