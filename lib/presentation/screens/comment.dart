@@ -1,6 +1,4 @@
-import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CreateComment extends StatefulWidget {
   const CreateComment({super.key});
@@ -55,6 +53,7 @@ class _CreateCommentState extends State<CreateComment> {
             child: ListTile(
               leading: GestureDetector(
                 onTap: () async {
+                  // Display the image in large form.
                   print("Comment Clicked");
                 },
                 child: Container(
@@ -65,8 +64,7 @@ class _CreateCommentState extends State<CreateComment> {
                       borderRadius: BorderRadius.all(Radius.circular(50))),
                   child: CircleAvatar(
                       radius: 50,
-                      backgroundImage: CommentBox.commentImageParser(
-                          imageURLorPath: data[i]['pic'])),
+                      backgroundImage: imageProvider(data[i]['pic'])),
                 ),
               ),
               title: Text(
@@ -82,72 +80,60 @@ class _CreateCommentState extends State<CreateComment> {
     );
   }
 
+  ImageProvider imageProvider(String uri) {
+    if (uri.startsWith('http') || uri.startsWith('https')) {
+      return NetworkImage(uri);
+    } else {
+      return AssetImage(uri);
+    }
+  }
+
+  void sendButtonMethod() {
+    setState(() {
+      var value = {
+        'name': 'New User',
+        'pic':
+            'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
+        'message': commentController.text,
+        'date': '2021-01-01 12:00:00'
+      };
+      filedata.insert(0, value);
+    });
+    commentController.clear();
+    FocusScope.of(context).unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Comments'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: commentChild(filedata),
+          ),
+          Container(
+            height: 60.0,
+            color: Colors.orange,
+            alignment: Alignment.bottomCenter,
+            child: TextField(
+              controller: commentController,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                fillColor: Colors.orange,
+                filled: true,
+                hintText: 'Add a comment...',
+                suffixIcon: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      sendButtonMethod();
                     },
-                    icon: Icon(Icons.arrow_back))
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              "Comment",
-              style: GoogleFonts.firaSans(fontSize: 40),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Expanded(
-              child: CommentBox(
-                userImage: CommentBox.commentImageParser(
-                    imageURLorPath: "assets/images/kikil.jpg"),
-                child: commentChild(filedata),
-                labelText: 'Write a comment...',
-                errorText: 'Comment cannot be blank',
-                withBorder: false,
-                sendButtonMethod: () {
-                  if (formKey.currentState!.validate()) {
-                    print(commentController.text);
-                    setState(() {
-                      var value = {
-                        'name': 'New User',
-                        'pic':
-                            'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-                        'message': commentController.text,
-                        'date': '2021-01-01 12:00:00'
-                      };
-                      filedata.insert(0, value);
-                    });
-                    commentController.clear();
-                    FocusScope.of(context).unfocus();
-                  } else {
-                    print("Not validated");
-                  }
-                },
-                formKey: formKey,
-                commentController: commentController,
-                backgroundColor: Colors.orange,
-                textColor: Colors.white,
-                sendWidget:
-                    Icon(Icons.send_sharp, size: 30, color: Colors.white),
+                    icon: const Icon(Icons.send)),
               ),
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
