@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class CreateComment extends StatefulWidget {
   const CreateComment({super.key});
@@ -10,6 +11,7 @@ class CreateComment extends StatefulWidget {
 class _CreateCommentState extends State<CreateComment> {
   final TextEditingController commentController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final ScrollController _scrollController = ScrollController();
   List filedata = [];
 
   @override
@@ -44,8 +46,24 @@ class _CreateCommentState extends State<CreateComment> {
     super.initState();
   }
 
+  void showImageDialog(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: Image.network(imageUrl),
+          ),
+        );
+      },
+    );
+  }
+
   Widget commentChild(data) {
     return ListView(
+      controller: _scrollController,
       children: [
         for (var i = 0; i < data.length; i++)
           Padding(
@@ -54,7 +72,7 @@ class _CreateCommentState extends State<CreateComment> {
               leading: GestureDetector(
                 onTap: () async {
                   // Display the image in large form.
-                  print("Comment Clicked");
+                  showImageDialog(context, data[i]['pic']);
                 },
                 child: Container(
                   height: 50.0,
@@ -88,19 +106,44 @@ class _CreateCommentState extends State<CreateComment> {
     }
   }
 
+  void showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Comment cannot be blank'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void sendButtonMethod() {
-    setState(() {
-      var value = {
-        'name': 'New User',
-        'pic':
-            'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-        'message': commentController.text,
-        'date': '2021-01-01 12:00:00'
-      };
-      filedata.insert(0, value);
-    });
-    commentController.clear();
-    FocusScope.of(context).unfocus();
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    if (!formKey.currentState!.validate()) {
+      return showErrorDialog(context);
+    } else {
+      setState(() {
+        var value = {
+          'name': 'New User',
+          'pic':
+              'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
+          'message': commentController.text,
+          'date': '2021-01-01 12:00:00'
+        };
+        filedata.insert(0, value);
+      });
+      commentController.clear();
+      FocusScope.of(context).unfocus();
+    }
   }
 
   @override
@@ -118,18 +161,25 @@ class _CreateCommentState extends State<CreateComment> {
             height: 60.0,
             color: Colors.orange,
             alignment: Alignment.bottomCenter,
-            child: TextField(
-              controller: commentController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                fillColor: Colors.orange,
-                filled: true,
-                hintText: 'Add a comment...',
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      sendButtonMethod();
-                    },
-                    icon: const Icon(Icons.send)),
+            child: Form(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: TextFormField(
+                controller: commentController,
+                decoration: InputDecoration(
+                  contentPadding:
+                      const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                  fillColor: Colors.orange,
+                  filled: true,
+                  hintText: 'Add a comment...',
+                  border: InputBorder.none,
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        sendButtonMethod();
+                      },
+                      icon: const Icon(Icons.send)),
+                ),
+                validator: (value) => value!.isEmpty ? '' : null,
               ),
             ),
           )
