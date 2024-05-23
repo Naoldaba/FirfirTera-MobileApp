@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firfir_tera/presentation/widgets/brand_promo.dart';
+import 'package:go_router/go_router.dart';
 
 class OnBoarding_1 extends StatefulWidget {
   const OnBoarding_1({super.key});
@@ -13,9 +14,7 @@ class _OnBoarding_1State extends State<OnBoarding_1> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, "/onboarding_2");
-    });
+    Timer(const Duration(seconds: 5), () => context.go('/Onboarding_2'));
   }
 
   @override

@@ -1,48 +1,63 @@
-import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:firfir_tera/presentation/screens/discover.dart';
 import 'package:firfir_tera/presentation/screens/profile.dart';
+import 'package:firfir_tera/presentation/screens/admin.dart';
+import 'package:firfir_tera/providers/home_provider.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Home extends StatelessWidget {
+  final bool isAdmin;
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
-
-  static const List<Widget> _pages = <Widget>[
-    Discover(), CreateRecipe(), Profile(),
-  ];
+  const Home({Key? key, required this.isAdmin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return ProviderScope(
+      child: _HomeContent(isAdmin: isAdmin),
+    );
+  }
+}
+
+class _HomeContent extends ConsumerWidget {
+  final bool isAdmin;
+
+  const _HomeContent({Key? key, required this.isAdmin}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _pages = [
+      Discover(),
+      CreateRecipe(),
+      isAdmin ? AdminPanel() : Profile(),
+    ];
+
+    final _navItems = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: 'Discover',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.add_box_rounded),
+        label: 'Add Recipe',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(isAdmin ? Icons.admin_panel_settings : Icons.person),
+        label: isAdmin ? 'Admin' : 'Profile',
+      ),
+    ];
+
+    final selectedIndex = ref.watch(selectedIndexProvider);
+
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: _pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
+          ref.read(selectedIndexProvider.notifier).state = index;
         },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Discover',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_rounded),
-            label: 'Add Recipe',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        selectedItemColor: Colors.orange, 
+        items: _navItems,
+        selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.grey,
       ),
     );

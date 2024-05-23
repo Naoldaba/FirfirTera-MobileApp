@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/recipe_card.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firfir_tera/providers/discover_provider.dart';
 
-class Discover extends StatefulWidget {
+class Discover extends ConsumerWidget {
   const Discover({super.key});
 
   @override
-  State<Discover> createState() => _DiscoverState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController _searchController = TextEditingController();
+    final selectedOption = ref.watch(selectedOptionProvider);
 
-class _DiscoverState extends State<Discover> {
-  final TextEditingController _searchController = TextEditingController();
-  String selectedOption = "All";
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: SafeArea(
         child: Padding(
@@ -55,10 +45,10 @@ class _DiscoverState extends State<Discover> {
               Wrap(
                 spacing: 20,
                 children: [
-                  buildOptionButton("All", "food"),
-                  buildOptionButton("Breakfast", "breakfast"),
-                  buildOptionButton("Lunch", "lunch"),
-                  buildOptionButton("Dinner", "dinner"),
+                  buildOptionButton(ref, "All", "food"),
+                  buildOptionButton(ref, "Breakfast", "breakfast"),
+                  buildOptionButton(ref, "Lunch", "lunch"),
+                  buildOptionButton(ref, "Dinner", "dinner"),
                 ],
               ),
               const SizedBox(height: 20),
@@ -89,7 +79,7 @@ class _DiscoverState extends State<Discover> {
     );
   }
 
-  Widget buildOptionButton(String option, String iconName) {
+  Widget buildOptionButton(WidgetRef ref, String option, String iconName) {
     Map<String, String> iconMap = {
       "food": "assets/icons/all_food.png",
       "breakfast": "assets/icons/breakfast.png",
@@ -98,18 +88,16 @@ class _DiscoverState extends State<Discover> {
     };
 
     String iconPath = iconMap[iconName] ?? '';
+    final selectedOption = ref.watch(selectedOptionProvider);
 
     return InkWell(
       onTap: () {
-        setState(() {
-          selectedOption = option;
-        });
+        ref.read(selectedOptionProvider.notifier).setOption(option);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color:
-              selectedOption == option ? Colors.grey[200] : Colors.transparent,
+          color: selectedOption == option ? Colors.grey[200] : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(

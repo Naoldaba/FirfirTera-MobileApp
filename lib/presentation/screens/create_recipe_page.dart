@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -50,7 +48,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   final _tempImage = ClipRRect(
     borderRadius: BorderRadius.circular(
-        10.0), // Adjust the radius to get the curve you want
+        10.0),
     child: Image.asset(
       'assets/images/kikil.jpg',
       fit: BoxFit.cover,
@@ -61,7 +59,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final primeryColor = Colors.orange;
 
   void take_photo(ImageSource source) async {
-    // ignore: deprecated_member_use
+    
     final pickedFile = await _picker.getImage(source: source);
     setState(() {
       if (pickedFile != null) {
@@ -87,7 +85,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
             children: [
               TextButton.icon(
                   onPressed: () {
-                    // Add your logic here
+                    
                     take_photo(ImageSource.camera);
                     Navigator.pop(context);
                   },
@@ -95,7 +93,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   label: Text('Camera')),
               TextButton.icon(
                   onPressed: () {
-                    // Add your logic here
+                    
                     take_photo(ImageSource.gallery);
                     Navigator.pop(context);
                   },
@@ -117,11 +115,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
               padding: const EdgeInsets.all(20),
               child: ListView(
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.arrow_back),
-                    ],
-                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -138,7 +131,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                         decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(10)),
-                        // ignore: unnecessary_null_comparison
+                       
                         child: _image == null
                             ? _tempImage
                             : Container(
@@ -156,7 +149,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                             color: primeryColor,
                           ),
                           onPressed: () {
-                            // Add your editing logic here
+                            
                             showModalBottomSheet(
                                 context: context,
                                 builder: (builder) {

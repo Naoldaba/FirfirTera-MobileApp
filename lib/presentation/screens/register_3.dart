@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'dart:io';
 import 'dart:convert';
 
 class Register_3 extends StatefulWidget {
@@ -40,16 +40,14 @@ class _Register_3State extends State<Register_3> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/register_2');
-                    },
+                    onPressed: () => context.go('/register_2'),
                     icon: const Icon(
                       Icons.arrow_back,
                       size: 40,
@@ -87,7 +85,7 @@ class _Register_3State extends State<Register_3> {
                   child: Container(
                     width: 200,
                     height: 200,
-                    // padding: const EdgeInsets.all(10),
+                    
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),

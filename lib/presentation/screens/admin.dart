@@ -1,37 +1,13 @@
+import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:firfir_tera/presentation/services/User.dart';
-import 'package:firfir_tera/presentation/screens/user_detail_for_admin.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class AdminPanel extends StatelessWidget {
-  final List<User> users = [
-    User(
-      id: 1,
-      firstName: "Naol",
-      lastName: "Daba",
-      email: "afaklsdj@gmail.com",
-    ),
-    User(
-      id: 2,
-      firstName: "Eyob",
-      lastName: "Derese",
-      email: "afaklsdj@gmail.com",
-    ),
-    User(
-      id: 3,
-      firstName: "Anatoli",
-      lastName: "Derese",
-      email: "afaklsdj@gmail.com",
-    ),
-    User(
-      id: 4,
-      firstName: "Aregawi",
-      lastName: "Fikre",
-      email: "afaklsdj@gmail.com",
-    ),
-  ];
-
+class AdminPanel extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final users = ref.watch(usersProvider);
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -53,19 +29,13 @@ class AdminPanel extends StatelessWidget {
               itemCount: users.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserDetails(user: users[index]),
-                      ),
-                    );
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: Card(
-                      elevation: 3,
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  onTap: () =>
+                      context.go('/admin/user_details', extra: users[index]),
+                  child: Card(
+                    elevation: 3,
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
                       child: ListTile(
                         title: Text(
                           users[index].firstName,
@@ -81,19 +51,11 @@ class AdminPanel extends StatelessWidget {
                           ),
                         ),
                         trailing: IconButton(
-                          icon: Icon(
-                            Icons.check,
-                            color: Colors.green,
-                          ),
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    "User ${users[index].firstName} banned"),
-                              ),
-                            );
-                          },
-                        ),
+                            icon: Icon(
+                              Icons.check,
+                              color: Colors.green,
+                            ),
+                            onPressed: () {}),
                       ),
                     ),
                   ),
@@ -104,13 +66,7 @@ class AdminPanel extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Add new Admin"),
-            ),
-          );
-        },
+        onPressed: () => context.go('/admin/add_admin'),
         backgroundColor: Colors.deepOrangeAccent,
         child: Icon(Icons.person_add),
       ),

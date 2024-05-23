@@ -1,77 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:firfir_tera/presentation/services/User.dart';
+import 'package:firfir_tera/models/User.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firfir_tera/providers/user_details_provider.dart';
+import 'package:go_router/go_router.dart';
 
-class UserDetails extends StatefulWidget {
+class UserDetails extends ConsumerWidget {
   final User user;
 
   UserDetails({required this.user});
 
   @override
-  State<UserDetails> createState() => _UserDetailsState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isBanned = ref.watch(isBannedProvider);
 
-class _UserDetailsState extends State<UserDetails> {
-  bool isBanned = false;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "User Details",
+          style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/log_reg_background.jpg'),
-              fit: BoxFit.cover),
-          // gradient: LinearGradient(
-          //   colors: [Colors.orange.shade300, Colors.orange.shade600],
-          //   begin: Alignment.topCenter,
-          //   end: Alignment.bottomCenter,
-          // ),
-        ),
+      body: Center(
         child: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.grey[200],
+                child: Icon(
+                  Icons.person,
+                  size: 50,
+                  color: Colors.grey,
+                ),
+              ),
               SizedBox(height: 20),
               Text(
-                'Name: ${widget.user.firstName} ${widget.user.lastName}',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-                textAlign: TextAlign.center,
+                '${user.firstName} ${user.lastName}',
+                style: TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Text(
-                'Email: ${widget.user.email}',
-                style: TextStyle(fontSize: 18, color: Colors.white),
-                textAlign: TextAlign.center,
+                '${user.email}',
+                style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    isBanned = !isBanned;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(isBanned
-                          ? "User ${widget.user.firstName} banned"
-                          : "User ${widget.user.firstName} unbanned"),
-                    ),
+                  ref.read(isBannedProvider.notifier).toggle();
+                  _showSnackBar(
+                    context,
+                    isBanned
+                        ? "User ${user.firstName} banned"
+                        : "User ${user.firstName} unbanned",
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isBanned ? Colors.red : Colors.green,
-                  elevation: 5,
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  primary: isBanned ? Colors.red : Colors.green,
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -81,20 +77,14 @@ class _UserDetailsState extends State<UserDetails> {
                   style: TextStyle(fontSize: 18),
                 ),
               ),
-              SizedBox(height: 15.0),
+              SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    isBanned = !isBanned;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("User Deleted"),
-                  ));
+                  _showSnackBar(context, "User Deleted");
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  elevation: 5,
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  primary: Colors.red,
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -107,6 +97,14 @@ class _UserDetailsState extends State<UserDetails> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
       ),
     );
   }
