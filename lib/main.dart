@@ -13,6 +13,7 @@ import 'package:firfir_tera/presentation/screens/register_2.dart';
 import 'package:firfir_tera/presentation/screens/register_3.dart';
 import 'package:firfir_tera/presentation/screens/user_detail_for_admin.dart';
 import 'package:firfir_tera/models/User.dart';
+import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
@@ -26,31 +27,31 @@ final GoRouter _router = GoRouter(
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const OnBoarding_1(),
+          builder: (context, state) => const AuthChecker(),
           routes: [
             GoRoute(
               path: 'onboarding_2',
-              builder: (context, state) => OnBoarding_2(),
+              builder: (context, state) => const OnBoarding_2(),
             ),
             GoRoute(
               path: 'onboarding_3',
-              builder: (context, state) => OnBoarding_3(),
+              builder: (context, state) => const OnBoarding_3(),
             ),
             GoRoute(
               path: 'home',
-              builder: (context, state) =>  Home(isAdmin: false),
+              builder: (context, state) =>  const Home(isAdmin: false),
               routes: [
                 GoRoute(
                   path: 'detailed_view',
-                  builder: (context, state) => DetailedView(),
+                  builder: (context, state) => const DetailedView(),
                 ),
                 GoRoute(
                   path: 'create_recipe',
-                  builder: (context, state) => CreateRecipe(),
+                  builder: (context, state) => const CreateRecipe(),
                 ),
                 GoRoute(
                   path: 'comment',
-                  builder: (context, state) => CreateComment(),
+                  builder: (context, state) => const CreateComment(),
                 ),
               ],
             ),
@@ -98,12 +99,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp.router(
       theme: ThemeData(
         textTheme: GoogleFonts.firaSansTextTheme(Theme.of(context).textTheme),
       ),
       routerConfig: _router,
     );
+  }
+}
+
+
+class AuthChecker extends ConsumerWidget {
+  const AuthChecker({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+
+    return user != null ? Container() : OnBoarding_1();
   }
 }

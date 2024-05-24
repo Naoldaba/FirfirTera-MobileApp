@@ -1,0 +1,77 @@
+import 'dart:convert';
+import 'package:firfir_tera/models/User.dart';
+import 'package:firfir_tera/models/auth_response.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+class AuthService {
+
+  final String baseUrl ="https://dummyjson.com/auth";
+  
+  late SharedPreferences sharedPreferences ;
+   
+  Future<void> initializeSharedPreferences() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+  
+  AuthService(  );
+
+  Future<AuthResponse> login(String email, String password) async {
+    await initializeSharedPreferences();
+    final response = await http.post(
+      Uri.parse('$baseUrl/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'username': email, 'password': password}),
+    );
+    if (response.statusCode == 200) {
+      saveUserToSharedPreferences(response.body);
+      return AuthResponse.fromJson(json.decode(response.body));
+
+    } else {
+      print(response.body);
+      throw Exception('Failed to login');
+    }
+  }
+
+  Future<void> saveUserToSharedPreferences(user) async {
+    await sharedPreferences.setString('user_data', user);
+  }
+
+  Future <User?> getCurrentUser() async { 
+    await initializeSharedPreferences();
+
+    final userString = sharedPreferences.getString('user_data');
+    if (userString != null) {
+
+      final userMap = json.decode(userString) as Map<String, dynamic>;
+      User user = User.fromJson(userMap);
+      return user;
+    }
+     else {
+      return null;
+    }
+  }
+
+  Future<AuthResponse> signUp(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/signup'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'email': email, 'password': password}),
+    );
+    if (response.statusCode == 200) {
+      return AuthResponse.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to sign up');
+    }
+  }
+
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('jwt_token', token);
+  }
+
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('jwt_token');
+  }
+}

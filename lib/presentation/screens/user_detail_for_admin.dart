@@ -15,14 +15,14 @@ class UserDetails extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "User Details",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -38,23 +38,23 @@ class UserDetails extends ConsumerWidget {
               CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey[200],
-                child: Icon(
+                child: const Icon(
                   Icons.person,
                   size: 50,
                   color: Colors.grey,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 '${user.firstName} ${user.lastName}',
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
-                '${user.email}',
-                style: TextStyle(fontSize: 18),
+                user.email,
+                style: const TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
                   ref.read(isBannedProvider.notifier).toggle();
@@ -66,30 +66,30 @@ class UserDetails extends ConsumerWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: isBanned ? Colors.red : Colors.green,
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                  foregroundColor: isBanned ? Colors.red : Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: Text(
                   isBanned ? 'Unban User' : 'Ban User',
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {
                   _showSnackBar(context, "User Deleted");
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                  foregroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "Delete User",
                   style: TextStyle(fontSize: 18),
                 ),

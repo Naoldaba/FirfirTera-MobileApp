@@ -1,3 +1,4 @@
+import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,6 +28,9 @@ class _LoginState extends State<Login> {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
+      AuthService authService = AuthService();
+      authService.login(email, password);
+      
     }
   }
 
@@ -87,9 +91,9 @@ class _LoginState extends State<Login> {
                     controller: _passwordController,
                     obscureText: !_passwordVisible,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon:const  Icon(Icons.lock),
                       labelText: "Password",
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.horizontal(
                           left: Radius.circular(20),
                           right: Radius.circular(20),
@@ -109,17 +113,18 @@ class _LoginState extends State<Login> {
                         },
                       ),
                     ),
-                    validator: _validatePassword
+                    // validator: _validatePassword
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: (){
-                      if (_formKey.currentState!.validate()) {
-                          context.go('/home');
-                      }
+                      _submit();
+                      // if (_formKey.currentState!.validate()) {
+                      //     context.go('/home');
+                      // }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
+                      foregroundColor: Colors.orange,
                       minimumSize: const Size(130, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40.0),
@@ -134,9 +139,9 @@ class _LoginState extends State<Login> {
                       const Text('Don\'t have an account? '),
                       GestureDetector(
                         onTap: () => context.go('/register_1'),
-                        child: MouseRegion(
+                        child: const MouseRegion(
                           cursor: SystemMouseCursors.click,
-                          child: const Text(
+                          child:  Text(
                             "Register",
                             style: TextStyle(
                               color: Colors.orange,
