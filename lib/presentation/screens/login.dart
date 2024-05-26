@@ -24,13 +24,14 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  void _submit() {
+  bool? _submit(context) {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
       AuthService authService = AuthService();
       authService.login(email, password);
-      
+      authService.getCurrentUser();
+      return true;
     }
   }
 
@@ -40,7 +41,7 @@ class _LoginState extends State<Login> {
     }
     RegExp regex = RegExp(r'^(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     if (!regex.hasMatch(value)) {
-      return 'Password must contain at least one letter, one number, one special character, and be at least 8 characters long';
+      return 'Password must contain at least one letter,a number,a special char, and at least 8 chars';
     }
     return null;
   }
@@ -118,7 +119,11 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: (){
-                      _submit();
+                      var val = _submit(context);
+                      if (val!= null && val){
+                        context.go('/home');
+                      }
+
                       // if (_formKey.currentState!.validate()) {
                       //     context.go('/home');
                       // }

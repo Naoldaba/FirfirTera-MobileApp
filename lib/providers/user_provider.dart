@@ -1,19 +1,17 @@
-import 'package:firfir_tera/models/User.dart';
-import 'package:firfir_tera/presentation/services/auth_service.dart';
-import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final authServiceProvider = Provider<AuthService>((ref) {
-  return AuthService();
-});
-
-class UserNotifier extends ChangeNotifier {
-  User? user;
-  UserNotifier({this.user});
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+late SharedPreferences sharedPreferences ;
+ Future<void> initializeSharedPreferences() async {
+  sharedPreferences = await SharedPreferences.getInstance();
 }
 
-final userProvider = ChangeNotifierProvider<UserNotifier>((ref) {
-  final authService = ref.read(authServiceProvider);
-  final currUser = authService.getCurrentUser();
-  return UserNotifier(user: currUser as User);
+Future <String?> checkUser() async {
+  await initializeSharedPreferences();
+  final userString = sharedPreferences.getString('user_data');
+  return userString ;
+}
+final userCheckProvider = FutureProvider<String?>((ref) async {
+      return await checkUser();
 });

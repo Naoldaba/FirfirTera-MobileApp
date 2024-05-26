@@ -1,3 +1,4 @@
+import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
@@ -7,37 +8,63 @@ import 'package:firfir_tera/presentation/screens/admin.dart';
 import 'package:firfir_tera/providers/home_provider.dart';
 
 class Home extends StatelessWidget {
-  final bool isAdmin;
 
-  const Home({Key? key, required this.isAdmin}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: _HomeContent(isAdmin: isAdmin),
+      child: _HomeContent(),
     );
   }
 }
 
+// ignore: must_be_immutable
 class _HomeContent extends ConsumerWidget {
-  final bool isAdmin;
+   bool isAdmin = false;
 
-  const _HomeContent({Key? key, required this.isAdmin}) : super(key: key);
+   _HomeContent({Key? key,}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
+    final user = ref.watch(userCheckProvider);
+    user.when(
+      data: (data){
+        if (data != null){
+          isAdmin = true;
+        }
+        else{
+          isAdmin = false;
+        }
+
+      }, 
+     loading: (){
+        return const Scaffold(body:  Center(child: CircularProgressIndicator.adaptive()));
+      },
+      error: (error, stackTrace) {
+        return const Scaffold(
+          body: Center(
+            child: Text('An error occurred'),
+          ),
+        );
+      }
+      );
+
     final _pages = [
-      Discover(),
-      CreateRecipe(),
-      isAdmin ? AdminPanel() : Profile(),
+      const Discover(),
+      const CreateRecipe(),
+      isAdmin ? AdminPanel() : const Profile(),
     ];
 
     final _navItems = [
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.home),
         label: 'Discover',
       ),
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.add_box_rounded),
         label: 'Add Recipe',
       ),

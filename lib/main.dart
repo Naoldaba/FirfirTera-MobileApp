@@ -39,7 +39,7 @@ final GoRouter _router = GoRouter(
             ),
             GoRoute(
               path: 'home',
-              builder: (context, state) =>  const Home(isAdmin: false),
+              builder: (context, state) =>  const Home(),
               routes: [
                 GoRoute(
                   path: 'detailed_view',
@@ -99,6 +99,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp.router(
       theme: ThemeData(
         textTheme: GoogleFonts.firaSansTextTheme(Theme.of(context).textTheme),
@@ -113,9 +114,29 @@ class AuthChecker extends ConsumerWidget {
   const AuthChecker({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider);
-
-    return user != null ? Container() : OnBoarding_1();
+  build(BuildContext context,  ref) {
+    final config = ref.watch(userCheckProvider);
+  
+    return config.when(
+      data: (data){
+        if (data != null) {
+          return const Home();
+        } else {
+          return const OnBoarding_1();
+        } 
+      },
+      loading: (){
+        return const Scaffold(body:  Center(child: CircularProgressIndicator.adaptive()));
+      },
+      error: (error, stackTrace) {
+        return const Scaffold(
+          body: Center(
+            child: Text('An error occurred'),
+          ),
+        );
+      },      
+      );
+  
   }
+    
 }

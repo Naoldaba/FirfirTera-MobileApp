@@ -2,6 +2,7 @@ import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminPanel extends ConsumerWidget {
   @override
@@ -66,7 +67,11 @@ class AdminPanel extends ConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go('/admin/add_admin'),
+        onPressed: ()async {
+        final sharedPreferences = await SharedPreferences.getInstance();  
+        sharedPreferences.remove('user_data')    ;    
+          context.go('/admin/add_admin');
+          },
         backgroundColor: Colors.deepOrangeAccent,
         child: Icon(Icons.person_add),
       ),
