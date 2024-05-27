@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+// ignore: camel_case_types
 class Register_2 extends ConsumerStatefulWidget {
   const Register_2({super.key});
 
@@ -141,9 +142,7 @@ class _Register_2State extends ConsumerState<Register_2> {
                                 'last_name': _lastName.text,
                                 'bio': _bio.text,
                               };
-                              
                               ref.read(registerTwoProvider.notifier).addValue(page);
-
                               context.go('/register_3');
                             } ,
                             style: ButtonStyle(
@@ -163,9 +162,6 @@ class _Register_2State extends ConsumerState<Register_2> {
                           ),
                         ],
                       ),
-                      
-                      
-                      
                     )
                   ],
                 ),

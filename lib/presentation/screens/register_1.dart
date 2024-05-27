@@ -36,6 +36,8 @@ class _Register_1State extends ConsumerState<Register_1> {
 
   @override
   Widget build(BuildContext context) {
+    final pageValue = ref.read(registerOneProvider);
+
     return Scaffold(
       extendBody: true,
       body:Container(
@@ -101,11 +103,9 @@ class _Register_1State extends ConsumerState<Register_1> {
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
-                              controller: _emailController,
-                              decoration: const InputDecoration(
-                                prefixIcon: Icon(Icons.email),
-                                labelText: "Email",
-                                border: OutlineInputBorder(
+                              decoration:   const InputDecoration(
+                                labelText: 'email',
+                                border:   OutlineInputBorder(
                                   borderRadius: BorderRadius.horizontal(
                                     left: Radius.circular(20),
                                     right: Radius.circular(20),

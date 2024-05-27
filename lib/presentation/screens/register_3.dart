@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:firfir_tera/providers/registration_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,19 +22,35 @@ class _Register_3State extends ConsumerState<Register_3> {
   Future<void> _getImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    XFile toSendImage ;
 
     if (pickedImage != null) {
       final bytes = await pickedImage.readAsBytes();
       final base64Image = base64Encode(bytes);
+      toSendImage = pickedImage;
       setState(() {
         _imageData = base64Image;
         _imageName = pickedImage.path.split('/').last;
       });
     }
+
+    
   }
 
   @override
   Widget build(BuildContext context) {
+    void prepareData() {
+      final firstPage = ref.read(myfirstPageMapProvider);
+      final secondPage = ref.read(mysecondPageMapProvider);
+      Map<String, String> totalData = {...firstPage, ...secondPage};
+      print(totalData);
+      final authInstance = AuthService();
+      authInstance.registerUser(totalData);
+    
+    
+    }
+    
+
     return Scaffold(
       extendBody: true,
       body: Container(
@@ -128,7 +147,7 @@ class _Register_3State extends ConsumerState<Register_3> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      
+                     prepareData();
                       Navigator.pushReplacementNamed(context, '/register_2');
                     },
                     style: ButtonStyle(

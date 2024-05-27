@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/models/auth_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -69,4 +71,22 @@ class AuthService  {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('jwt_token');
   }
+
+  Future registerUser(Map<String, String> data, ) async {
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/register'));
+    request.fields.addAll(data);
+    // request.files.add(await http.MultipartFile.fromPath('image',));
+    var response = await request.send();
+    if (response.statusCode == 200) {
+
+      print('Uploaded!');
+    } else {
+      print(response.statusCode);
+      print('Failed to upload');
+    }
+
+
+  }
+    
+
 }
