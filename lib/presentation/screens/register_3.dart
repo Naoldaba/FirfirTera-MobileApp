@@ -1,16 +1,18 @@
+import 'package:firfir_tera/providers/registration_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 
-class Register_3 extends StatefulWidget {
+class Register_3 extends ConsumerStatefulWidget {
   const Register_3({super.key});
 
   @override
-  State<Register_3> createState() => _Register_3State();
+  ConsumerState<Register_3> createState() => _Register_3State();
 }
 
-class _Register_3State extends State<Register_3> {
+class _Register_3State extends ConsumerState<Register_3> {
   String? _imageData;
   String? _imageName;
 
@@ -126,7 +128,8 @@ class _Register_3State extends State<Register_3> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Navigator.pushReplacementNamed(context, '/register_2');
+                      
+                      Navigator.pushReplacementNamed(context, '/register_2');
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.black),

@@ -1,19 +1,23 @@
+import 'package:firfir_tera/providers/registration_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/presentation/widgets/brand_promo.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum UserType { customer, cook }
 
-class Register_1 extends StatefulWidget {
+// ignore: camel_case_types
+class Register_1 extends ConsumerStatefulWidget {
   const Register_1({Key? key}) : super(key: key);
-
   @override
-  State<Register_1> createState() => _Register_1State();
+  ConsumerState<Register_1> createState() => _Register_1State();
+
 }
 
 
-class _Register_1State extends State<Register_1> {
+// ignore: camel_case_types
+class _Register_1State extends ConsumerState<Register_1> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -82,8 +86,8 @@ class _Register_1State extends State<Register_1> {
                                   value: type,
                                   child: Text(
                                     type == UserType.customer
-                                        ? 'I am a Customer'
-                                        : 'I am a Cook',
+                                        ? 'Customer'
+                                        : 'Cook',
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                 );
@@ -135,7 +139,15 @@ class _Register_1State extends State<Register_1> {
                             const SizedBox(height: 30),
                             ElevatedButton(
                               onPressed: () {
+
                                 if (_formKey.currentState!.validate()) {
+                                  Map<String, dynamic> dataOfPage;
+                                  dataOfPage = {
+                                    'email': _emailController.text,
+                                    'password': _passwordController.text,
+                                    'userType': _userType == UserType.customer ? 'customer' : 'cook',
+                                  };  
+                                  ref.read(registerOneProvider.notifier).addValue(dataOfPage);
                                   context.go('/register_2');
                                 }
                               },

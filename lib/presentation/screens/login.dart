@@ -30,7 +30,7 @@ class _LoginState extends State<Login> {
       String password = _passwordController.text;
       AuthService authService = AuthService();
       authService.login(email, password);
-      authService.getCurrentUser();
+      // final temp = authService.getCurrentUser().then((value) => value);
       return true;
     }
   }
