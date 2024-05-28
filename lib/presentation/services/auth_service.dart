@@ -79,10 +79,8 @@ class AuthService  {
     var response = await request.send();
     if (response.statusCode == 200) {
 
-      print('Uploaded!');
     } else {
       print(response.statusCode);
-      print('Failed to upload');
     }
 
 
