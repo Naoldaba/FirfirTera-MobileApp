@@ -1,50 +1,20 @@
+// import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:firfir_tera/providers/comment_provider.dart";
+import 'package:firfir_tera/models/User.dart';
 
-class CreateComment extends StatefulWidget {
+class CreateComment extends ConsumerStatefulWidget {
   const CreateComment({super.key});
 
   @override
-  State<CreateComment> createState() => _CreateCommentState();
+  _CreateCommentState createState() => _CreateCommentState();
 }
 
-class _CreateCommentState extends State<CreateComment> {
+class _CreateCommentState extends ConsumerState<CreateComment> {
   final TextEditingController commentController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
-  List filedata = [];
-
-  @override
-  void initState() {
-    filedata = [
-      {
-        'name': 'Chuks Okwuenu',
-        'pic': 'https://picsum.photos/300/30',
-        'message': 'I love to code',
-        'date': '2021-01-01 12:00:00'
-      },
-      {
-        'name': 'Biggi Man',
-        'pic':
-            'https://www.adeleyeayodeji.com/img/IMG_20200522_121756_834_2.jpg',
-        'message': 'Very cool',
-        'date': '2021-01-01 12:00:00'
-      },
-      {
-        'name': 'Tunde Martins',
-        'pic': 'assets/images/kikil.jpg',
-        'message': 'Very cool',
-        'date': '2021-01-01 12:00:00'
-      },
-      {
-        'name': 'Biggi Man',
-        'pic': 'https://picsum.photos/300/30',
-        'message': 'Very cool',
-        'date': '2021-01-01 12:00:00'
-      },
-    ];
-    super.initState();
-  }
 
   void showImageDialog(BuildContext context, String imageUrl) {
     showDialog(
@@ -61,7 +31,7 @@ class _CreateCommentState extends State<CreateComment> {
     );
   }
 
-  Widget commentChild(data) {
+  Widget commentChild(List<Map<String, String>> data) {
     return ListView(
       controller: _scrollController,
       children: [
@@ -71,8 +41,7 @@ class _CreateCommentState extends State<CreateComment> {
             child: ListTile(
               leading: GestureDetector(
                 onTap: () async {
-                  // Display the image in large form.
-                  showImageDialog(context, data[i]['pic']);
+                  showImageDialog(context, data[i]['pic']!);
                 },
                 child: Container(
                   height: 50.0,
@@ -81,17 +50,18 @@ class _CreateCommentState extends State<CreateComment> {
                       color: Colors.blue,
                       borderRadius: BorderRadius.all(Radius.circular(50))),
                   child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: imageProvider(data[i]['pic'])),
+                    radius: 50,
+                    backgroundImage: imageProvider(data[i]['pic']!),
+                  ),
                 ),
               ),
               title: Text(
-                data[i]['name'],
+                data[i]['name']!,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: Text(data[i]['message']),
+              subtitle: Text(data[i]['message']!),
               trailing:
-                  Text(data[i]['date'], style: const TextStyle(fontSize: 10)),
+                  Text(data[i]['date']!, style: const TextStyle(fontSize: 10)),
             ),
           )
       ],
@@ -127,27 +97,21 @@ class _CreateCommentState extends State<CreateComment> {
   }
 
   void sendButtonMethod() {
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     if (!formKey.currentState!.validate()) {
-      return showErrorDialog(context);
+      showErrorDialog(context);
     } else {
-      setState(() {
-        var value = {
-          'name': 'New User',
-          'pic':
-              'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-          'message': commentController.text,
-          'date': '2021-01-01 12:00:00'
-        };
-        filedata.insert(0, value);
-      });
+      ref.read(commentsProvider.notifier).addComment(commentController.text);
       commentController.clear();
       FocusScope.of(context).unfocus();
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final comments = ref.watch(commentsProvider);
+    // final User user = ref.read(userStateProvider.notifier).state;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Comments'),
@@ -155,7 +119,7 @@ class _CreateCommentState extends State<CreateComment> {
       body: Column(
         children: [
           Expanded(
-            child: commentChild(filedata),
+            child: commentChild(comments),
           ),
           Container(
             height: 60.0,
@@ -174,15 +138,14 @@ class _CreateCommentState extends State<CreateComment> {
                   hintText: 'Add a comment...',
                   border: InputBorder.none,
                   suffixIcon: IconButton(
-                      onPressed: () {
-                        sendButtonMethod();
-                      },
-                      icon: const Icon(Icons.send)),
+                    onPressed: sendButtonMethod,
+                    icon: const Icon(Icons.send),
+                  ),
                 ),
                 validator: (value) => value!.isEmpty ? '' : null,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
