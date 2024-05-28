@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/brand_promo.dart';
+import 'package:firfir_tera/providers/users_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firfir_tera/models/User.dart';
 
-class Login extends StatefulWidget {
+class Login extends ConsumerStatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends ConsumerState<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -24,9 +27,23 @@ class _LoginState extends State<Login> {
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate()) {
+      
+      bool isAdmin = false; 
+      final user = User(
+        id: 2,
+        firstName: "Naol",
+        lastName: "Daba",
+        email: "xyx@gmail.com",
+        role:"normal"
+        );
+
+      ref.read(userStateProvider.notifier).setUser(user);
+
+      context.go('/home');
       String email = _emailController.text;
       String password = _passwordController.text;
+      
     }
   }
 
@@ -34,7 +51,8 @@ class _LoginState extends State<Login> {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
     }
-    RegExp regex = RegExp(r'^(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    RegExp regex =
+        RegExp(r'^(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     if (!regex.hasMatch(value)) {
       return 'Password must contain at least one letter, one number, one special character, and be at least 8 characters long';
     }
@@ -109,15 +127,11 @@ class _LoginState extends State<Login> {
                         },
                       ),
                     ),
-                    validator: _validatePassword
+                    validator: _validatePassword,
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: (){
-                      if (_formKey.currentState!.validate()) {
-                          context.go('/home');
-                      }
-                    },
+                    onPressed: _submit,
                     style: ElevatedButton.styleFrom(
                       primary: Colors.orange,
                       minimumSize: const Size(130, 60),
