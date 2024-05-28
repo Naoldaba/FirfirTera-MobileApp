@@ -11,3 +11,12 @@ class IsBanned extends _$IsBanned {
     state = !state;
   }
 }
+
+@riverpod
+class IsPromoted extends _$IsPromoted {
+  @override
+  bool build() => false;
+  void toggle() {
+    state = !state;
+  }
+}
