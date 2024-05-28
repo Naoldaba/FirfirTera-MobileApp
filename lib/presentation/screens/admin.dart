@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 class AdminPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final users = ref.watch(usersProvider);
+    final usersListAsync = ref.watch(allUsersProvider);
 
     return Scaffold(
       body: Column(
@@ -25,48 +25,57 @@ class AdminPanel extends ConsumerWidget {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () =>
-                      context.go('/admin/user_details', extra: users[index]),
-                  child: Card(
-                    elevation: 3,
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: ListTile(
-                        title: Text(
-                          users[index].firstName,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        subtitle: Text(
-                          users[index].email,
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                        trailing: IconButton(
-                            icon: Icon(
-                              Icons.check,
-                              color: Colors.green,
+            child: usersListAsync.when(
+                data: (users) => Container(
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () => context.go('/home/admin/user_details',
+                            extra: users[index]),
+                        child: Card(
+                          elevation: 3,
+                          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: ListTile(
+                              title: Text(
+                                users[index].firstName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              subtitle: Text(
+                                users[index].email,
+                                style: TextStyle(
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              trailing: IconButton(
+                                  icon: Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  ),
+                                  onPressed: () {}),
                             ),
-                            onPressed: () {}),
-                      ),
-                    ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
+                ),
+                loading: () => Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(
+                    child: Text(
+                  'Ops... unable to fetch users.',
+                )),
+              )
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go('/admin/add_admin'),
+        onPressed: () {},
         backgroundColor: Colors.deepOrangeAccent,
         child: Icon(Icons.person_add),
       ),
