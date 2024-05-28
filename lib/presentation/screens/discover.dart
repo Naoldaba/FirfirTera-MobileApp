@@ -1,8 +1,12 @@
+import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/recipe_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/discover_provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:firfir_tera/providers/recipe_provider.dart';
+
 
 class Discover extends ConsumerWidget {
   const Discover({super.key});
@@ -11,6 +15,22 @@ class Discover extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController _searchController = TextEditingController();
     final selectedOption = ref.watch(selectedOptionProvider);
+
+    AutoDisposeFutureProvider<List<Recipe>> getRecipeProvider() {
+      switch (selectedOption) {
+        case 'Breakfast':
+          return breakfastRecipesProvider;
+        case 'Lunch':
+          return lunchRecipesProvider;
+        case 'Dinner':
+          return dinnerRecipesProvider;
+        default:
+          return recipesProvider;
+      }
+    }
+
+
+    final recipeListAsync = ref.watch(getRecipeProvider());
 
     return SingleChildScrollView(
       child: SafeArea(
@@ -57,20 +77,30 @@ class Discover extends ConsumerWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              Container(
-                height: 280,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: recipeList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: RecipeCard(
-                        imagePath: recipeList[index].imagePath,
-                        recipeName: recipeList[index].recipeName,
-                      ),
-                    );
-                  },
+              recipeListAsync.when(
+                data: (recipeList) => Container(
+                  height: 280,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: recipeList.length,
+                    itemBuilder: (context, index) {
+                      final recipe = recipeList[index];
+                      return GestureDetector(
+                        onTap: () =>
+                            context.go('/home/detailed_view', extra: recipe),
+                        child: RecipeCard(
+                          image: recipe.image,
+                          name: recipe.name,
+                        ),
+                      );
+                    },
+                  ),
                 ),
+                loading: () => Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(
+                    child: Text(
+                  'Ops... unable to fetch recipes.',
+                )),
               ),
             ],
           ),
@@ -97,7 +127,8 @@ class Discover extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: selectedOption == option ? Colors.grey[200] : Colors.transparent,
+          color:
+              selectedOption == option ? Colors.grey[200] : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
