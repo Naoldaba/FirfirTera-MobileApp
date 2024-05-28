@@ -1,3 +1,4 @@
+import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
@@ -5,47 +6,68 @@ import 'package:firfir_tera/presentation/screens/discover.dart';
 import 'package:firfir_tera/presentation/screens/profile.dart';
 import 'package:firfir_tera/presentation/screens/admin.dart';
 import 'package:firfir_tera/providers/home_provider.dart';
+import 'package:firfir_tera/models/User.dart';
 
 class Home extends StatelessWidget {
-  final bool isAdmin;
 
-  const Home({Key? key, required this.isAdmin}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: _HomeContent(isAdmin: isAdmin),
+      child: _HomeContent(),
     );
   }
 }
 
 class _HomeContent extends ConsumerWidget {
-  final bool isAdmin;
 
-  const _HomeContent({Key? key, required this.isAdmin}) : super(key: key);
+  const _HomeContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _pages = [
-      Discover(),
-      CreateRecipe(),
-      isAdmin ? AdminPanel() : Profile(),
-    ];
+    final List<Widget> _pages = [Discover()];
+    final User? user = ref.read(userStateProvider.notifier).state;
+    final role = user?.role;
 
-    final _navItems = [
+    final List<BottomNavigationBarItem> _navItems = [
       BottomNavigationBarItem(
         icon: Icon(Icons.home),
         label: 'Discover',
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.add_box_rounded),
-        label: 'Add Recipe',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(isAdmin ? Icons.admin_panel_settings : Icons.person),
-        label: isAdmin ? 'Admin' : 'Profile',
-      ),
     ];
+
+    if (role=='chef') {
+      _pages.add(CreateRecipe());
+      _pages.add(Profile());
+      _navItems.add(
+        BottomNavigationBarItem(
+          icon: Icon(Icons.add_box_rounded),
+          label: 'Add Recipe',
+        ),
+      );
+      _navItems.add(
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      );
+    }else if (role=='admin') {
+      _pages.add(AdminPanel());
+      _navItems.add(
+        BottomNavigationBarItem(
+          icon: Icon(Icons.admin_panel_settings),
+          label: 'Admin',
+        ),
+      );
+    }
+     else {
+      _pages.add(Profile());
+      _navItems.add(BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'Profile',
+      ));
+    }
 
     final selectedIndex = ref.watch(selectedIndexProvider);
 
