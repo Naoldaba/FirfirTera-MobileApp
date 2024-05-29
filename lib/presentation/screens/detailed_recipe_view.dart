@@ -52,7 +52,7 @@ class DetailedView extends ConsumerWidget {
                           ),
                           Row(
                             children: [
-                              if (role=='chef') ...[
+                              if (role=='cook')...[
                                 IconButton(
                                   onPressed: () {
                                     context.go(
@@ -69,7 +69,7 @@ class DetailedView extends ConsumerWidget {
                               if (user.role=='normal')
                                 IconButton(
                                   onPressed: () =>
-                                      context.go('/home/detailed_view/comment'),
+                                      context.go('/home/detailed_view/comment', extra: recipe),
                                   icon: Icon(Icons.comment),
                                 ),
                             ],
