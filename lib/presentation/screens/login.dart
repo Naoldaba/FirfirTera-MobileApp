@@ -24,12 +24,12 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  bool? _submit(context) {
+  Future<bool?> _submit(context) async {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
       AuthService authService = AuthService();
-      authService.login(email, password);
+      authService.login(email, password, context);
       // final temp = authService.getCurrentUser().then((value) => value);
       return true;
     }
@@ -119,14 +119,7 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: (){
-                      var val = _submit(context);
-                      if (val!= null && val){
-                        context.go('/home');
-                      }
-
-                      // if (_formKey.currentState!.validate()) {
-                      //     context.go('/home');
-                      // }
+                      _submit(context);
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.orange,

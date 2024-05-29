@@ -1,15 +1,17 @@
 import 'package:firfir_tera/models/User.dart';
 
-class AuthResponse {
+class AuthResponseModel {
   final String token;
-  final User user;
+  final String role;
+  final String userId;
 
-  AuthResponse({required this.token, required this.user});
+  AuthResponseModel({required this.token, required this.role, required this.userId});
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    return AuthResponse(
+  factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
+    return AuthResponseModel(
       token: json['token'],
-      user: User.fromJson(json['user']),
+      role: json['role'][0],
+      userId : json['id']
     );
   }
 }

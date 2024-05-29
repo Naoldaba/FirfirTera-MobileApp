@@ -29,7 +29,6 @@ class _HomeContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     final user = ref.watch(userCheckProvider);
     user.when(
       data: (data){
@@ -39,7 +38,6 @@ class _HomeContent extends ConsumerWidget {
         else{
           isAdmin = false;
         }
-
       }, 
      loading: (){
         return const Scaffold(body:  Center(child: CircularProgressIndicator.adaptive()));
@@ -81,6 +79,7 @@ class _HomeContent extends ConsumerWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
+          // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
           ref.read(selectedIndexProvider.notifier).state = index;
         },
         items: _navItems,

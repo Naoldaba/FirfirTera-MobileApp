@@ -103,6 +103,7 @@ class _Register_1State extends ConsumerState<Register_1> {
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
+                              controller: _emailController,
                               decoration:   const InputDecoration(
                                 labelText: 'email',
                                 border:   OutlineInputBorder(
@@ -145,7 +146,7 @@ class _Register_1State extends ConsumerState<Register_1> {
                                   dataOfPage = {
                                     'email': _emailController.text,
                                     'password': _passwordController.text,
-                                    'userType': _userType == UserType.customer ? 'customer' : 'cook',
+                                    'role': _userType == UserType.customer ? 'normal' : 'cook',
                                   };  
                                   ref.read(registerOneProvider.notifier).addValue(dataOfPage);
                                   context.go('/register_2');

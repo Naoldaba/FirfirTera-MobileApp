@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:firfir_tera/providers/registration_provider.dart';
@@ -18,36 +17,35 @@ class Register_3 extends ConsumerStatefulWidget {
 class _Register_3State extends ConsumerState<Register_3> {
   String? _imageData;
   String? _imageName;
+  String? _imagePath;
 
-  Future<void> _getImage() async {
+  Future<String> _getImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    XFile toSendImage ;
-
     if (pickedImage != null) {
       final bytes = await pickedImage.readAsBytes();
       final base64Image = base64Encode(bytes);
-      toSendImage = pickedImage;
       setState(() {
         _imageData = base64Image;
         _imageName = pickedImage.path.split('/').last;
       });
+      return pickedImage.path;
     }
-
-    
+    else{
+      throw Exception('No image selected');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    void prepareData() {
+    
+    void prepareData(context) async {
       final firstPage = ref.read(myfirstPageMapProvider);
       final secondPage = ref.read(mysecondPageMapProvider);
       Map<String, String> totalData = {...firstPage, ...secondPage};
-      print(totalData);
-      final authInstance = AuthService();
-      authInstance.registerUser(totalData);
-    
-    
+      _imagePath ??= await _getImage();
+      final authInstance = AuthService();     
+      authInstance.registerUser(totalData, _imagePath, context);
     }
     
 
@@ -147,8 +145,8 @@ class _Register_3State extends ConsumerState<Register_3> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                     prepareData();
-                      Navigator.pushReplacementNamed(context, '/register_2');
+                     prepareData(context);
+                      // Navigator.pushReplacementNamed(context, '/register_2');
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.black),

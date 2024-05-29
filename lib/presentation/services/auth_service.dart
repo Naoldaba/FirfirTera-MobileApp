@@ -1,66 +1,43 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/models/auth_response.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AuthService  {
-
-  final String baseUrl ="https://dummyjson.com/auth";
+  final String baseUrl ="https://e5c9-196-189-150-186.ngrok-free.app/auth";
   late SharedPreferences sharedPreferences ;
   Future<void> initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
   }
   AuthService();
 
-  Future<User?> login(String email, String password) async {
+  Future<void> login(String email, String password, BuildContext context) async {
     await initializeSharedPreferences();
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({'username': email, 'password': password}),
-    );
-      if (response.statusCode == 200) {
-      saveUserToSharedPreferences(response.body);
-      final resMap = json.decode(response.body) as Map<String, dynamic>;
-      return User.fromJson(resMap);
+      body: json.encode({'email': email, 'password': password}),
+    ).timeout(const Duration(seconds: 300));
+      print(response.statusCode);
+      if (response.statusCode == 201) {
+        final responseJson = json.decode(response.body);
+        final authResponse = AuthResponseModel(token: responseJson['token'], role: responseJson['role'][0], userId: responseJson['id']);
+        saveUserToSharedPreferences(authResponse);
+        context.go('/home');
+        
     } else {
-      throw Exception('Failed to login');
+      SnackBar(content: Text(response.body));
     }
   }
 
   Future<void> saveUserToSharedPreferences(user) async {
     await sharedPreferences.setString('user_data', user);
-
-    
   }
+  
 
-    getCurrentUser() async { 
-    await initializeSharedPreferences();
-    final userString = sharedPreferences.getString('user_data');
-    if (userString != null) {
-           return true;
-    }
-     else {
-      return false;
-    }
-  }
-
-  Future<AuthResponse> signUp(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/signup'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email, 'password': password}),
-    );
-    if (response.statusCode == 200) {
-      return AuthResponse.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Failed to sign up');
-    }
-  }
 
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -72,19 +49,30 @@ class AuthService  {
     return prefs.getString('jwt_token');
   }
 
-  Future registerUser(Map<String, String> data, ) async {
-    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/register'));
+  Future registerUser(Map<String, String> data,  String? filePath,BuildContext context) async {
+    var request = http.MultipartRequest('POST', Uri.parse('https://e5c9-196-189-150-186.ngrok-free.app/auth/signup'));
+    if (filePath != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', filePath));
+      // print(filePath);
+      // print('trying to add file');
+    }
     request.fields.addAll(data);
-    // request.files.add(await http.MultipartFile.fromPath('image',));
-    var response = await request.send();
-    if (response.statusCode == 200) {
-
-    } else {
+    final response = await request.send();
+    if (response.statusCode == 201){
+        final responseBody = await response.stream.bytesToString();
+        final responseJson = jsonDecode(responseBody);  
+      final authResponse = AuthResponseModel(token: responseJson['token'], role: responseJson['role'][0], userId: responseJson['id']);
+      // final authResponse = AuthResponseModel(token: responseJson['token'], role: responseJson['role'][0], userId: responseJson['id']);
+        saveUserToSharedPreferences(authResponse);
+        // ignore: use_build_context_synchronously
+        context.go('/home');
+    }
+    else{
+      SnackBar(content: Text(response.isRedirect.toString()));
       print(response.statusCode);
     }
-
-
-  }
     
+   
+  }
 
 }

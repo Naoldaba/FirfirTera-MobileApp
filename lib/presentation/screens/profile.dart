@@ -52,6 +52,16 @@ class Profile extends StatelessWidget {
                         borderRadius: BorderRadius.circular(40)))),
                 child: const Text('Log Out', style: TextStyle(color: Colors.red)),
               ),
+              const SizedBox(height: 10,),
+              OutlinedButton(
+                onPressed: () {},
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    minimumSize: MaterialStateProperty.all(const Size(90, 40)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40)))),
+                child: const Text('Delete', style: TextStyle(color: Colors.white)),
+              ),
             ],
           ),
         ),

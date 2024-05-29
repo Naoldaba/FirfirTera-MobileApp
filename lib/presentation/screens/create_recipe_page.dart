@@ -13,7 +13,7 @@ class CreateRecipe extends StatefulWidget {
 }
 
 class _CreateRecipeState extends State<CreateRecipe> {
-  List<TextEditingController> _controllers = [];
+  final List<TextEditingController> _controllers = [];
 
   @override
   void initState() {
@@ -28,7 +28,9 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   @override
   void dispose() {
-    _controllers.forEach((controller) => controller.dispose());
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -58,8 +60,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final ImagePicker _picker = ImagePicker();
   final primeryColor = Colors.orange;
 
+  // ignore: non_constant_identifier_names
   void take_photo(ImageSource source) async {
     
+    // ignore: deprecated_member_use
     final pickedFile = await _picker.getImage(source: source);
     setState(() {
       if (pickedFile != null) {
@@ -72,14 +76,14 @@ class _CreateRecipeState extends State<CreateRecipe> {
     return Container(
       height: 100,
       width: double.infinity,
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Text(
+          const Text(
             'Choose Image',
             style: TextStyle(fontSize: 20),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -89,16 +93,16 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     take_photo(ImageSource.camera);
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.camera),
-                  label: Text('Camera')),
+                  icon: const Icon(Icons.camera),
+                  label: const Text('Camera')),
               TextButton.icon(
                   onPressed: () {
                     
                     take_photo(ImageSource.gallery);
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.image),
-                  label: Text('Gallery'))
+                  icon: const Icon(Icons.image),
+                  label: const Text('Gallery'))
             ],
           )
         ],
@@ -115,14 +119,14 @@ class _CreateRecipeState extends State<CreateRecipe> {
               padding: const EdgeInsets.all(20),
               child: ListView(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Text(
                     'Create Recipe',
                     style: GoogleFonts.firaSans(fontSize: 40),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Stack(
                     children: [
                       Container(
@@ -135,10 +139,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
                         child: _image == null
                             ? _tempImage
                             : Container(
-                                child: Image.file(File(_image!.path),
-                                    fit: BoxFit.cover),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10))),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Image.file(File(_image!.path),
+                                    fit: BoxFit.cover)),
                       ),
                       Positioned(
                         top: 10,
@@ -160,17 +164,17 @@ class _CreateRecipeState extends State<CreateRecipe> {
                       )
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     textAlign: TextAlign.end,
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(20),
+                        contentPadding: const EdgeInsets.all(20),
                         prefixIcon: Icon(
                           Icons.local_dining,
                           color: primeryColor,
                         ),
                         prefixText: "Recipe Name    ",
-                        prefixStyle: TextStyle(
+                        prefixStyle: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
@@ -181,17 +185,17 @@ class _CreateRecipeState extends State<CreateRecipe> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(color: primeryColor))),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     textAlign: TextAlign.end,
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(20),
+                        contentPadding: const EdgeInsets.all(20),
                         prefixIcon: Icon(
                           Icons.person,
                           color: primeryColor,
                         ),
                         prefixText: "Serves    ",
-                        prefixStyle: TextStyle(
+                        prefixStyle: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
@@ -202,17 +206,17 @@ class _CreateRecipeState extends State<CreateRecipe> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(color: primeryColor))),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     textAlign: TextAlign.end,
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(20),
+                        contentPadding: const EdgeInsets.all(20),
                         prefixIcon: Icon(
                           Icons.access_time,
                           color: primeryColor,
                         ),
                         prefixText: "Cooking Time    ",
-                        prefixStyle: TextStyle(
+                        prefixStyle: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),
@@ -223,11 +227,11 @@ class _CreateRecipeState extends State<CreateRecipe> {
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(color: primeryColor))),
                   ),
-                  SizedBox(height: 20),
-                  Text("Ingredients",
+                  const SizedBox(height: 20),
+                  const Text("Ingredients",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
                     height: 250,
                     child: Column(
@@ -237,7 +241,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                             itemCount: _controllers.length,
                             itemBuilder: (context, index) {
                               if (index.isOdd) {
-                                return SizedBox(height: 8);
+                                return const SizedBox(height: 8);
                               }
                               final controller = _controllers[index];
                               return Row(
@@ -251,14 +255,14 @@ class _CreateRecipeState extends State<CreateRecipe> {
                                             'Ingredient ${index ~/ 2 + 1}',
                                         border: OutlineInputBorder(
                                           borderSide:
-                                              BorderSide(color: Colors.grey),
+                                              const BorderSide(color: Colors.grey),
                                           borderRadius:
                                               BorderRadius.circular(14),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   Expanded(
@@ -276,7 +280,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                                     ),
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.remove_circle),
+                                    icon: const Icon(Icons.remove_circle),
                                     onPressed: () => _removeLine(index),
                                   ),
                                 ],
@@ -304,7 +308,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {},
                     child: Container(
@@ -323,7 +327,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                                   .size
                                   .width, // This will make the container full width
                               // Add your desired color
-                              child: Center(child: Text('Save My Recipe')),
+                              child: const Center(child: Text('Save My Recipe')),
                             ),
                           ),
                         ],

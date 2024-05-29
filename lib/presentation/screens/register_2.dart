@@ -138,8 +138,8 @@ class _Register_2State extends ConsumerState<Register_2> {
                           ElevatedButton(
                             onPressed: () {
                               Map<String, dynamic > page = {
-                                'first_name': _firstName.text,
-                                'last_name': _lastName.text,
+                                'firstName': _firstName.text,
+                                'lastName': _lastName.text,
                                 'bio': _bio.text,
                               };
                               ref.read(registerTwoProvider.notifier).addValue(page);
