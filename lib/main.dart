@@ -22,7 +22,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 
-
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -46,42 +45,59 @@ final GoRouter _router = GoRouter(
             builder: (context, state) => Home(),
             routes: [
               GoRoute(
-                  path: 'detailed_view',
-                  builder: (context, state) {
-                    final recipe = state.extra as Recipe;
-                    return DetailedView(recipe);
-                  },
-                  routes: [
-                    GoRoute(
-                      path: 'comment',
-                      builder: (context, state) => CreateComment(),
-                    ),
-                    GoRoute(
-                      path: 'edit_recipe',
-                      builder: (context, state) {
-                        final recipe = state.extra as Recipe;
-                        return EditRecipeScreen(recipe: recipe);
-                      },
-                    ),
-                  ]),
+                path: 'detailed_view',
+                builder: (context, state) {
+                  final recipe = state.extra as Recipe;
+                  return DetailedView(recipe);
+                },
+                routes: [
+                  GoRoute(
+                    path: 'comment',
+                    builder: (context, state) {
+                      final recipe = state.extra as Recipe;
+                     
+                      return CommentScreen(
+                        recipe: recipe,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'edit_recipe',
+                    builder: (context, state) {
+                      final recipe = state.extra as Recipe;
+                      return EditRecipeScreen(recipe: recipe);
+                    },
+                  ),
+                ],
+              ),
               GoRoute(
                 path: 'create_recipe',
                 builder: (context, state) => CreateRecipe(),
               ),
               GoRoute(
-                  path: 'admin',
-                  builder: (context, state) => AdminPanel(),
-                  routes: [
-                    GoRoute(
-                        path: 'add_admin',
-                        builder: (context, state) => const AddAdminDialog()),
-                    GoRoute(
-                        path: 'user_details',
-                        builder: (context, state) {
-                          final user = state.extra as User;
-                          return UserDetails(user: user);
-                        }),
-                  ]),
+                path: 'admin',
+                builder: (context, state) => AdminPanel(),
+                routes: [
+                  GoRoute(
+                    path: 'add_admin',
+                    builder: (context, state) => const AddAdminDialog(),
+                  ),
+                  GoRoute(
+                    path: 'user_details',
+                    builder: (context, state) {
+                      final user = state.extra as User?;
+                      if (user == null) {
+                        return Scaffold(
+                          body: Center(
+                            child: Text('User data is missing!'),
+                          ),
+                        );
+                      }
+                      return UserDetails(user: user);
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
           GoRoute(
