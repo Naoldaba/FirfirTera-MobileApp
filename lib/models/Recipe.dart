@@ -1,4 +1,5 @@
 class Recipe {
+  final String id;
   final String name;
   final String description;
   final int cookTime;
@@ -10,6 +11,7 @@ class Recipe {
   final String image;
 
   Recipe({
+    required this.id,
     required this.name,
     required this.description,
     required this.cookTime,
@@ -23,6 +25,7 @@ class Recipe {
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
+      id:json['id'],
       name: json['name'],
       description: json['description'],
       cookTime: json['cookTime'],
@@ -48,7 +51,7 @@ class Recipe {
       'type': type,
     };
   }
-  
+
   Recipe copyWith({
     String? name,
     String? description,
@@ -61,6 +64,7 @@ class Recipe {
     String? image,
   }) {
     return Recipe(
+      id: id?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       cookTime: cookTime ?? this.cookTime,
