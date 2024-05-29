@@ -1,149 +1,122 @@
-// import 'package:firfir_tera/providers/users_provider.dart';
+import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import "package:firfir_tera/providers/comment_provider.dart";
+import 'package:firfir_tera/providers/comment_provider.dart';
+import 'package:firfir_tera/models/Comment.dart';
 import 'package:firfir_tera/models/User.dart';
+import 'package:firfir_tera/providers/users_provider.dart';
 
-class CreateComment extends ConsumerStatefulWidget {
-  const CreateComment({super.key});
+class CommentScreen extends ConsumerWidget {
+  final Recipe recipe;
 
-  @override
-  _CreateCommentState createState() => _CreateCommentState();
-}
+  CommentScreen({required this.recipe});
 
-class _CreateCommentState extends ConsumerState<CreateComment> {
-  final TextEditingController commentController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-  final ScrollController _scrollController = ScrollController();
-
-  void showImageDialog(BuildContext context, String imageUrl) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: Image.network(imageUrl),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget commentChild(List<Map<String, String>> data) {
-    return ListView(
-      controller: _scrollController,
-      children: [
-        for (var i = 0; i < data.length; i++)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 0.0),
-            child: ListTile(
-              leading: GestureDetector(
-                onTap: () async {
-                  showImageDialog(context, data[i]['pic']!);
-                },
-                child: Container(
-                  height: 50.0,
-                  width: 50.0,
-                  decoration: const BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.all(Radius.circular(50))),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: imageProvider(data[i]['pic']!),
-                  ),
-                ),
-              ),
-              title: Text(
-                data[i]['name']!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(data[i]['message']!),
-              trailing:
-                  Text(data[i]['date']!, style: const TextStyle(fontSize: 10)),
-            ),
-          )
-      ],
-    );
-  }
-
-  ImageProvider imageProvider(String uri) {
-    if (uri.startsWith('http') || uri.startsWith('https')) {
-      return NetworkImage(uri);
-    } else {
-      return AssetImage(uri);
-    }
-  }
-
-  void showErrorDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: Text('Comment cannot be blank'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void sendButtonMethod() {
-    if (!formKey.currentState!.validate()) {
-      showErrorDialog(context);
-    } else {
-      ref.read(commentsProvider.notifier).addComment(commentController.text);
-      commentController.clear();
-      FocusScope.of(context).unfocus();
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    }
-  }
+  final TextEditingController _commentController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    final comments = ref.watch(commentsProvider);
-    // final User user = ref.read(userStateProvider.notifier).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recipeId = recipe.id;
+    final user = ref.read(userStateProvider.notifier).state;
+    final currentUserId = user.id.toString();
+    final comments = ref.watch(commentsProvider(recipeId));
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Comments'),
+        title: Text('Comments'),
+        backgroundColor: Colors.orange,
       ),
       body: Column(
         children: [
           Expanded(
-            child: commentChild(comments),
+            child: ListView.builder(
+              itemCount: comments.length,
+              itemBuilder: (context, index) {
+                final comment = comments[index];
+                return ListTile(
+                  title: Text(comment.comment),
+                  subtitle: Text('User: ${comment.userId}'),
+                  trailing: comment.userId == currentUserId
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                _commentController.text = comment.comment;
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text('Edit Comment'),
+                                    content: TextField(
+                                      controller: _commentController,
+                                      decoration: InputDecoration(
+                                          hintText: 'Edit your comment'),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          ref
+                                              .read(commentsProvider(recipeId)
+                                                  .notifier)
+                                              .updateComment(
+                                                Comment(
+                                                  id:comment.id,
+                                                  recipeId: comment.recipeId,
+                                                  userId: comment.userId,
+                                                  comment:
+                                                      _commentController.text,
+                                                ),
+                                              );
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('Save'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                ref
+                                    .read(commentsProvider(recipeId).notifier)
+                                    .deleteComment(comment.id);
+                              },
+                            ),
+                          ],
+                        )
+                      : null,
+                );
+              },
+            ),
           ),
-          Container(
-            height: 60.0,
-            color: Colors.orange,
-            alignment: Alignment.bottomCenter,
-            child: Form(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: TextFormField(
-                controller: commentController,
-                decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                  fillColor: Colors.orange,
-                  filled: true,
-                  hintText: 'Add a comment...',
-                  border: InputBorder.none,
-                  suffixIcon: IconButton(
-                    onPressed: sendButtonMethod,
-                    icon: const Icon(Icons.send),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _commentController,
+                    decoration: InputDecoration(hintText: 'Enter your comment'),
                   ),
                 ),
-                validator: (value) => value!.isEmpty ? '' : null,
-              ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+                    final newComment = Comment(
+                      id: DateTime.now().toString(),
+                      recipeId: recipeId,
+                      userId: currentUserId,
+                      comment: _commentController.text,
+                    );
+                    ref
+                        .read(commentsProvider(recipeId).notifier)
+                        .addComment(newComment);
+                    _commentController.clear();
+                  },
+                ),
+              ],
             ),
           ),
         ],
