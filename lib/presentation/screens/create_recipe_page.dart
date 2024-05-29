@@ -148,6 +148,7 @@ class CreateRecipe extends ConsumerWidget {
               TextField(
                 controller: _peopleController,
                 textAlign: TextAlign.end,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(20),
                   prefixIcon: Icon(
@@ -173,6 +174,7 @@ class CreateRecipe extends ConsumerWidget {
               TextField(
                 controller: _cookTimeController,
                 textAlign: TextAlign.end,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(20),
                   prefixIcon: Icon(
