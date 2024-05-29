@@ -6,20 +6,6 @@ part of 'user_details_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$isBannedHash() => r'4a8bb08db00772a55e3dea6844e9a2d9099c733c';
-
-/// See also [IsBanned].
-@ProviderFor(IsBanned)
-final isBannedProvider = AutoDisposeNotifierProvider<IsBanned, bool>.internal(
-  IsBanned.new,
-  name: r'isBannedProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$isBannedHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$IsBanned = AutoDisposeNotifier<bool>;
 String _$isPromotedHash() => r'f1f97bdefa15dc8df8c8f841f73ef226f37abf03';
 
 /// See also [IsPromoted].

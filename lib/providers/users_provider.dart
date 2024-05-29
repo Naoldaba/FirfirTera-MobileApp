@@ -1,3 +1,6 @@
+
+// Anatoli this is just for mocking, you need to implement the real provider
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,13 +22,13 @@ Future<List<User>> allUsers(AllUsersRef ref) async {
 @riverpod
 class UserState extends _$UserState {
   @override
-  User? build() {
+  User build() {
     return User(
       id: 1,
       email: "afdasfds",
       firstName: "nafga",
       lastName: "manda",
-      role: "chef",
+      role: "normal",
     );
   }
 

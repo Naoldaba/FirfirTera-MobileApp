@@ -11,7 +11,6 @@ class UserDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBanned = ref.watch(isBannedProvider);
     final IsPromoted = ref.watch(isPromotedProvider);
 
     return Scaffold(
@@ -56,28 +55,6 @@ class UserDetails extends ConsumerWidget {
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(isBannedProvider.notifier).toggle();
-                  _showSnackBar(
-                    context,
-                    isBanned
-                        ? "User ${user.firstName} banned"
-                        : "User ${user.firstName} unbanned",
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: isBanned ? Colors.red : Colors.green,
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: Text(
-                  isBanned ? 'Unban User' : 'Ban User',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
               SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {
@@ -97,7 +74,7 @@ class UserDetails extends ConsumerWidget {
                   ),
                 ),
                 child: Text(
-                  isBanned ? 'Demote User' : 'Promote User',
+                  IsPromoted ? 'Demote User' : 'Promote User',
                   style: TextStyle(fontSize: 18),
                 ),
               ),

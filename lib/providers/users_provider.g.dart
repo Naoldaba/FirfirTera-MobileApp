@@ -20,12 +20,11 @@ final allUsersProvider = AutoDisposeFutureProvider<List<User>>.internal(
 );
 
 typedef AllUsersRef = AutoDisposeFutureProviderRef<List<User>>;
-String _$userStateHash() => r'407211932c16998c758ea3cc0498937702bc0947';
+String _$userStateHash() => r'e90905a9ce55994d717c88a914994de24d82be25';
 
 /// See also [UserState].
 @ProviderFor(UserState)
-final userStateProvider =
-    AutoDisposeNotifierProvider<UserState, User?>.internal(
+final userStateProvider = AutoDisposeNotifierProvider<UserState, User>.internal(
   UserState.new,
   name: r'userStateProvider',
   debugGetCreateSourceHash:
@@ -34,6 +33,6 @@ final userStateProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$UserState = AutoDisposeNotifier<User?>;
+typedef _$UserState = AutoDisposeNotifier<User>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

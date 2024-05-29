@@ -6,7 +6,7 @@ part of 'recipe_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recipesHash() => r'5007d0cadb22fa23c65b270552e9ceb892381075';
+String _$recipesHash() => r'b4903247a3ce5a56dbbc5b77aa7b445fe10b0777';
 
 /// See also [recipes].
 @ProviderFor(recipes)
@@ -20,7 +20,7 @@ final recipesProvider = AutoDisposeFutureProvider<List<Recipe>>.internal(
 );
 
 typedef RecipesRef = AutoDisposeFutureProviderRef<List<Recipe>>;
-String _$breakfastRecipesHash() => r'91039afdadd82cb548bf0f1f63cb8f434ea01c69';
+String _$breakfastRecipesHash() => r'b40466d62ef7dc819e1077f91f2bafc1c1a1fa71';
 
 /// See also [breakfastRecipes].
 @ProviderFor(breakfastRecipes)
@@ -36,7 +36,7 @@ final breakfastRecipesProvider =
 );
 
 typedef BreakfastRecipesRef = AutoDisposeFutureProviderRef<List<Recipe>>;
-String _$lunchRecipesHash() => r'30b95d94a28d109be343b8f46cda174383c58f33';
+String _$lunchRecipesHash() => r'268beeaa9854b631fd51124f14d92b301136e41a';
 
 /// See also [lunchRecipes].
 @ProviderFor(lunchRecipes)
@@ -50,7 +50,7 @@ final lunchRecipesProvider = AutoDisposeFutureProvider<List<Recipe>>.internal(
 );
 
 typedef LunchRecipesRef = AutoDisposeFutureProviderRef<List<Recipe>>;
-String _$dinnerRecipesHash() => r'84775c870cd498407ee3dfd2dbc968a5d18412c2';
+String _$dinnerRecipesHash() => r'8091d8c518ff297981310fbb41dd8559c2da6d7a';
 
 /// See also [dinnerRecipes].
 @ProviderFor(dinnerRecipes)
@@ -80,7 +80,7 @@ final foodTypeProvider =
 );
 
 typedef _$foodType = AutoDisposeNotifier<FoodType>;
-String _$recipeNotifierHash() => r'efa3d6ae6c30e0d690ef96571218c1e5f7823192';
+String _$recipeNotifierHash() => r'c3fd5719f56f39a60ed06caf1c81d797901aab3d';
 
 /// See also [RecipeNotifier].
 @ProviderFor(RecipeNotifier)
