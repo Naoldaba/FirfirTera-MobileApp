@@ -8,38 +8,40 @@ part 'recipe_provider.g.dart';
 
 @riverpod
 Future<List<Recipe>> recipes(RecipesRef ref) async {
-  // final response = await http.get(Uri.parse(""));
-  return [
-    Recipe(
-      image: 'assets/images/kikil.jpg',
-      name: 'Kikil',
-      description: '',
-      cookTime: 10,
-      people: 50,
-      ingredients: ["light", 'souce'],
-      steps: ['dark', 'moist'],
-      fasting: false,
-      type: 'fasting',
-    ),
-    Recipe(
-      image: 'assets/images/tibs.jpg',
-      name: 'Tibs',
-      description: '',
-      cookTime: 0,
-      people: 0,
-      ingredients: [],
-      steps: [],
-      fasting: false,
-      type: '',
-    ),
-  ];
-  // if (response.statusCode == 200) {
-  //   final data = jsonDecode(response.body) as List;
-  //   return data.map((recipe) => Recipe.fromJson(recipe)).toList();
+  final response = await http.get(Uri.parse(""));
+  // return [
+  //   Recipe(
+  //     id:'1',
+  //     image: 'assets/images/kikil.jpg',
+  //     name: 'Kikil',
+  //     description: '',
+  //     cookTime: 10,
+  //     people: 50,
+  //     ingredients: ["light", 'souce'],
+  //     steps: ['dark', 'moist'],
+  //     fasting: false,
+  //     type: 'fasting',
+  //   ),
+  //   Recipe(
+  //     id:'2',
+  //     image: 'assets/images/tibs.jpg',
+  //     name: 'Tibs',
+  //     description: '',
+  //     cookTime: 0,
+  //     people: 0,
+  //     ingredients: [],
+  //     steps: [],
+  //     fasting: false,
+  //     type: '',
+  //   ),
+  // ];
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body) as List;
+    return data.map((recipe) => Recipe.fromJson(recipe)).toList();
 
-  // } else {
-  //   throw Exception("");
-  // }
+  } else {
+    throw Exception("");
+  }
 }
 
 enum FoodType { fasting, nonfasting }
@@ -58,7 +60,7 @@ class foodType extends _$foodType {
 
 @riverpod
 Future<List<Recipe>> breakfastRecipes(BreakfastRecipesRef ref) async {
-  final response = await http.get(Uri.parse("YOUR_API_ENDPOINT"));
+  final response = await http.get(Uri.parse(""));
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body) as List;
     return data
@@ -73,7 +75,7 @@ Future<List<Recipe>> breakfastRecipes(BreakfastRecipesRef ref) async {
 
 @riverpod
 Future<List<Recipe>> lunchRecipes(LunchRecipesRef ref) async {
-  final response = await http.get(Uri.parse("YOUR_API_ENDPOINT"));
+  final response = await http.get(Uri.parse(""));
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body) as List;
     return data
@@ -87,7 +89,7 @@ Future<List<Recipe>> lunchRecipes(LunchRecipesRef ref) async {
 
 @riverpod
 Future<List<Recipe>> dinnerRecipes(DinnerRecipesRef ref) async {
-  final response = await http.get(Uri.parse("YOUR_API_ENDPOINT"));
+  final response = await http.get(Uri.parse(""));
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body) as List;
     return data
@@ -104,6 +106,7 @@ class RecipeNotifier extends _$RecipeNotifier {
   @override
   Recipe build() {
     return Recipe(
+      id:'1',
       name: '',
       description: '',
       cookTime: 0,
