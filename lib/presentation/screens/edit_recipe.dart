@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:firfir_tera/providers/create_recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
 import 'package:firfir_tera/presentation/services/recipe_services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditRecipeScreen extends ConsumerStatefulWidget {
   final Recipe recipe;
@@ -24,6 +26,14 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
   final List<TextEditingController> _stepControllers = [];
 
   File? _image;
+
+  final _tempImage = ClipRRect(
+    borderRadius: BorderRadius.circular(10.0),
+    child: Image.asset(
+      'assets/images/kikil.jpg',
+      fit: BoxFit.cover,
+    ),
+  );
 
   @override
   void initState() {
@@ -63,10 +73,52 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
     }
     super.dispose();
   }
+  Widget bottomSheet(BuildContext context, WidgetRef ref) {
+    return Container(
+      height: 100,
+      width: double.infinity,
+      margin: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const Text(
+            'Choose Image',
+            style: TextStyle(fontSize: 20),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton.icon(
+                onPressed: () {
+                  ref.read(imageNotifierProvider.notifier).pickImage(ImageSource.camera);
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.camera),
+                label: const Text('Camera'),
+              ),
+              TextButton.icon(
+                onPressed: () {
+                  ref.read(imageNotifierProvider.notifier).pickImage(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.image),
+                label: const Text('Gallery'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    FoodType _foodType = FoodType.fasting;
+    final _foodTypeProv = ref.read(foodTypeProvider.notifier);
     final recipe = ref.watch(recipeNotifierProvider);
+    final ingredients = ref.watch(ingredientsNotifierProvider);
+    final steps = ref.watch(stepNotifierProvider);
+    final image = ref.watch(imageNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -78,6 +130,41 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Stack(
+                children: [
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: image == null
+                        ? _tempImage
+                        : Container(
+                            child: Image.file(File(image.path), fit: BoxFit.cover),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 20,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.orange,
+                      ),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (builder) => bottomSheet(context, ref),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             TextField(
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Name'),
@@ -103,7 +190,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
               onChanged: (value) {
                 ref
                     .read(recipeNotifierProvider.notifier)
-                    .updateRecipe(cookTime: int.parse(value));
+                    .updateRecipe(cookTime: int.tryParse(value));
               },
             ),
             TextField(
@@ -113,17 +200,29 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
               onChanged: (value) {
                 ref
                     .read(recipeNotifierProvider.notifier)
-                    .updateRecipe(people: int.parse(value));
+                    .updateRecipe(people:int.tryParse(value));
               },
             ),
-            TextField(
-              controller: _typeController,
-              decoration: InputDecoration(labelText: 'Type'),
-              onChanged: (value) {
-                ref
-                    .read(recipeNotifierProvider.notifier)
-                    .updateRecipe(type: value);
-              },
+            DropdownButtonFormField<FoodType>(
+                value: _foodType,
+                onChanged: (newValue) {
+                  _foodTypeProv.setState(newValue as FoodType);
+                },
+                items: FoodType.values.map((FoodType type) {
+                  return DropdownMenuItem<FoodType>(
+                    value: type,
+                    child: Text(
+                      type == FoodType.fasting ? 'fasting' : 'non-fasting',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  labelText: "Food Type",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
             ),
             SizedBox(height: 16),
             Text('Ingredients'),
@@ -232,24 +331,35 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
-                if (_image != null) {
-                  await sendPatchRequest(
-                    context: context,
-                    name: _nameController.text,
-                    description: _descriptionController.text,
-                    cookTime: _cookTimeController.text,
-                    people: _peopleController.text,
-                    type: _typeController.text,
-                    image: _image!,
-                    ingredients: _ingredientControllers.map((controller) => controller.text).toList(),
-                    steps: _stepControllers.map((controller) => controller.text).toList(),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Please select an image')),
-                  );
-                }
-              },
+                  
+                  if (_nameController.text.isNotEmpty &&
+                      _descriptionController.text.isNotEmpty &&
+                      _cookTimeController.text.isNotEmpty &&
+                      _peopleController.text.isNotEmpty &&
+                      image != null &&
+                      _ingredientControllers.isNotEmpty &&
+                      _stepControllers.isNotEmpty) {
+                    
+                    await sendPostRequest(
+                      context: context,
+                      name: _nameController.text,
+                      description: _descriptionController.text,
+                      cookTime: _cookTimeController.text,
+                      people: _peopleController.text,
+                      type: _foodType.toString(), 
+                      image: File(image.path),
+                      ingredients: ingredients.map((ingredient) => ingredient.nameController.text).toList(),
+                      steps: steps.map((step) => step.stepController.text).toList(),
+                    );
+                  } else {
+                    
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please fill all required fields'),
+                      ),
+                    );
+                  }
+                },
               child: Text('Save Changes'),
               style: ButtonStyle(
                   backgroundColor:
