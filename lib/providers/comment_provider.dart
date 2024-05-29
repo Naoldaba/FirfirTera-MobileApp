@@ -1,49 +1,53 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:firfir_tera/models/Comment.dart';
+import 'package:firfir_tera/presentation/services/comment_service.dart';
 
-part 'comment_provider.g.dart';
 
-@riverpod
-class Comments extends _$Comments {
-  @override
-  List<Map<String, String>> build() {
-    return [
-      {
-        'name': 'Chuks Okwuenu',
-        'pic': 'https://picsum.photos/300/30',
-        'message': 'I love to code',
-        'date': '2021-01-01 12:00:00'
-      },
-      {
-        'name': 'Biggi Man',
-        'pic': 'https://www.adeleyeayodeji.com/img/IMG_20200522_121756_834_2.jpg',
-        'message': 'Very cool',
-        'date': '2021-01-01 12:00:00'
-      },
-      {
-        'name': 'Tunde Martins',
-        'pic': 'assets/images/kikil.jpg',
-        'message': 'Very cool',
-        'date': '2021-01-01 12:00:00'
-      },
-      {
-        'name': 'Biggi Man',
-        'pic': 'https://picsum.photos/300/30',
-        'message': 'Very cool',
-        'date': '2021-01-01 12:00:00'
-      },
-    ];
+final commentServiceProvider = Provider((ref) => CommentService());
+
+final commentsProvider =
+    StateNotifierProvider.family<CommentNotifier, List<Comment>, String>(
+        (ref, recipeId) {
+  final service = ref.watch(commentServiceProvider);
+  return CommentNotifier(service, recipeId);
+});
+
+class CommentNotifier extends StateNotifier<List<Comment>> {
+  final CommentService _service;
+  final String _recipeId;
+
+  CommentNotifier(this._service, this._recipeId) : super([]) {
+    _fetchComments();
   }
 
-  void addComment(String message) {
-    state = [
-      {
-        'name': 'New User',
-        'pic': 'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-        'message': message,
-        'date': '2021-01-01 12:00:00'
-      },
-      ...state
-    ];
+  Future<void> _fetchComments() async {
+    try {
+      state = await _service.fetchComments(_recipeId);
+    } catch (e) {}
+  }
+
+  Future<void> addComment(Comment comment) async {
+    try {
+      await _service.addComment(comment);
+      state = [...state, comment];
+    } catch (e) {}
+  }
+
+  Future<void> deleteComment(String commentId) async {
+    try {
+      await _service.deleteComment(commentId);
+      state = state.where((comment) => comment.id != commentId).toList();
+    } catch (e) {}
+  }
+
+  Future<void> updateComment(Comment updatedComment) async {
+    try {
+      await _service.updateComment(updatedComment);
+      state = state
+          .map((comment) => comment.id == updatedComment.id
+              ? updatedComment
+              : comment)
+          .toList();
+    } catch (e) {}
   }
 }
