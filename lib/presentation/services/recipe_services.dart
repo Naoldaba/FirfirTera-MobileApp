@@ -53,8 +53,11 @@ Future<void> sendPatchRequest({
     ));
 
     final response = await request.send();
+    // print(request.fields);
+    // print(request.files);
 
-    if (response.statusCode == 200) {
+    // final response = true;
+    if (response.statusCode==200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Recipe updated successfully')),
       );
@@ -105,12 +108,13 @@ Future<void> sendPostRequest({
       filename: basename(image.path),
       contentType: MediaType('image', 'jpeg'),
     ));
-    
-    print(request);
 
     final response = await request.send();
+    // print(request.fields);
+    // print(request.fields);
+    // final response = true;
 
-    if (response.statusCode == 201) {
+    if (response.statusCode==200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Recipe created successfully')),
       );
