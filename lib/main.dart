@@ -1,17 +1,17 @@
-import 'package:firfir_tera/presentation/screens/admin.dart';
-import 'package:firfir_tera/presentation/screens/comment.dart';
-import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
-import 'package:firfir_tera/presentation/screens/detailed_recipe_view.dart';
-import 'package:firfir_tera/presentation/screens/home.dart';
-import 'package:firfir_tera/presentation/screens/login.dart';
-import 'package:firfir_tera/presentation/screens/new_admin.dart';
-import 'package:firfir_tera/presentation/screens/onboarding_1.dart';
-import 'package:firfir_tera/presentation/screens/onboarding_2.dart';
-import 'package:firfir_tera/presentation/screens/onboarding_3.dart';
-import 'package:firfir_tera/presentation/screens/register_1.dart';
-import 'package:firfir_tera/presentation/screens/register_2.dart';
-import 'package:firfir_tera/presentation/screens/register_3.dart';
-import 'package:firfir_tera/presentation/screens/user_detail_for_admin.dart';
+import 'package:firfir_tera/models/presentation/screens/admin.dart';
+import 'package:firfir_tera/models/presentation/screens/comment.dart';
+import 'package:firfir_tera/models/presentation/screens/create_recipe_page.dart';
+import 'package:firfir_tera/models/presentation/screens/detailed_recipe_view.dart';
+import 'package:firfir_tera/models/presentation/screens/home.dart';
+import 'package:firfir_tera/models/presentation/screens/login.dart';
+import 'package:firfir_tera/models/presentation/screens/new_admin.dart';
+import 'package:firfir_tera/models/presentation/screens/onboarding_1.dart';
+import 'package:firfir_tera/models/presentation/screens/onboarding_2.dart';
+import 'package:firfir_tera/models/presentation/screens/onboarding_3.dart';
+import 'package:firfir_tera/models/presentation/screens/register_1.dart';
+import 'package:firfir_tera/models/presentation/screens/register_2.dart';
+import 'package:firfir_tera/models/presentation/screens/register_3.dart';
+import 'package:firfir_tera/models/presentation/screens/user_detail_for_admin.dart';
 import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +115,7 @@ class AuthChecker extends ConsumerWidget {
 
   @override
   build(BuildContext context,  ref) {
-    final config = ref.watch(userCheckProvider);
+    final config = ref.watch(checkProvider);
   
     return config.when(
       data: (data){

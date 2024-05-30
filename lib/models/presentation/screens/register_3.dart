@@ -1,5 +1,5 @@
 
-import 'package:firfir_tera/presentation/services/auth_service.dart';
+import 'package:firfir_tera/models/presentation/services/auth_service.dart';
 import 'package:firfir_tera/providers/registration_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -145,7 +145,7 @@ class _Register_3State extends ConsumerState<Register_3> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                     prepareData(context);
+                     prepareData(context    );
                       // Navigator.pushReplacementNamed(context, '/register_2');
                     },
                     style: ButtonStyle(

@@ -1,7 +1,7 @@
 import 'package:firfir_tera/models/User.dart';
 
 class AuthResponseModel {
-  final String token;
+  final int? token;
   final String role;
   final String userId;
 

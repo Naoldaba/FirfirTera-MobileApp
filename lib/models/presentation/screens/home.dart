@@ -1,10 +1,10 @@
 import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
-import 'package:firfir_tera/presentation/screens/discover.dart';
-import 'package:firfir_tera/presentation/screens/profile.dart';
-import 'package:firfir_tera/presentation/screens/admin.dart';
+import 'package:firfir_tera/models/presentation/screens/create_recipe_page.dart';
+import 'package:firfir_tera/models/presentation/screens/discover.dart';
+import 'package:firfir_tera/models/presentation/screens/profile.dart';
+import 'package:firfir_tera/models/presentation/screens/admin.dart';
 import 'package:firfir_tera/providers/home_provider.dart';
 
 class Home extends StatelessWidget {
@@ -29,10 +29,10 @@ class _HomeContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userCheckProvider);
+    final user = ref.watch(userProvider);
     user.when(
       data: (data){
-        if (data != null){
+        if (data.role == 'admin'){
           isAdmin = true;
         }
         else{
