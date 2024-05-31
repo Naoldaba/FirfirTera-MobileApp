@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:firfir_tera/models/User.dart';
-import 'package:firfir_tera/models/presentation/services/auth_service.dart';
+import 'package:firfir_tera/models/User%20copy.dart';
+import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,13 +34,29 @@ Future  getSessionJson() async {
 final userProvider = FutureProvider((ref) async {
   final data = await getSessionJson();
   AuthService authInstance  = AuthService();
-  final myUser = authInstance.getUser(data!['id']).then((value) => User.fromJson(value));
-  return myUser;
+  return authInstance.getUser(data!['id']);
 }
 );
 
+// final userModelProvider = FutureProvider<User?>((ref) async {    
+//   User? myUserModel = ref.read(userProvider).when(
+//     data: (data) => User.fromJson(data),
+//      error: (error, s) {}, 
+//      loading:() {
+//      });
+//      return myUserModel;
+
+// });
 
 
+final userModelProvider = FutureProvider<User?>((ref) async {
+  final Map<String, dynamic>? userData = await ref.watch(userProvider.future);
+  if (userData != null) {
+    return User.fromJson(userData);
+  } else {
+    return null;
+  }
+});
 
 
 final checkProvider = FutureProvider<String?>((ref) async {

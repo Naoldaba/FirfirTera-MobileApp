@@ -1,8 +1,9 @@
-import 'package:firfir_tera/models/presentation/services/auth_service.dart';
+import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firfir_tera/models/presentation/widgets/brand_promo.dart';
+import 'package:firfir_tera/presentation/widgets/brand_promo.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({Key? key}) : super(key: key);

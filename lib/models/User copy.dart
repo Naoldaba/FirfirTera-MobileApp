@@ -1,34 +1,25 @@
 
 
 class User {
-  final String id;
+  final int? id;
   final String firstName;
   final String lastName;
   final String email;
   final String role;
-  final String? image;
 
   User(
-      {
-      required this.id,
+      {required this.id,
       required this.firstName,
       required this.lastName,
       required this.email,
-      required this.role, 
-      this.image
-    }
-    );
+      required this.role});
 
   factory User.fromJson(Map<String, dynamic> json) {
-    print(json);
-    print("ene ga");
     return User(
-        id: json['_id'] ,
+        id: json['id'],
         firstName: json['firstName'],
         lastName: json['lastName'],
         email: json['email'],
-        role: json['role'][0],
-        image: json['image']
-        );
+        role: json['role']);
   }
 }

@@ -1,5 +1,5 @@
 
-import 'package:firfir_tera/models/presentation/services/auth_service.dart';
+import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:firfir_tera/providers/registration_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

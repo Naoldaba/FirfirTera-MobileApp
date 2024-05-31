@@ -1,9 +1,7 @@
 import 'package:firfir_tera/providers/user_provider.dart';
-import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile.dart';
 
 class Profile extends ConsumerWidget {
@@ -26,17 +24,33 @@ class Profile extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
                Text(
-                ref.watch(userProvider).when(
-                  data: (user) => '${user.firstName} ${user.lastName}',
+                ref.watch(userModelProvider).when(
+                  data: (user) {
+                    if (user != null){
+                      return '${user.firstName} ${user.lastName}';
+                    }
+                    else{
+                      return 'No name';
+                    }
+                  },
                   loading: () => 'Loading...',
-                  error: (error, stackTrace) => 'error',
+                  error: (error, stackTrace) {
+                    return 'error';
+                  } ,
                 ),
                 style: const  TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
                Text(
-                ref.watch(userProvider).when(
-                  data: (user) => user.email,
+                ref.watch(userModelProvider).when(
+                  data: (user){
+                    if (user != null){
+                      return user.email;
+                    }
+                    else{
+                      return 'No email';
+                    }
+                  },
                   loading: () => 'Loading...',
                   error: (error, stackTrace) => 'Error',
                 ),
@@ -61,7 +75,6 @@ class Profile extends ConsumerWidget {
               OutlinedButton(
                 onPressed: () {
                   sharedPreferences.  clear();
-                  print("loggin out");
                   context.go('/login');
                 },
                 style: ButtonStyle(

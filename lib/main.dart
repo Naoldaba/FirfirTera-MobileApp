@@ -1,3 +1,5 @@
+
+import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/presentation/screens/admin.dart';
 import 'package:firfir_tera/presentation/screens/comment.dart';
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
@@ -15,21 +17,6 @@ import 'package:firfir_tera/presentation/screens/register_1.dart';
 import 'package:firfir_tera/presentation/screens/register_2.dart';
 import 'package:firfir_tera/presentation/screens/register_3.dart';
 import 'package:firfir_tera/presentation/screens/user_detail_for_admin.dart';
-import 'package:firfir_tera/models/presentation/screens/admin.dart';
-import 'package:firfir_tera/models/presentation/screens/comment.dart';
-import 'package:firfir_tera/models/presentation/screens/create_recipe_page.dart';
-import 'package:firfir_tera/models/presentation/screens/detailed_recipe_view.dart';
-import 'package:firfir_tera/models/presentation/screens/home.dart';
-import 'package:firfir_tera/models/presentation/screens/login.dart';
-import 'package:firfir_tera/models/presentation/screens/new_admin.dart';
-import 'package:firfir_tera/models/presentation/screens/onboarding_1.dart';
-import 'package:firfir_tera/models/presentation/screens/onboarding_2.dart';
-import 'package:firfir_tera/models/presentation/screens/onboarding_3.dart';
-import 'package:firfir_tera/models/presentation/screens/register_1.dart';
-import 'package:firfir_tera/models/presentation/screens/register_2.dart';
-import 'package:firfir_tera/models/presentation/screens/register_3.dart';
-import 'package:firfir_tera/models/presentation/screens/user_detail_for_admin.dart';
-import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,19 +32,19 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
         path: '/',
-        builder: (context, state) => const OnBoarding_1(),
+        builder: (context, state) => const AuthChecker(),
         routes: [
           GoRoute(
             path: 'onboarding_2',
-            builder: (context, state) => OnBoarding_2(),
+            builder: (context, state) => const OnBoarding_2(),
           ),
           GoRoute(
             path: 'onboarding_3',
-            builder: (context, state) => OnBoarding_3(),
+            builder: (context, state) => const OnBoarding_3(),
           ),
           GoRoute(
             path: 'home',
-            builder: (context, state) => Home(),
+            builder: (context, state) => const Home(),
             routes: [
               GoRoute(
                 path: 'detailed_view',
@@ -97,31 +84,31 @@ final GoRouter _router = GoRouter(
                     path: 'add_admin',
                     builder: (context, state) => const AddAdminDialog(),
                   ),
-                  GoRoute(
-                    path: 'user_details',
-                    builder: (context, state) {
-                      final user = state.extra as User?;
-                      if (user == null) {
-                        return Scaffold(
-                          body: Center(
-                            child: Text('User data is missing!'),
-                          ),
-                        );
-                      }
-                      return UserDetails(user: user);
-                    },
-                  ),
+                  // GoRoute(
+                  //   path: 'user_details',
+                  //   builder: (context, state) {
+                  //     final user = state.extra as User?;
+                  //     if (user == null) {
+                  //       return Scaffold(
+                  //         body: Center(
+                  //           child: Text('User data is missing!'),
+                  //         ),
+                  //       );
+                  //     }
+                  //     return UserDetails(user: user);
+                  //   },
+                  // ),
                 ],
               ),
             ],
           ),
           GoRoute(
               path: 'edit_profile',
-              builder: (context, state) => EditProfile(),
+              builder: (context, state) => const EditProfile(),
               routes: [
                 GoRoute(
                   path: 'profile',
-                  builder: (context, state) => Profile(),
+                  builder: (context, state) => const Profile(),
                 )
               ]),
           GoRoute(
@@ -141,9 +128,7 @@ final GoRouter _router = GoRouter(
             builder: (context, state) => const Register_3(),
           ),
         ]),
-  ],
-);
-      routes: [
+       
         GoRoute(
           path: '/',
           builder: (context, state) => const AuthChecker(),
@@ -162,15 +147,41 @@ final GoRouter _router = GoRouter(
               routes: [
                 GoRoute(
                   path: 'detailed_view',
-                  builder: (context, state) => const DetailedView(),
+                  builder: (context, state) =>  DetailedView(
+                    Recipe(
+                      id: 'recipe_id',
+                      name: 'recipe_name',
+                      description: 'recipe_description',
+                      cookTime: 23,
+                      people: 32,
+                      fasting: false,
+                      image: 'recipe_image',
+                      ingredients: ['recipe_ingredients'],
+                      steps: ['recipe_steps'],
+                      type: 'recipe_type',
+                    )
+                    
+                  )
+                  ,
                 ),
                 GoRoute(
                   path: 'create_recipe',
-                  builder: (context, state) => const CreateRecipe(),
+                  builder: (context, state) =>  CreateRecipe(),
                 ),
                 GoRoute(
                   path: 'comment',
-                  builder: (context, state) => const CreateComment(),
+                    builder: (context, state) =>  CommentScreen(recipe:  Recipe(
+                      id: 'recipe_id',
+                      name: 'recipe_name',
+                      description: 'recipe_description',
+                      cookTime: 23,
+                      people: 32,
+                      fasting: false,
+                      image: 'recipe_image',
+                      ingredients: ['recipe_ingredients'],
+                      steps: ['recipe_steps'],
+                      type: 'recipe_type',
+                    )),
                 ),
               ],
             ),
@@ -209,8 +220,14 @@ final GoRouter _router = GoRouter(
             ),
           ]
         ),
-      ],
+     
+    ]
     );
+    
+    
+    class CreateComment {
+      const CreateComment();
+    }
 
 
 class MyApp extends StatelessWidget {
@@ -234,14 +251,13 @@ class AuthChecker extends ConsumerWidget {
   const AuthChecker({Key? key}) : super(key: key);
 
   @override
-  build(BuildContext context,  ref) {
-    final config = ref.watch(checkProvider);
-  
-    return config.when(
-      data: (data){
+  build(BuildContext context,  ref) {  
+    return ref.watch(checkProvider).when(
+      data: (data) {
         if (data != null) {
           return const Home();
         } else {
+          print("data mpt");
           return const OnBoarding_1();
         } 
       },

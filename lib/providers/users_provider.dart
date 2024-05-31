@@ -24,7 +24,7 @@ class UserState extends _$UserState {
   @override
   User build() {
     return User(
-      id: 1,
+      id: '1',
       email: "afdasfds",
       firstName: "nafga",
       lastName: "manda",

@@ -55,9 +55,7 @@ class AuthService  {
         final responseBody = await response.stream.bytesToString();
         final responseJson = jsonDecode(responseBody);  
         saveUserToSharedPreferences(responseJson['token'], responseJson['role'][0], responseJson['id']);
-
-        // saveUserToSharedPreferences(responseJson);
-        // context.go('/home');
+        context.go('/home');
     }
     else{
     ScaffoldMessenger.of(context).showSnackBar(

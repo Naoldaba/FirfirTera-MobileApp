@@ -67,7 +67,7 @@ class UserDetails extends ConsumerWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: IsPromoted ? Colors.red : Colors.green,
+                  backgroundColor: IsPromoted ? Colors.red : Colors.green,
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),

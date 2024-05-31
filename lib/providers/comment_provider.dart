@@ -1,6 +1,6 @@
+import 'package:firfir_tera/presentation/services/comment_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/models/Comment.dart';
-import 'package:firfir_tera/presentation/services/comment_service.dart';
 
 
 final commentServiceProvider = Provider((ref) => CommentService());

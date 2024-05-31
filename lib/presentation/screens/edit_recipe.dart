@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:firfir_tera/presentation/services/recipe_services.dart';
 import 'package:firfir_tera/providers/create_recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
-import 'package:firfir_tera/presentation/services/recipe_services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditRecipeScreen extends ConsumerStatefulWidget {
@@ -13,6 +13,7 @@ class EditRecipeScreen extends ConsumerStatefulWidget {
   const EditRecipeScreen({required this.recipe, Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _EditRecipeScreenState createState() => _EditRecipeScreenState();
 }
 
@@ -25,7 +26,6 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
   final List<TextEditingController> _ingredientControllers = [];
   final List<TextEditingController> _stepControllers = [];
 
-  File? _image;
 
   final _tempImage = ClipRRect(
     borderRadius: BorderRadius.circular(10.0),
@@ -113,20 +113,19 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FoodType _foodType = FoodType.fasting;
-    final _foodTypeProv = ref.read(foodTypeProvider.notifier);
-    final recipe = ref.watch(recipeNotifierProvider);
+    FoodType foodType = FoodType.fasting;
+    final foodTypeProv = ref.read(foodTypeProvider.notifier);
     final ingredients = ref.watch(ingredientsNotifierProvider);
     final steps = ref.watch(stepNotifierProvider);
     final image = ref.watch(imageNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Recipe'),
+        title: const Text('Edit Recipe'),
         backgroundColor: Colors.orange,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -142,16 +141,16 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                     child: image == null
                         ? _tempImage
                         : Container(
-                            child: Image.file(File(image.path), fit: BoxFit.cover),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10)),
+                            child: Image.file(File(image.path), fit: BoxFit.cover),
                           ),
                   ),
                   Positioned(
                     top: 10,
                     right: 20,
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.edit,
                         color: Colors.orange,
                       ),
@@ -167,7 +166,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
               ),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
               onChanged: (value) {
                 ref
                     .read(recipeNotifierProvider.notifier)
@@ -176,7 +175,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             ),
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Description'),
               onChanged: (value) {
                 ref
                     .read(recipeNotifierProvider.notifier)
@@ -185,7 +184,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             ),
             TextField(
               controller: _cookTimeController,
-              decoration: InputDecoration(labelText: 'Cook Time'),
+              decoration: const InputDecoration(labelText: 'Cook Time'),
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 ref
@@ -195,7 +194,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             ),
             TextField(
               controller: _peopleController,
-              decoration: InputDecoration(labelText: 'People'),
+              decoration: const InputDecoration(labelText: 'People'),
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 ref
@@ -204,9 +203,9 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
               },
             ),
             DropdownButtonFormField<FoodType>(
-                value: _foodType,
+                value: foodType,
                 onChanged: (newValue) {
-                  _foodTypeProv.setState(newValue as FoodType);
+                  foodTypeProv.setState(newValue as FoodType);
                 },
                 items: FoodType.values.map((FoodType type) {
                   return DropdownMenuItem<FoodType>(
@@ -224,8 +223,8 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                   ),
                 ),
             ),
-            SizedBox(height: 16),
-            Text('Ingredients'),
+            const SizedBox(height: 16),
+            const Text('Ingredients'),
             Column(
               children: List.generate(_ingredientControllers.length, (index) {
                 return Row(
@@ -247,7 +246,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
                         setState(() {
                           _ingredientControllers.removeAt(index);
@@ -264,20 +263,20 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                 );
               }),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   _ingredientControllers.add(TextEditingController());
                 });
               },
-              child: Text('Add Ingredient'),
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.orange)),
+              child: const Text('Add Ingredient'),
             ),
-            SizedBox(height: 16),
-            Text('Steps'),
+            const SizedBox(height: 16),
+            const Text('Steps'),
             Column(
               children: List.generate(_stepControllers.length, (index) {
                 return Row(
@@ -299,7 +298,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
                         setState(() {
                           _stepControllers.removeAt(index);
@@ -316,19 +315,19 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                 );
               }),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   _stepControllers.add(TextEditingController());
                 });
               },
-              child: Text('Add Step'),
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.orange)),
+              child: const Text('Add Step'),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
                   
@@ -346,7 +345,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                       description: _descriptionController.text,
                       cookTime: _cookTimeController.text,
                       people: _peopleController.text,
-                      type: _foodType.toString(), 
+                      type: foodType.toString(), 
                       image: File(image.path),
                       ingredients: ingredients.map((ingredient) => ingredient.nameController.text).toList(),
                       steps: steps.map((step) => step.stepController.text).toList(),
@@ -354,16 +353,16 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                   } else {
                     
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text('Please fill all required fields'),
                       ),
                     );
                   }
                 },
-              child: Text('Save Changes'),
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.orange)),
+              child: const Text('Save Changes'),
             ),
           ],
         ),

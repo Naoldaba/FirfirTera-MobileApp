@@ -1,7 +1,7 @@
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firfir_tera/models/presentation/widgets/recipe_card.dart';
+import 'package:firfir_tera/presentation/widgets/recipe_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/discover_provider.dart';
 import 'package:go_router/go_router.dart';
