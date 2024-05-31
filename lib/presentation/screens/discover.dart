@@ -1,12 +1,11 @@
 import 'package:firfir_tera/models/Recipe.dart';
+import 'package:firfir_tera/providers/recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/recipe_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/discover_provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firfir_tera/providers/recipe_provider.dart';
-
 
 class Discover extends ConsumerWidget {
   const Discover({super.key});
@@ -16,7 +15,7 @@ class Discover extends ConsumerWidget {
     final TextEditingController _searchController = TextEditingController();
     final selectedOption = ref.watch(selectedOptionProvider);
 
-    AutoDisposeFutureProvider<List<Recipe>> getRecipeProvider() {
+    FutureProvider<List<Recipe>> getRecipeProvider() {
       switch (selectedOption) {
         case 'Breakfast':
           return breakfastRecipesProvider;
@@ -28,7 +27,6 @@ class Discover extends ConsumerWidget {
           return recipesProvider;
       }
     }
-
 
     final recipeListAsync = ref.watch(getRecipeProvider());
 
@@ -78,79 +76,98 @@ class Discover extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
               recipeListAsync.when(
-                data: (recipeList) => Container(
-                  height: 280,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: recipeList.length,
-                    itemBuilder: (context, index) {
-                      final recipe = recipeList[index];
-                      return GestureDetector(
-                        onTap: () =>
-                            context.go('/home/detailed_view', extra: recipe),
-                        child: RecipeCard(
-                          image: recipe.image,
-                          name: recipe.name,
+                data: (recipeList) {
+                  return Container(
+                    height: 280,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: recipeList.length,
+                      itemBuilder: (context, index) {
+                        final recipe = recipeList[index];
+                        return GestureDetector(
+                          onTap: () =>
+                              context.go('/home/detailed_view', extra: recipe),
+                          child: RecipeCard(
+                            image: recipe.image,
+                            name: recipe.name,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                loading: () {
+                  return Center(child: CircularProgressIndicator());
+                },
+                error: (err, stack) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Oops... Unable to fetch recipes.',
+                          style: TextStyle(fontSize: 16, color: Colors.red),
                         ),
-                      );
-                    },
-                  ),
-                ),
-                loading: () => Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Center(
-                    child: Text(
-                  'Ops... unable to fetch recipes.',
-                )),
-              ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            ref.invalidate(getRecipeProvider());
+                          },
+                          child: Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget buildOptionButton(WidgetRef ref, String option, String iconName) {
-    Map<String, String> iconMap = {
-      "food": "assets/icons/all_food.png",
-      "breakfast": "assets/icons/breakfast.png",
-      "lunch": "assets/icons/lunch.png",
-      "dinner": "assets/icons/dinner.png"
-    };
+Widget buildOptionButton(WidgetRef ref, String option, String iconName) {
+  Map<String, String> iconMap = {
+    "food": "assets/icons/all_food.png",
+    "breakfast": "assets/icons/breakfast.png",
+    "lunch": "assets/icons/lunch.png",
+    "dinner": "assets/icons/dinner.png"
+  };
 
-    String iconPath = iconMap[iconName] ?? '';
-    final selectedOption = ref.watch(selectedOptionProvider);
+  String iconPath = iconMap[iconName] ?? '';
+  final selectedOption = ref.watch(selectedOptionProvider);
 
-    return InkWell(
-      onTap: () {
-        ref.read(selectedOptionProvider.notifier).setOption(option);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
-          color:
-              selectedOption == option ? Colors.grey[200] : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          children: [
-            Image.asset(
-              iconPath,
-              width: 30,
-              height: 30,
-            ),
-            Text(
-              option,
-              style: TextStyle(
-                fontSize: selectedOption == option ? 18 : 16,
-                fontWeight: selectedOption == option
-                    ? FontWeight.bold
-                    : FontWeight.normal,
-                color: selectedOption == option ? Colors.black : Colors.grey,
-              ),
-            ),
-          ],
-        ),
+  return InkWell(
+    onTap: () {
+      ref.read(selectedOptionProvider.notifier).setOption(option);
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      decoration: BoxDecoration(
+        color: selectedOption == option ? Colors.grey[200] : Colors.transparent,
+        borderRadius: BorderRadius.circular(20),
       ),
-    );
-  }
+      child: Column(
+        children: [
+          Image.asset(
+            iconPath,
+            width: 30,
+            height: 30,
+          ),
+          Text(
+            option,
+            style: TextStyle(
+              fontSize: selectedOption == option ? 18 : 16,
+              fontWeight: selectedOption == option
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+              color: selectedOption == option ? Colors.black : Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
