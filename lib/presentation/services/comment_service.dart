@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import "dart:convert";
 
 class CommentService {
-  final String url = 'https://ee64-196-189-150-186.ngrok-free.app';
+  final String url = 'https://7f7a-213-55-95-169.ngrok-free.app';
 
   Future<List<Comment>> fetchComments(String recipeId) async {
     // return [
@@ -25,8 +25,8 @@ class CommentService {
   Future<void> addComment(Comment comment) async {
     final response = await http.post(
       Uri.parse('$url/comments/${comment.recipeId}'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      headers:{
+        'Content-Type': 'application/json',
       },
       body: jsonEncode(comment.toJson()),
     );

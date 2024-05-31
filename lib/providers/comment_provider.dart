@@ -2,14 +2,13 @@ import 'package:firfir_tera/presentation/services/comment_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/models/Comment.dart';
 
-
 final commentServiceProvider = Provider((ref) => CommentService());
 
 final commentsProvider =
     StateNotifierProvider.family<CommentNotifier, List<Comment>, String>(
         (ref, recipeId) {
-    final service = ref.watch(commentServiceProvider);
-    return CommentNotifier(service, recipeId);
+  final service = ref.watch(commentServiceProvider);
+  return CommentNotifier(service, recipeId);
 });
 
 class CommentNotifier extends StateNotifier<List<Comment>> {
@@ -23,6 +22,7 @@ class CommentNotifier extends StateNotifier<List<Comment>> {
   Future<void> _fetchComments() async {
     try {
       state = await _service.fetchComments(_recipeId);
+      print('hi');
     } catch (e) {}
   }
 
@@ -44,9 +44,8 @@ class CommentNotifier extends StateNotifier<List<Comment>> {
     try {
       await _service.updateComment(updatedComment);
       state = state
-          .map((comment) => comment.id == updatedComment.id
-              ? updatedComment
-              : comment)
+          .map((comment) =>
+              comment.id == updatedComment.id ? updatedComment : comment)
           .toList();
     } catch (e) {}
   }

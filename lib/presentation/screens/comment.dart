@@ -16,22 +16,17 @@ class CommentScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recipeId = recipe.id;
-    User user = ref.watch(userModelProvider).when(
-        data: (body) {
-          print(body.role);
-          return body;
-        },
-        error: (e, s) => throw (e),
-        loading: () {
-          return User(
-              email: "noemail",
-              id: '2',
-              firstName: "ene",
-              lastName: "das",
-              role: "cook");
-        });
-    final currentUserId = user.id;
-    final comments = ref.watch(commentsProvider(recipeId!));
+    User? user = ref.watch(userModelProvider).when(data: (body) {
+      print(body.role);
+      return body;
+    }, error: (e, s) {
+      print(e);
+    }, loading: () {
+      print('loading');
+    });
+    
+    final currentUserId = user!.id;
+    final comments = ref.watch(commentsProvider(recipeId));
 
     return Scaffold(
       appBar: AppBar(

@@ -3,7 +3,7 @@ import 'package:firfir_tera/providers/recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firfir_tera/providers/users_provider.dart';
+import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:firfir_tera/models/User.dart';
 
 class DetailedView extends ConsumerWidget {
@@ -13,12 +13,20 @@ class DetailedView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final User? user = ref.read(userStateProvider.notifier).state;
+    final userAsyncValue = ref.watch(userModelProvider);
+    User? user = userAsyncValue.when(
+        data: (user) => user,
+        loading: () {
+          const Center(child: CircularProgressIndicator());
+        },
+        error: (error, stack) {
+          Center(child: Text('Error: $error'));
+        });
     final service = ref.read(recipeServiceProvider);
-    final String role = user!.role;
+    // final String role = user!.role;
 
     void deleteRecipe() {
-      bool ans = service.DeleteRecipe((user.id).toString()) as bool;
+      bool ans = service.DeleteRecipe((user!.id).toString()) as bool;
       if (ans == true) {
         context.go("/home/discover");
       }
@@ -53,7 +61,7 @@ class DetailedView extends ConsumerWidget {
                           ),
                           Row(
                             children: [
-                              if (role == 'cook') ...[
+                              if (user!.role == 'cook' || user!.role=='admin') ...[
                                 IconButton(
                                   onPressed: () {
                                     context.go(
@@ -66,14 +74,15 @@ class DetailedView extends ConsumerWidget {
                                   onPressed: deleteRecipe,
                                   icon: const Icon(Icons.delete),
                                 ),
-                              ],
-                              if (user.role == 'normal')
+                              ]
+                              else ...[
                                 IconButton(
                                   onPressed: () => context.go(
                                       '/home/detailed_view/comment',
                                       extra: recipe),
-                                  icon: Icon(Icons.comment),
+                                  icon:const Icon(Icons.comment),
                                 ),
+                              ]
                             ],
                           ),
                         ],
@@ -89,13 +98,13 @@ class DetailedView extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Column(
                             children: [
                               Icon(Icons.timer),
-                              Text("45 mins"),
+                              Text("${recipe.cookTime}"),
                             ],
                           ),
                           Column(
@@ -107,7 +116,7 @@ class DetailedView extends ConsumerWidget {
                           Column(
                             children: [
                               Icon(Icons.food_bank),
-                              Text("Fasting"),
+                              Text(recipe.fasting ? "fasting" : "Non-fasting"),
                             ],
                           ),
                         ],
