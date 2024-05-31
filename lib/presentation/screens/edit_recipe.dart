@@ -115,7 +115,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
   Widget build(BuildContext context) {
     FoodType _foodType = FoodType.fasting;
     final _foodTypeProv = ref.read(foodTypeProvider.notifier);
-    final recipe = ref.watch(recipeNotifierProvider);
+    final service = ref.watch(recipeServiceProvider);
     final ingredients = ref.watch(ingredientsNotifierProvider);
     final steps = ref.watch(stepNotifierProvider);
     final image = ref.watch(imageNotifierProvider);
@@ -340,7 +340,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                       _ingredientControllers.isNotEmpty &&
                       _stepControllers.isNotEmpty) {
                     
-                    await sendPostRequest(
+                    await service.sendPostRequest(
                       context: context,
                       name: _nameController.text,
                       description: _descriptionController.text,

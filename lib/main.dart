@@ -85,14 +85,8 @@ final GoRouter _router = GoRouter(
                   GoRoute(
                     path: 'user_details',
                     builder: (context, state) {
-                      final user = state.extra as User?;
-                      if (user == null) {
-                        return Scaffold(
-                          body: Center(
-                            child: Text('User data is missing!'),
-                          ),
-                        );
-                      }
+                      final user = state.extra as User;
+                      
                       return UserDetails(user: user);
                     },
                   ),

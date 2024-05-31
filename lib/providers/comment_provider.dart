@@ -8,8 +8,8 @@ final commentServiceProvider = Provider((ref) => CommentService());
 final commentsProvider =
     StateNotifierProvider.family<CommentNotifier, List<Comment>, String>(
         (ref, recipeId) {
-  final service = ref.watch(commentServiceProvider);
-  return CommentNotifier(service, recipeId);
+    final service = ref.watch(commentServiceProvider);
+    return CommentNotifier(service, recipeId);
 });
 
 class CommentNotifier extends StateNotifier<List<Comment>> {

@@ -1,50 +1,75 @@
 import 'dart:convert';
-import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firfir_tera/models/Recipe.dart';
+import 'package:firfir_tera/presentation/services/recipe_services.dart';
 
 part 'recipe_provider.g.dart';
 
-@riverpod
-Future<List<Recipe>> recipes(RecipesRef ref) async {
-  final response = await http.get(Uri.parse(""));
-  // return [
-  //   Recipe(
-  //     id:'1',
-  //     image: 'assets/images/kikil.jpg',
-  //     name: 'Kikil',
-  //     description: '',
-  //     cookTime: 10,
-  //     people: 50,
-  //     ingredients: ["light", 'souce'],
-  //     steps: ['dark', 'moist'],
-  //     fasting: false,
-  //     type: 'fasting',
-  //   ),
-  //   Recipe(
-  //     id:'2',
-  //     image: 'assets/images/tibs.jpg',
-  //     name: 'Tibs',
-  //     description: '',
-  //     cookTime: 0,
-  //     people: 0,
-  //     ingredients: [],
-  //     steps: [],
-  //     fasting: false,
-  //     type: '',
-  //   ),
-  // ];
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body) as List;
-    return data.map((recipe) => Recipe.fromJson(recipe)).toList();
-
-  } else {
-    throw Exception("");
-  }
-}
+const url = 'https://ee64-196-189-150-186.ngrok-free.app';
 
 enum FoodType { fasting, nonfasting }
+
+final recipeServiceProvider = Provider((ref) => RecipeServices());
+
+final recipesProvider = FutureProvider<List<Recipe>>((ref) async {
+  final service = ref.watch(recipeServiceProvider);
+  return service.recipes();
+});
+
+final breakfastRecipesProvider = FutureProvider<List<Recipe>>((ref) async {
+  final service = ref.watch(recipeServiceProvider);
+  return service.breakfastRecipes();
+});
+
+final lunchRecipesProvider = FutureProvider<List<Recipe>>((ref) async {
+  final service = ref.watch(recipeServiceProvider);
+  return service.lunchRecipes();
+});
+
+final dinnerRecipesProvider = FutureProvider<List<Recipe>>((ref) async {
+  final service = ref.watch(recipeServiceProvider);
+  return service.dinnerRecipes();
+});
+
+final deleteRecipeProvider = FutureProvider.family<bool, String>((ref, id) async {
+  final service = ref.watch(recipeServiceProvider);
+  return service.DeleteRecipe(id);
+});
+
+
+final patchRecipeProvider = FutureProvider.family<void, PatchRecipeParams>((ref, params) async {
+  final service = ref.watch(recipeServiceProvider);
+  await service.sendPatchRequest(
+    context: params.context,
+    id: params.id,
+    name: params.name,
+    description: params.description,
+    cookTime: params.cookTime,
+    people: params.people,
+    type: params.type,
+    image: params.image,
+    ingredients: params.ingredients,
+    steps: params.steps,
+  );
+});
+
+
+final postRecipeProvider = FutureProvider.family<void, PostRecipeParams>((ref, params) async {
+  final service = ref.watch(recipeServiceProvider);
+  await service.sendPostRequest(
+    context: params.context,
+    name: params.name,
+    description: params.description,
+    cookTime: params.cookTime,
+    people: params.people,
+    type: params.type,
+    image: params.image,
+    ingredients: params.ingredients,
+    steps: params.steps,
+  );
+});
+
 
 @riverpod
 class foodType extends _$foodType {
@@ -59,54 +84,11 @@ class foodType extends _$foodType {
 }
 
 @riverpod
-Future<List<Recipe>> breakfastRecipes(BreakfastRecipesRef ref) async {
-  final response = await http.get(Uri.parse(""));
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body) as List;
-    return data
-        .map((recipe) => Recipe.fromJson(recipe))
-        .where((recipe) => recipe.type == 'breakfast')
-        .toList();
-  } else {
-    throw Exception("");
-    ;
-  }
-}
-
-@riverpod
-Future<List<Recipe>> lunchRecipes(LunchRecipesRef ref) async {
-  final response = await http.get(Uri.parse(""));
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body) as List;
-    return data
-        .map((recipe) => Recipe.fromJson(recipe))
-        .where((recipe) => recipe.type == 'lunch')
-        .toList();
-  } else {
-    throw Exception("");
-  }
-}
-
-@riverpod
-Future<List<Recipe>> dinnerRecipes(DinnerRecipesRef ref) async {
-  final response = await http.get(Uri.parse(""));
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body) as List;
-    return data
-        .map((recipe) => Recipe.fromJson(recipe))
-        .where((recipe) => recipe.type == 'dinner')
-        .toList();
-  } else {
-    throw Exception("");
-  }
-}
-
-@riverpod
 class RecipeNotifier extends _$RecipeNotifier {
   @override
   Recipe build() {
     return Recipe(
-      id:'1',
+      id: '1',
       name: '',
       description: '',
       cookTime: 0,
@@ -145,3 +127,5 @@ class RecipeNotifier extends _$RecipeNotifier {
     );
   }
 }
+
+final errorMessageProvider = StateProvider<String?>((ref) => null);

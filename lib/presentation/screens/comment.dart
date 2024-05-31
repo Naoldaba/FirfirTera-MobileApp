@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/comment_provider.dart';
 import 'package:firfir_tera/models/Comment.dart';
-import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/providers/users_provider.dart';
 
 class CommentScreen extends ConsumerWidget {
@@ -18,7 +17,7 @@ class CommentScreen extends ConsumerWidget {
     final recipeId = recipe.id;
     final user = ref.read(userStateProvider.notifier).state;
     final currentUserId = user.id.toString();
-    final comments = ref.watch(commentsProvider(recipeId));
+    final comments = ref.watch(commentsProvider(recipeId!));
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +59,6 @@ class CommentScreen extends ConsumerWidget {
                                                   .notifier)
                                               .updateComment(
                                                 Comment(
-                                                  id:comment.id,
                                                   recipeId: comment.recipeId,
                                                   userId: comment.userId,
                                                   comment:
@@ -81,7 +79,7 @@ class CommentScreen extends ConsumerWidget {
                               onPressed: () {
                                 ref
                                     .read(commentsProvider(recipeId).notifier)
-                                    .deleteComment(comment.id);
+                                    .deleteComment(comment.id!);
                               },
                             ),
                           ],
@@ -105,7 +103,6 @@ class CommentScreen extends ConsumerWidget {
                   icon: Icon(Icons.send),
                   onPressed: () {
                     final newComment = Comment(
-                      id: DateTime.now().toString(),
                       recipeId: recipeId,
                       userId: currentUserId,
                       comment: _commentController.text,

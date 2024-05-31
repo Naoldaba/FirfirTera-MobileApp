@@ -28,7 +28,7 @@ class _HomeContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final List<Widget> _pages = [Discover()];
     final User? user = ref.read(userStateProvider.notifier).state;
-    final role = user?.role;
+    final role = user?.role[0];
 
     final List<BottomNavigationBarItem> _navItems = [
       BottomNavigationBarItem(
@@ -37,7 +37,7 @@ class _HomeContent extends ConsumerWidget {
       ),
     ];
 
-    if (role=='chef') {
+    if (role=='cook') {
       _pages.add(CreateRecipe());
       _pages.add(Profile());
       _navItems.add(

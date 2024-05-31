@@ -28,7 +28,7 @@ class UserState extends _$UserState {
       email: "afdasfds",
       firstName: "nafga",
       lastName: "manda",
-      role: "normal",
+      role: "cook",
     );
   }
 

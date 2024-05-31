@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/widgets.dart';
+
 class Recipe {
-  final String id;
+  final String? id;
   final String name;
   final String description;
   final int cookTime;
@@ -11,7 +15,7 @@ class Recipe {
   final String image;
 
   Recipe({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
     required this.cookTime,
@@ -76,4 +80,54 @@ class Recipe {
       image: image ?? this.image,
     );
   }
+}
+
+class PatchRecipeParams {
+  final BuildContext context;
+  final String id;
+  final String name;
+  final String description;
+  final String cookTime;
+  final String people;
+  final String type;
+  final File image;
+  final List<String> ingredients;
+  final List<String> steps;
+
+  PatchRecipeParams({
+    required this.context,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.cookTime,
+    required this.people,
+    required this.type,
+    required this.image,
+    required this.ingredients,
+    required this.steps,
+  });
+}
+
+class PostRecipeParams {
+  final BuildContext context;
+  final String name;
+  final String description;
+  final String cookTime;
+  final String people;
+  final String type;
+  final File image;
+  final List<String> ingredients;
+  final List<String> steps;
+
+  PostRecipeParams({
+    required this.context,
+    required this.name,
+    required this.description,
+    required this.cookTime,
+    required this.people,
+    required this.type,
+    required this.image,
+    required this.ingredients,
+    required this.steps,
+  });
 }
