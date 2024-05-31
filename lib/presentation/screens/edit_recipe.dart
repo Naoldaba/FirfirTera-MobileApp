@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:firfir_tera/presentation/services/recipe_services.dart';
-import 'package:firfir_tera/providers/create_recipe_provider.dart';
+// import 'package:firfir_tera/presentation/services/recipe_services.dart';
+// import 'package:firfir_tera/providers/create_recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
+import 'package:firfir_tera/providers/edit_recipe_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -43,8 +44,9 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
     _peopleController.text = widget.recipe.people.toString();
     _typeController.text = widget.recipe.type;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(recipeNotifierProvider.notifier).setRecipe(widget.recipe);
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(ingredientsEditNotifierProvider.notifier).setInitialIngredients(widget.recipe.ingredients);
+      ref.read(stepsEditNotifierProvider.notifier).setInitialSteps(widget.recipe.steps);
     });
 
     for (var ingredient in widget.recipe.ingredients) {
@@ -63,12 +65,8 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
     _cookTimeController.dispose();
     _peopleController.dispose();
     _typeController.dispose();
-    for (var controller in _ingredientControllers) {
-      controller.dispose();
-    }
-    for (var controller in _stepControllers) {
-      controller.dispose();
-    }
+    ref.read(ingredientsEditNotifierProvider.notifier).state.forEach((controller) => controller.dispose());
+    ref.read(stepsEditNotifierProvider.notifier).state.forEach((controller) => controller.dispose());
     super.dispose();
   }
 
@@ -116,12 +114,12 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedFoodType = ref.watch(selectedFoodTypeProvider.notifier).state;
-    final fastingBoolean = ref.watch(foodTypeBooleanProvider.notifier).state;
-    final selectedCategory = ref.watch(selectedCategoryProvider.notifier).state;
+    final selectedFoodType = ref.watch(selectedFoodTypeProvider);
+    final fastingBoolean = selectedFoodType == FoodType.fasting;
+    final selectedCategory = ref.watch(selectedCategoryProvider);
     final service = ref.watch(recipeServiceProvider);
-    final ingredients = ref.watch(ingredientsNotifierProvider);
-    final steps = ref.watch(stepNotifierProvider);
+    final ingredients = ref.watch(ingredientsEditNotifierProvider);
+    final steps = ref.watch(stepsEditNotifierProvider);
     final image = ref.watch(imageNotifierProvider);
 
     return Scaffold(
@@ -175,7 +173,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
               decoration: const InputDecoration(labelText: 'Name'),
               onChanged: (value) {
                 ref
-                    .read(recipeNotifierProvider.notifier)
+                    .watch(recipeNotifierProvider.notifier)
                     .updateRecipe(name: value);
               },
             ),
@@ -258,40 +256,27 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 30,),
             const Text('Ingredients'),
             Column(
-              children: List.generate(_ingredientControllers.length, (index) {
+              children: List.generate(ingredients.length, (index) {
                 return Row(
                   children: [
                     Expanded(
                       child: TextField(
-                        controller: _ingredientControllers[index],
+                        controller: ingredients[index],
                         decoration: InputDecoration(
                           labelText: 'Ingredient ${index + 1}',
                         ),
                         onChanged: (value) {
-                          final ingredients = _ingredientControllers
-                              .map((controller) => controller.text)
-                              .toList();
-                          ref
-                              .read(recipeNotifierProvider.notifier)
-                              .updateRecipe(ingredients: ingredients);
+                          ref.read(ingredientsEditNotifierProvider.notifier).updateIngredientController(index, value);
                         },
                       ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        setState(() {
-                          _ingredientControllers.removeAt(index);
-                          final ingredients = _ingredientControllers
-                              .map((controller) => controller.text)
-                              .toList();
-                          ref
-                              .read(recipeNotifierProvider.notifier)
-                              .updateRecipe(ingredients: ingredients);
-                        });
+                        ref.read(ingredientsEditNotifierProvider.notifier).removeIngredientController(index);
                       },
                     ),
                   ],
@@ -301,49 +286,34 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _ingredientControllers.add(TextEditingController());
-                });
+                ref.read(ingredientsEditNotifierProvider.notifier).addIngredientController(TextEditingController());
               },
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange)),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+              ),
               child: const Text('Add Ingredient'),
             ),
             const SizedBox(height: 16),
             const Text('Steps'),
             Column(
-              children: List.generate(_stepControllers.length, (index) {
+              children: List.generate(steps.length, (index) {
                 return Row(
                   children: [
                     Expanded(
                       child: TextField(
-                        controller: _stepControllers[index],
+                        controller: steps[index],
                         decoration: InputDecoration(
                           labelText: 'Step ${index + 1}',
                         ),
                         onChanged: (value) {
-                          final steps = _stepControllers
-                              .map((controller) => controller.text)
-                              .toList();
-                          ref
-                              .read(recipeNotifierProvider.notifier)
-                              .updateRecipe(steps: steps);
+                          ref.read(stepsEditNotifierProvider.notifier).updateStepController(index, value);
                         },
                       ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        setState(() {
-                          _stepControllers.removeAt(index);
-                          final steps = _stepControllers
-                              .map((controller) => controller.text)
-                              .toList();
-                          ref
-                              .read(recipeNotifierProvider.notifier)
-                              .updateRecipe(steps: steps);
-                        });
+                        ref.read(stepsEditNotifierProvider.notifier).removeStepController(index);
                       },
                     ),
                   ],
@@ -353,25 +323,30 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _stepControllers.add(TextEditingController());
-                });
+                ref.read(stepsEditNotifierProvider.notifier).addStepController(TextEditingController());
               },
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange)),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+              ),
               child: const Text('Add Step'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
+                print('Name: ${_nameController.text}');
+                print('Description: ${_descriptionController.text}');
+                print('Cook Time: ${_cookTimeController.text}');
+                print('People: ${_peopleController.text}');
+                print('Image: ${image?.path}');
+                print('Ingredients: ${ingredients.map((controller) => controller.text).toList()}');
+                print('Steps: ${steps.map((controller) => controller.text).toList()}');
                 if (_nameController.text.isNotEmpty &&
                     _descriptionController.text.isNotEmpty &&
                     _cookTimeController.text.isNotEmpty &&
                     _peopleController.text.isNotEmpty &&
+                    ingredients.isNotEmpty &&
                     image != null &&
-                    _ingredientControllers.isNotEmpty &&
-                    _stepControllers.isNotEmpty) {
+                    steps.isNotEmpty) {
                   await service.sendPatchRequest(
                     context: context,
                     id: widget.recipe.id,
@@ -382,11 +357,8 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                     type: selectedCategory.toString(),
                     fasting: fastingBoolean,
                     image: File(image.path),
-                    ingredients: ingredients
-                        .map((ingredient) => ingredient.ingredientController.text)
-                        .toList(),
-                    steps:
-                        steps.map((step) => step.stepController.text).toList(),
+                    ingredients: ingredients.map((controller) => controller.text).toList(),
+                    steps: steps.map((controller) => controller.text).toList(),
                   );
                   context.go('/home');
                 } else {
@@ -398,11 +370,11 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                 }
               },
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange)),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+              ),
               child: const Text('Save Changes'),
             ),
-          ],
+          ]
         ),
       ),
     );

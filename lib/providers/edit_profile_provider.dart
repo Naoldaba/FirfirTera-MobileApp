@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'edit_profile_provider.g.dart';
@@ -28,6 +29,7 @@ class ProfileNotifier extends _$ProfileNotifier {
 
   }
 }
+
 
 class ProfileState {
   final String? imageData;

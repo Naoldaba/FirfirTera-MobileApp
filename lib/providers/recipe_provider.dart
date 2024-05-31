@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:firfir_tera/presentation/services/recipe_services.dart';
@@ -87,6 +89,7 @@ class foodType extends _$foodType {
   }
 }
 
+
 @riverpod
 class RecipeNotifier extends _$RecipeNotifier {
   @override
@@ -97,8 +100,8 @@ class RecipeNotifier extends _$RecipeNotifier {
       description: '',
       cookTime: 0,
       people: 0,
-      ingredients: [],
-      steps: [],
+      ingredients: ['afds'],
+      steps: ['asdfasd'],
       fasting: false,
       type: '',
       image: '',

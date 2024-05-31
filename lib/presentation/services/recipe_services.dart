@@ -30,31 +30,6 @@ class RecipeServices {
     } catch (e) {
       throw Exception();
     }
-
-    //   String jsonResponse = '''
-    //     [
-    //       {
-    //         "_id": "66592b09d1cdaee61107e839",
-    //         "name": "firfir",
-    //         "description": "ye habtam mgb",
-    //         "cookTime": 21,
-    //         "people": 4,
-    //         "ingredients": ["one", "two"],
-    //         "steps": ["one", "two"],
-    //         "fasting": false,
-    //         "type": "breakfast",
-    //         "image": "assets/images/firfir.jpg",
-    //         "cook_id": "66592682d1cdaee61107e827",
-    //         "createdAt": "2024-05-31T01:42:33.492Z",
-    //         "updatedAt": "2024-05-31T01:42:33.492Z",
-    //         "__v": 0
-    //       }
-    //     ]
-    // ''';
-
-    // List<dynamic> data = jsonDecode(jsonResponse);
-    // final temp = data.map((recipe) => Recipe.fromJson(recipe)).toList();
-    // return temp;
   }
 
   Future<List<Recipe>> breakfastRecipes() async {
@@ -150,7 +125,7 @@ class RecipeServices {
       request.fields['description'] = description;
       request.fields['cookTime'] = cookTime;
       request.fields['people'] = people;
-      request.fields['type'] = type;
+      request.fields['type'] = type.split('.')[1];
       request.fields['fasting'] = fasting.toString();
       request.fields['ingredients'] = jsonEncode(ingredients);
       request.fields['steps'] = jsonEncode(steps);
@@ -166,7 +141,7 @@ class RecipeServices {
       print(request.fields);
       print(request.files);
 
-      // final response = true;
+      
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Recipe updated successfully')),
@@ -209,7 +184,7 @@ class RecipeServices {
       request.fields['description'] = description;
       request.fields['cookTime'] = cookTime;
       request.fields['people'] = people;
-      request.fields['type'] = type;
+      request.fields['type'] = type.split('.')[1];
       request.fields['ingredients'] = jsonEncode(ingredients);
       request.fields['steps'] = jsonEncode(steps);
 
