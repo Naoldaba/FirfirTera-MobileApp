@@ -1,4 +1,4 @@
-import 'package:firfir_tera/models/User%20copy.dart';
+import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/presentation/screens/admin.dart';
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:firfir_tera/presentation/screens/discover.dart';
@@ -27,21 +27,22 @@ class _HomeContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final List<Widget> _pages = [const Discover()];
      
-    final  user = ref.read(userProvider).when(
+    User  user = ref.read(userModelProvider).when(
       data: (data) {
-        print(data);
+        return data;
       },
        error: ((error, stackTrace) => (
-         error.toString()
+         throw error
        )), 
        loading: (){
+        return User(email: "noemail", id: '2', firstName: "ene", lastName: "dadss", role : "cook");
         
        }
        );
-    print(user);
     
-
-    String role = 'normal';
+    
+    String role = user.role;
+   
 
     
 

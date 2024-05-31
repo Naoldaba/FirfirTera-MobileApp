@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:firfir_tera/providers/user_provider.dart';
+import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile.dart';
 
 class Profile extends ConsumerWidget {
@@ -9,12 +12,13 @@ class Profile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+
   
       return Scaffold(
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
+          child: Column(  
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -43,16 +47,14 @@ class Profile extends ConsumerWidget {
               const SizedBox(height: 10),
                Text(
                 ref.watch(userModelProvider).when(
-                  data: (user){
-                    if (user != null){
-                      return user.email;
+                  data: (user) {
+                    if (user !=null){
+                      user;
                     }
-                    else{
-                      return 'No email';
-                    }
+                    return "nu";
                   },
                   loading: () => 'Loading...',
-                  error: (error, stackTrace) => 'Error',
+                  error: (error, stackTrace) => error.toString(),
                 ),
                 style: const TextStyle(fontSize: 20, color: Colors.grey),
               ),
@@ -75,6 +77,7 @@ class Profile extends ConsumerWidget {
               OutlinedButton(
                 onPressed: () {
                   sharedPreferences.  clear();
+                  print("loggin out");
                   context.go('/login');
                 },
                 style: ButtonStyle(
@@ -85,7 +88,9 @@ class Profile extends ConsumerWidget {
               ),
               const SizedBox(height: 10,),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // test();
+                },
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.red),
                     minimumSize: MaterialStateProperty.all(const Size(90, 40)),

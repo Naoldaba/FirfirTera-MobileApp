@@ -77,7 +77,8 @@ class AuthService  {
   ).timeout(const Duration(seconds: 300));
 
   if (response.statusCode == 200) {
-    return jsonDecode(response.body);
+    final jsond = jsonDecode(response.body);
+    return jsond;
   } else {
     throw Exception('Failed to load user');
   }

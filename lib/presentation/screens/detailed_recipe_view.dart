@@ -17,7 +17,7 @@ class DetailedView extends ConsumerWidget {
     final String role = user!.role;
 
     void deleteRecipe() {
-      bool ans = DeleteRecipe((user.id).toString()) as bool;
+      bool ans = DeleteRecipe((user!.id).toString()) as bool;
       if (ans == true) {
         context.go("/home/discover");
       }

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:firfir_tera/models/User%20copy.dart';
+import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -38,24 +38,26 @@ final userProvider = FutureProvider((ref) async {
 }
 );
 
-// final userModelProvider = FutureProvider<User?>((ref) async {    
-//   User? myUserModel = ref.read(userProvider).when(
-//     data: (data) => User.fromJson(data),
-//      error: (error, s) {}, 
-//      loading:() {
-//      });
-//      return myUserModel;
+final userModelProvider = FutureProvider<User>((ref) async {    
+  User myUserModel = ref.read(userProvider).when(
+    data: (data)
+    { 
+      print(data);
+      return User.fromJson(data);
+      
+    },
+     error: (error, s) {
+      throw error;
 
-// });
+     }, 
+     loading:() {
+      return User(email: "noemail", id: '2', firstName: "ene", lastName: "das", role : "normal");
 
+     }
+     
+     );
+     return myUserModel;
 
-final userModelProvider = FutureProvider<User?>((ref) async {
-  final Map<String, dynamic>? userData = await ref.watch(userProvider.future);
-  if (userData != null) {
-    return User.fromJson(userData);
-  } else {
-    return null;
-  }
 });
 
 
