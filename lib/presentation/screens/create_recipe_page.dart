@@ -1,11 +1,12 @@
 import 'dart:io';
-import 'package:firfir_tera/presentation/services/recipe_services.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/create_recipe_provider.dart';
+import 'package:firfir_tera/presentation/services/recipe_services.dart';
 
 class CreateRecipe extends ConsumerWidget {
   CreateRecipe({super.key});
@@ -69,8 +70,9 @@ class CreateRecipe extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    FoodType _foodType = FoodType.fasting;
-    final _foodTypeProv = ref.read(foodTypeProvider.notifier);
+    final selectedFoodType = ref.watch(selectedFoodTypeProvider.notifier).state;
+    final fastingBoolean = ref.watch(foodTypeBooleanProvider.notifier).state;
+    final selectedCategory = ref.watch(selectedCategoryProvider);
     final ingredients = ref.watch(ingredientsNotifierProvider);
     final steps = ref.watch(stepNotifierProvider);
     final image = ref.watch(imageNotifierProvider);
@@ -204,9 +206,14 @@ class CreateRecipe extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField<FoodType>(
-                value: _foodType,
+                value: selectedFoodType,
                 onChanged: (newValue) {
-                  _foodTypeProv.setState(newValue as FoodType);
+                  if (newValue != null) {
+                    ref.read(selectedFoodTypeProvider.notifier).state =
+                        newValue;
+                    ref.read(foodTypeBooleanProvider.notifier).state =
+                        newValue == FoodType.fasting;
+                  }
                 },
                 items: FoodType.values.map((FoodType type) {
                   return DropdownMenuItem<FoodType>(
@@ -219,6 +226,31 @@ class CreateRecipe extends ConsumerWidget {
                 }).toList(),
                 decoration: InputDecoration(
                   labelText: "Food Type",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<FoodCategory>(
+                value: selectedCategory,
+                onChanged: (newValue) {
+                  if (newValue != null) {
+                    ref.read(selectedCategoryProvider.notifier).state =
+                        newValue;
+                  }
+                },
+                items: FoodCategory.values.map((FoodCategory category) {
+                  return DropdownMenuItem<FoodCategory>(
+                    value: category,
+                    child: Text(
+                      category.toString(),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  labelText: "Category",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -395,7 +427,8 @@ class CreateRecipe extends ConsumerWidget {
                       description: _descriptionController.text,
                       cookTime: _cookTimeController.text,
                       people: _peopleController.text,
-                      type: _foodType.toString(),
+                      fasting: fastingBoolean,
+                      type: selectedCategory.toString(),
                       image: File(image.path),
                       ingredients: ingredients
                           .map((ingredient) => ingredient.nameController.text)
@@ -413,7 +446,8 @@ class CreateRecipe extends ConsumerWidget {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.orange,
+                  primary: Colors.orange,
+                  onPrimary: Colors.white,
                   minimumSize: Size(double.infinity, 50),
                   textStyle: TextStyle(
                     fontSize: 16,

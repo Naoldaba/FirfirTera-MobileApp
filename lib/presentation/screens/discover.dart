@@ -60,8 +60,8 @@ class Discover extends ConsumerWidget {
                 onSubmitted: (val) {},
               ),
               const SizedBox(height: 40),
-              Wrap(
-                spacing: 20,
+              Row(
+                
                 children: [
                   buildOptionButton(ref, "All", "food"),
                   buildOptionButton(ref, "Breakfast", "breakfast"),
@@ -159,7 +159,7 @@ Widget buildOptionButton(WidgetRef ref, String option, String iconName) {
           Text(
             option,
             style: TextStyle(
-              fontSize: selectedOption == option ? 18 : 16,
+              fontSize: selectedOption == option ? 15 : 12,
               fontWeight: selectedOption == option
                   ? FontWeight.bold
                   : FontWeight.normal,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firfir_tera/models/Recipe.dart';
@@ -6,9 +7,10 @@ import 'package:firfir_tera/presentation/services/recipe_services.dart';
 
 part 'recipe_provider.g.dart';
 
-const url = 'https://ee64-196-189-150-186.ngrok-free.app';
+const url = 'https://c3ed-213-55-95-236.ngrok-free.app';
 
 enum FoodType { fasting, nonfasting }
+enum FoodCategory {breakfast, lunch, dinner}
 
 final recipeServiceProvider = Provider((ref) => RecipeServices());
 
@@ -48,6 +50,7 @@ final patchRecipeProvider = FutureProvider.family<void, PatchRecipeParams>((ref,
     cookTime: params.cookTime,
     people: params.people,
     type: params.type,
+    fasting: params.fasting,
     image: params.image,
     ingredients: params.ingredients,
     steps: params.steps,
@@ -63,6 +66,7 @@ final postRecipeProvider = FutureProvider.family<void, PostRecipeParams>((ref, p
     description: params.description,
     cookTime: params.cookTime,
     people: params.people,
+    fasting: params.fasting,
     type: params.type,
     image: params.image,
     ingredients: params.ingredients,
@@ -128,4 +132,14 @@ class RecipeNotifier extends _$RecipeNotifier {
   }
 }
 
-final errorMessageProvider = StateProvider<String?>((ref) => null);
+final selectedFoodTypeProvider = StateProvider<FoodType?>((ref) => null);
+
+final foodTypeBooleanProvider = StateProvider<bool>((ref) {
+  final foodType = ref.watch(selectedFoodTypeProvider);
+  return foodType == FoodType.fasting;
+});
+
+final selectedCategoryProvider = StateProvider<FoodCategory>((ref) => FoodCategory.breakfast);
+
+
+

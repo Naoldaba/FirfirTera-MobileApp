@@ -84,20 +84,7 @@ final GoRouter _router = GoRouter(
                     path: 'add_admin',
                     builder: (context, state) => const AddAdminDialog(),
                   ),
-                  // GoRoute(
-                  //   path: 'user_details',
-                  //   builder: (context, state) {
-                  //     final user = state.extra as User?;
-                  //     if (user == null) {
-                  //       return Scaffold(
-                  //         body: Center(
-                  //           child: Text('User data is missing!'),
-                  //         ),
-                  //       );
-                  //     }
-                  //     return UserDetails(user: user);
-                  //   },
-                  // ),
+                  
                 ],
               ),
             ],
@@ -160,9 +147,7 @@ final GoRouter _router = GoRouter(
                       steps: ['recipe_steps'],
                       type: 'recipe_type',
                     )
-                    
                   )
-                  ,
                 ),
                 GoRoute(
                   path: 'create_recipe',
@@ -272,7 +257,5 @@ class AuthChecker extends ConsumerWidget {
         );
       },      
       );
-  
-  }
-    
+  } 
 }

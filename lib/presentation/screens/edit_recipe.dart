@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditRecipeScreen extends ConsumerStatefulWidget {
@@ -13,7 +14,6 @@ class EditRecipeScreen extends ConsumerStatefulWidget {
   const EditRecipeScreen({required this.recipe, Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _EditRecipeScreenState createState() => _EditRecipeScreenState();
 }
 
@@ -25,7 +25,6 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
   final TextEditingController _typeController = TextEditingController();
   final List<TextEditingController> _ingredientControllers = [];
   final List<TextEditingController> _stepControllers = [];
-
 
   final _tempImage = ClipRRect(
     borderRadius: BorderRadius.circular(10.0),
@@ -57,7 +56,6 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
     }
   }
 
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -73,6 +71,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
     }
     super.dispose();
   }
+
   Widget bottomSheet(BuildContext context, WidgetRef ref) {
     return Container(
       height: 100,
@@ -90,7 +89,9 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             children: [
               TextButton.icon(
                 onPressed: () {
-                  ref.read(imageNotifierProvider.notifier).pickImage(ImageSource.camera);
+                  ref
+                      .read(imageNotifierProvider.notifier)
+                      .pickImage(ImageSource.camera);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.camera),
@@ -98,7 +99,9 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
               ),
               TextButton.icon(
                 onPressed: () {
-                  ref.read(imageNotifierProvider.notifier).pickImage(ImageSource.gallery);
+                  ref
+                      .read(imageNotifierProvider.notifier)
+                      .pickImage(ImageSource.gallery);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.image),
@@ -113,11 +116,10 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FoodType _foodType = FoodType.fasting;
-    final _foodTypeProv = ref.read(foodTypeProvider.notifier);
+    final selectedFoodType = ref.watch(selectedFoodTypeProvider.notifier).state;
+    final fastingBoolean = ref.watch(foodTypeBooleanProvider.notifier).state;
+    final selectedCategory = ref.watch(selectedCategoryProvider.notifier).state;
     final service = ref.watch(recipeServiceProvider);
-    FoodType foodType = FoodType.fasting;
-    final foodTypeProv = ref.read(foodTypeProvider.notifier);
     final ingredients = ref.watch(ingredientsNotifierProvider);
     final steps = ref.watch(stepNotifierProvider);
     final image = ref.watch(imageNotifierProvider);
@@ -133,40 +135,41 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Stack(
-                children: [
-                  Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: image == null
-                        ? _tempImage
-                        : Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Image.file(File(image.path), fit: BoxFit.cover),
-                          ),
+              children: [
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  Positioned(
-                    top: 10,
-                    right: 20,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.edit,
-                        color: Colors.orange,
-                      ),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (builder) => bottomSheet(context, ref),
-                        );
-                      },
+                  child: image == null
+                      ? _tempImage
+                      : Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          child:
+                              Image.file(File(image.path), fit: BoxFit.cover),
+                        ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: 20,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.orange,
                     ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (builder) => bottomSheet(context, ref),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(labelText: 'Name'),
@@ -202,31 +205,60 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
               onChanged: (value) {
                 ref
                     .read(recipeNotifierProvider.notifier)
-                    .updateRecipe(people:int.tryParse(value));
+                    .updateRecipe(people: int.tryParse(value));
               },
             ),
+            const SizedBox(height: 20),
             DropdownButtonFormField<FoodType>(
-                value: foodType,
-                onChanged: (newValue) {
-                  foodTypeProv.setState(newValue as FoodType);
-                },
-                items: FoodType.values.map((FoodType type) {
-                  return DropdownMenuItem<FoodType>(
-                    value: type,
-                    child: Text(
-                      type == FoodType.fasting ? 'fasting' : 'non-fasting',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  );
-                }).toList(),
-                decoration: InputDecoration(
-                  labelText: "Food Type",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+              value: selectedFoodType,
+              onChanged: (newValue) {
+                if (newValue != null) {
+                  ref.read(selectedFoodTypeProvider.notifier).state = newValue;
+                  ref.read(foodTypeBooleanProvider.notifier).state =
+                      newValue == FoodType.fasting;
+                }
+              },
+              items: FoodType.values.map((FoodType type) {
+                return DropdownMenuItem<FoodType>(
+                  value: type,
+                  child: Text(
+                    type == FoodType.fasting ? 'fasting' : 'non-fasting',
+                    style: const TextStyle(fontSize: 16),
                   ),
+                );
+              }).toList(),
+              decoration: InputDecoration(
+                labelText: "Food Type",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<FoodCategory>(
+              value: selectedCategory,
+              onChanged: (newValue) {
+                if (newValue != null) {
+                  ref.read(selectedCategoryProvider.notifier).state = newValue;
+                }
+              },
+              items: FoodCategory.values.map((FoodCategory category) {
+                return DropdownMenuItem<FoodCategory>(
+                  value: category,
+                  child: Text(
+                    category.toString().split('.')[1].toUpperCase(),
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                );
+              }).toList(),
+              decoration: InputDecoration(
+                labelText: "Category",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
             const Text('Ingredients'),
             Column(
               children: List.generate(_ingredientControllers.length, (index) {
@@ -333,35 +365,38 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
-                  
-                  if (_nameController.text.isNotEmpty &&
-                      _descriptionController.text.isNotEmpty &&
-                      _cookTimeController.text.isNotEmpty &&
-                      _peopleController.text.isNotEmpty &&
-                      image != null &&
-                      _ingredientControllers.isNotEmpty &&
-                      _stepControllers.isNotEmpty) {
-                    
-                    await service.sendPostRequest(
-                      context: context,
-                      name: _nameController.text,
-                      description: _descriptionController.text,
-                      cookTime: _cookTimeController.text,
-                      people: _peopleController.text,
-                      type: foodType.toString(), 
-                      image: File(image.path),
-                      ingredients: ingredients.map((ingredient) => ingredient.nameController.text).toList(),
-                      steps: steps.map((step) => step.stepController.text).toList(),
-                    );
-                  } else {
-                    
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill all required fields'),
-                      ),
-                    );
-                  }
-                },
+                if (_nameController.text.isNotEmpty &&
+                    _descriptionController.text.isNotEmpty &&
+                    _cookTimeController.text.isNotEmpty &&
+                    _peopleController.text.isNotEmpty &&
+                    image != null &&
+                    _ingredientControllers.isNotEmpty &&
+                    _stepControllers.isNotEmpty) {
+                  await service.sendPatchRequest(
+                    context: context,
+                    id: widget.recipe.id,
+                    name: _nameController.text,
+                    description: _descriptionController.text,
+                    cookTime: _cookTimeController.text,
+                    people: _peopleController.text,
+                    type: selectedCategory.toString(),
+                    fasting: fastingBoolean,
+                    image: File(image.path),
+                    ingredients: ingredients
+                        .map((ingredient) => ingredient.nameController.text)
+                        .toList(),
+                    steps:
+                        steps.map((step) => step.stepController.text).toList(),
+                  );
+                  context.go('/home');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill all required fields'),
+                    ),
+                  );
+                }
+              },
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.orange)),
