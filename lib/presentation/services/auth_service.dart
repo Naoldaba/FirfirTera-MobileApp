@@ -65,7 +65,8 @@ class AuthService  {
     }
   }
 
-  Future<Map<String, dynamic>> getUser(String userId) async {    
+  Future<Map<String, dynamic>> getUser(String userId) async {   
+    print("jere with" + userId); 
   await initializeSharedPreferences();
   final response = await http.get(
     Uri.parse('$baseUrl/user/$userId'),
@@ -97,8 +98,9 @@ Future editUser(String? id) async {
   );
 }
 
-Future deleteUser(String? id, context) async {
+Future deleteUser(String? id, BuildContext context) async {
     await initializeSharedPreferences();
+    
     http.delete(
       Uri.parse('$baseUrl/user/$id'),
       headers: {
@@ -107,7 +109,9 @@ Future deleteUser(String? id, context) async {
       },
     );
     sharedPreferences.clear();
-    context.go('/register ');
+    // ignore: use_build_context_synchronously
+    context.go('/register_1 ');
+
     return ;
 
 }

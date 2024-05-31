@@ -1,4 +1,3 @@
-import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/presentation/screens/admin.dart';
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:firfir_tera/presentation/screens/discover.dart';

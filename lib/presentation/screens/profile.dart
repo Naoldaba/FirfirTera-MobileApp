@@ -15,7 +15,6 @@ class Profile extends ConsumerWidget {
 
     User user = ref.watch(userModelProvider).when(
       data: (body) {
-        print(body.role);
         return body;
       },
       error:  (e,s) => throw(e),
@@ -62,11 +61,11 @@ class Profile extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(40)))),
                 child: const Text('Edit Profile'),
               ),
+
               const SizedBox(height: 20),
               OutlinedButton(
                 onPressed: () {
-                  sharedPreferences.  clear();
-                  
+                  sharedPreferences.clear();
                   context.go('/login');
                 },
                 style: ButtonStyle(
@@ -81,7 +80,9 @@ class Profile extends ConsumerWidget {
   try {
     AuthService authInstance = AuthService();
     SharedPreferences sharedpref = await SharedPreferences.getInstance();
-    String? userId = sharedpref.getString('userId');  // No need for 'await' here
+    String? userId = sharedpref.getString('userId'); 
+    
+     // No need for 'await' here
 
     if (userId != null) {
       await authInstance.deleteUser(userId, context);
@@ -90,7 +91,6 @@ class Profile extends ConsumerWidget {
       print("User ID not found in SharedPreferences");
     }
   } catch (e) {
-    // Handle any errors that might occur during SharedPreferences initialization or usage
     print("Error initializing SharedPreferences or deleting user: $e");
   }
   

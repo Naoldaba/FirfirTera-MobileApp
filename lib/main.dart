@@ -35,7 +35,7 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
         path: '/',
-        builder: (context, state) => const AuthChecker(),
+        builder: (context, state) => const  AuthChecker (),
         routes: [
           GoRoute(
             path: 'onboarding_2',
@@ -251,13 +251,14 @@ class MyApp extends StatelessWidget {
 
 
 class AuthChecker extends ConsumerWidget {
-  const AuthChecker({Key? key}) : super(key: key);
+  const AuthChecker({super.key});
 
   @override
   build(BuildContext context,  ref) {  
+    
     return ref.watch(checkProvider).when(
       data: (data) {
-        
+        print('data');
         if (data != null) {
           return const Home();
         } else {
