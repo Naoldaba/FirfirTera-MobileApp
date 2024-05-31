@@ -42,7 +42,9 @@ class CreateRecipe extends ConsumerWidget {
             children: [
               TextButton.icon(
                 onPressed: () {
-                  ref.read(imageNotifierProvider.notifier).pickImage(ImageSource.camera);
+                  ref
+                      .read(imageNotifierProvider.notifier)
+                      .pickImage(ImageSource.camera);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.camera),
@@ -50,7 +52,9 @@ class CreateRecipe extends ConsumerWidget {
               ),
               TextButton.icon(
                 onPressed: () {
-                  ref.read(imageNotifierProvider.notifier).pickImage(ImageSource.gallery);
+                  ref
+                      .read(imageNotifierProvider.notifier)
+                      .pickImage(ImageSource.gallery);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.image),
@@ -70,6 +74,7 @@ class CreateRecipe extends ConsumerWidget {
     final ingredients = ref.watch(ingredientsNotifierProvider);
     final steps = ref.watch(stepNotifierProvider);
     final image = ref.watch(imageNotifierProvider);
+    final service = ref.watch(recipeServiceProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -96,7 +101,8 @@ class CreateRecipe extends ConsumerWidget {
                     child: image == null
                         ? _tempImage
                         : Container(
-                            child: Image.file(File(image.path), fit: BoxFit.cover),
+                            child:
+                                Image.file(File(image.path), fit: BoxFit.cover),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
@@ -267,7 +273,8 @@ class CreateRecipe extends ConsumerWidget {
                                   decoration: InputDecoration(
                                     hintText: 'Ingredient ${index + 1}',
                                     border: OutlineInputBorder(
-                                      borderSide: const BorderSide(color: Colors.grey),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                   ),
@@ -276,7 +283,9 @@ class CreateRecipe extends ConsumerWidget {
                               const SizedBox(width: 8),
                               IconButton(
                                 icon: const Icon(Icons.remove_circle),
-                                onPressed: () => ref.read(ingredientsNotifierProvider.notifier).removeIngredient(index),
+                                onPressed: () => ref
+                                    .read(ingredientsNotifierProvider.notifier)
+                                    .removeIngredient(index),
                               ),
                             ],
                           );
@@ -284,7 +293,9 @@ class CreateRecipe extends ConsumerWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => ref.read(ingredientsNotifierProvider.notifier).addIngredient(),
+                      onTap: () => ref
+                          .read(ingredientsNotifierProvider.notifier)
+                          .addIngredient(),
                       child: const Row(
                         children: [
                           Icon(
@@ -371,7 +382,6 @@ class CreateRecipe extends ConsumerWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  
                   if (_nameController.text.isNotEmpty &&
                       _descriptionController.text.isNotEmpty &&
                       _cookTimeController.text.isNotEmpty &&
@@ -379,20 +389,22 @@ class CreateRecipe extends ConsumerWidget {
                       image != null &&
                       ingredients.isNotEmpty &&
                       steps.isNotEmpty) {
-                    
-                    await sendPostRequest(
+                    await service.sendPostRequest(
                       context: context,
                       name: _nameController.text,
                       description: _descriptionController.text,
                       cookTime: _cookTimeController.text,
                       people: _peopleController.text,
-                      type: _foodType.toString(), 
+                      type: _foodType.toString(),
                       image: File(image.path),
-                      ingredients: ingredients.map((ingredient) => ingredient.nameController.text).toList(),
-                      steps: steps.map((step) => step.stepController.text).toList(),
+                      ingredients: ingredients
+                          .map((ingredient) => ingredient.nameController.text)
+                          .toList(),
+                      steps: steps
+                          .map((step) => step.stepController.text)
+                          .toList(),
                     );
                   } else {
-                    
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Please fill all required fields'),
