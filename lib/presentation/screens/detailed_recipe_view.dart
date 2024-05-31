@@ -1,4 +1,5 @@
 import 'package:firfir_tera/models/Recipe.dart';
+import 'package:firfir_tera/providers/recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -14,10 +15,11 @@ class DetailedView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final User? user = ref.read(userStateProvider.notifier).state;
+    final service = ref.read(recipeServiceProvider);
     final String role = user!.role;
 
     void deleteRecipe() {
-      bool ans = DeleteRecipe((user.id).toString()) as bool;
+      bool ans = service.DeleteRecipe((user.id).toString()) as bool;
       if (ans == true) {
         context.go("/home/discover");
       }
@@ -52,7 +54,7 @@ class DetailedView extends ConsumerWidget {
                           ),
                           Row(
                             children: [
-                              if (role=='cook')...[
+                              if (role == 'cook') ...[
                                 IconButton(
                                   onPressed: () {
                                     context.go(
@@ -66,10 +68,11 @@ class DetailedView extends ConsumerWidget {
                                   icon: Icon(Icons.delete),
                                 ),
                               ],
-                              if (user.role=='normal')
+                              if (user.role == 'normal')
                                 IconButton(
-                                  onPressed: () =>
-                                      context.go('/home/detailed_view/comment', extra: recipe),
+                                  onPressed: () => context.go(
+                                      '/home/detailed_view/comment',
+                                      extra: recipe),
                                   icon: Icon(Icons.comment),
                                 ),
                             ],
