@@ -1,12 +1,12 @@
-import 'package:firfir_tera/providers/users_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firfir_tera/models/User.dart';
+import 'package:firfir_tera/presentation/screens/admin.dart';
 import 'package:firfir_tera/presentation/screens/create_recipe_page.dart';
 import 'package:firfir_tera/presentation/screens/discover.dart';
 import 'package:firfir_tera/presentation/screens/profile.dart';
-import 'package:firfir_tera/presentation/screens/admin.dart';
+import 'package:firfir_tera/providers/user_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/home_provider.dart';
-import 'package:firfir_tera/models/User.dart';
 
 class Home extends StatelessWidget {
 
@@ -14,24 +14,40 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
+    return const ProviderScope(
       child: _HomeContent(),
     );
   }
 }
 
 class _HomeContent extends ConsumerWidget {
-
   const _HomeContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Widget> _pages = [Discover()];
-    final User? user = ref.read(userStateProvider.notifier).state;
-    final role = user?.role[0];
+    final List<Widget> _pages = [const Discover()];
+     
+    User  user = ref.read(userModelProvider).when(
+      data: (data) {
+        return data;
+      },
+       error: ((error, stackTrace) => (
+         throw error
+       )), 
+       loading: (){
+        return User(email: "noemail", id: '2', firstName: "ene", lastName: "dadss", role : "cook");
+        
+       }
+       );
+    
+    
+    String role = user.role;
+   
+
+    
 
     final List<BottomNavigationBarItem> _navItems = [
-      BottomNavigationBarItem(
+      const BottomNavigationBarItem(
         icon: Icon(Icons.home),
         label: 'Discover',
       ),
@@ -39,15 +55,15 @@ class _HomeContent extends ConsumerWidget {
 
     if (role=='cook') {
       _pages.add(CreateRecipe());
-      _pages.add(Profile());
+      _pages.add(const Profile());
       _navItems.add(
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.add_box_rounded),
           label: 'Add Recipe',
         ),
       );
       _navItems.add(
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',
         ),
@@ -55,15 +71,15 @@ class _HomeContent extends ConsumerWidget {
     }else if (role=='admin') {
       _pages.add(AdminPanel());
       _navItems.add(
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.admin_panel_settings),
           label: 'Admin',
         ),
       );
     }
      else {
-      _pages.add(Profile());
-      _navItems.add(BottomNavigationBarItem(
+      _pages.add(const Profile());
+      _navItems.add(const BottomNavigationBarItem(
         icon: Icon(Icons.person),
         label: 'Profile',
       ));

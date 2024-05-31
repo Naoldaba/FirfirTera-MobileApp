@@ -5,12 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:firfir_tera/models/User.dart';
-import 'package:firfir_tera/presentation/services/recipe_services.dart';
 
 class DetailedView extends ConsumerWidget {
   final Recipe recipe;
 
-  const DetailedView(this.recipe);
+  const DetailedView(this.recipe, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,11 +60,11 @@ class DetailedView extends ConsumerWidget {
                                         '/home/detailed_view/edit_recipe',
                                         extra: recipe);
                                   },
-                                  icon: Icon(Icons.edit),
+                                  icon: const Icon(Icons.edit),
                                 ),
                                 IconButton(
                                   onPressed: deleteRecipe,
-                                  icon: Icon(Icons.delete),
+                                  icon: const Icon(Icons.delete),
                                 ),
                               ],
                               if (user.role == 'normal')
@@ -126,7 +125,7 @@ class DetailedView extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Ingredients",
                         style: TextStyle(
                           fontSize: 18,
@@ -141,7 +140,7 @@ class DetailedView extends ConsumerWidget {
                           return ListTile(
                             title: Text(
                               recipe.ingredients[index],
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                             ),
                           );
                         },
@@ -159,7 +158,7 @@ class DetailedView extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Steps",
                         style: TextStyle(
                           fontSize: 18,
@@ -173,7 +172,7 @@ class DetailedView extends ConsumerWidget {
                           return ListTile(
                             title: Text(
                               recipe.steps[index],
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                             ),
                           );
                         },

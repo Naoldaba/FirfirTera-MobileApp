@@ -1,23 +1,27 @@
+
+import 'package:firfir_tera/presentation/services/auth_service.dart';
+import 'package:firfir_tera/providers/registration_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 
-class Register_3 extends StatefulWidget {
+class Register_3 extends ConsumerStatefulWidget {
   const Register_3({super.key});
 
   @override
-  State<Register_3> createState() => _Register_3State();
+  ConsumerState<Register_3> createState() => _Register_3State();
 }
 
-class _Register_3State extends State<Register_3> {
+class _Register_3State extends ConsumerState<Register_3> {
   String? _imageData;
   String? _imageName;
+  String? _imagePath;
 
-  Future<void> _getImage() async {
+  Future<String> _getImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
     if (pickedImage != null) {
       final bytes = await pickedImage.readAsBytes();
       final base64Image = base64Encode(bytes);
@@ -25,11 +29,26 @@ class _Register_3State extends State<Register_3> {
         _imageData = base64Image;
         _imageName = pickedImage.path.split('/').last;
       });
+      return pickedImage.path;
+    }
+    else{
+      throw Exception('No image selected');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    
+    void prepareData(context) async {
+      final firstPage = ref.read(myfirstPageMapProvider);
+      final secondPage = ref.read(mysecondPageMapProvider);
+      Map<String, String> totalData = {...firstPage, ...secondPage};
+      _imagePath ??= await _getImage();
+      final authInstance = AuthService();     
+      authInstance.registerUser(totalData, _imagePath, context);
+    }
+    
+
     return Scaffold(
       extendBody: true,
       body: Container(
@@ -126,6 +145,7 @@ class _Register_3State extends State<Register_3> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                     prepareData(context    );
                       // Navigator.pushReplacementNamed(context, '/register_2');
                     },
                     style: ButtonStyle(

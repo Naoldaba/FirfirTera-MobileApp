@@ -1,23 +1,34 @@
+
+
+import 'package:http/http.dart';
+
 class User {
-  final int id;
-  final String firstName;
-  final String lastName;
+  final String id;
+   final String firstName;
+   String? lastName;
   final String email;
   final String role;
+  final String? image;
 
   User(
-      {required this.id,
-      required this.firstName,
-      required this.lastName,
+      {
+      required this.id,
+       required this.firstName,
+       this.lastName,
       required this.email,
-      required this.role});
+      required this.role, 
+      this.image  
+    }
+    );
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: json['id'],
+        id: json['_id'] ,
         firstName: json['firstName'],
         lastName: json['lastName'],
         email: json['email'],
-        role: json['role']);
+        role: json['role'][0],
+        image: json['image']
+        );
   }
 }

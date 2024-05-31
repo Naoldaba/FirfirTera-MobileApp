@@ -1,10 +1,9 @@
+import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/brand_promo.dart';
-import 'package:firfir_tera/providers/users_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firfir_tera/models/User.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -26,24 +25,14 @@ class _LoginState extends ConsumerState<Login> {
     super.dispose();
   }
 
-  void _submit() {
-    if (!_formKey.currentState!.validate()) {
-      
-      bool isAdmin = false; 
-      final user = User(
-        id: 2,
-        firstName: "Naol",
-        lastName: "Daba",
-        email: "xyx@gmail.com",
-        role:"normal"
-        );
-
-      ref.read(userStateProvider.notifier).setUser(user);
-
-      context.go('/home');
+  Future<bool?> _submit(context) async {
+    if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
-      
+      AuthService authService = AuthService();
+      authService.login(email, password, context);
+      // final temp = authService.getCurrentUser().then((value) => value);
+      return true;
     }
   }
 
@@ -54,7 +43,7 @@ class _LoginState extends ConsumerState<Login> {
     RegExp regex =
         RegExp(r'^(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     if (!regex.hasMatch(value)) {
-      return 'Password must contain at least one letter, one number, one special character, and be at least 8 characters long';
+      return 'Password must contain at least one letter,a number,a special char, and at least 8 chars';
     }
     return null;
   }
@@ -105,9 +94,9 @@ class _LoginState extends ConsumerState<Login> {
                     controller: _passwordController,
                     obscureText: !_passwordVisible,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon:const  Icon(Icons.lock),
                       labelText: "Password",
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.horizontal(
                           left: Radius.circular(20),
                           right: Radius.circular(20),
@@ -127,13 +116,15 @@ class _LoginState extends ConsumerState<Login> {
                         },
                       ),
                     ),
-                    validator: _validatePassword,
+                    // validator: _validatePassword
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: _submit,
+                    onPressed: (){
+                      _submit(context);
+                    },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
+                      foregroundColor: Colors.orange,
                       minimumSize: const Size(130, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40.0),
@@ -148,9 +139,9 @@ class _LoginState extends ConsumerState<Login> {
                       const Text('Don\'t have an account? '),
                       GestureDetector(
                         onTap: () => context.go('/register_1'),
-                        child: MouseRegion(
+                        child: const MouseRegion(
                           cursor: SystemMouseCursors.click,
-                          child: const Text(
+                          child:  Text(
                             "Register",
                             style: TextStyle(
                               color: Colors.orange,

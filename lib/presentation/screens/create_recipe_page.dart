@@ -1,11 +1,11 @@
 import 'dart:io';
+import 'package:firfir_tera/presentation/services/recipe_services.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/create_recipe_provider.dart';
-import 'package:firfir_tera/presentation/services/recipe_services.dart';
 
 class CreateRecipe extends ConsumerWidget {
   CreateRecipe({super.key});
@@ -413,8 +413,7 @@ class CreateRecipe extends ConsumerWidget {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
+                  foregroundColor: Colors.white, backgroundColor: Colors.orange,
                   minimumSize: Size(double.infinity, 50),
                   textStyle: TextStyle(
                     fontSize: 16,
