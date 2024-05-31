@@ -20,7 +20,7 @@ final allUsersProvider = AutoDisposeFutureProvider<List<User>>.internal(
 );
 
 typedef AllUsersRef = AutoDisposeFutureProviderRef<List<User>>;
-String _$userStateHash() => r'e90905a9ce55994d717c88a914994de24d82be25';
+String _$userStateHash() => r'0eef5a70dc20a3ca2777739d72151134fef5599a';
 
 /// See also [UserState].
 @ProviderFor(UserState)

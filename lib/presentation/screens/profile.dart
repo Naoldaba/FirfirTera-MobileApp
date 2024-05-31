@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:firfir_tera/providers/user_provider.dart';
@@ -87,12 +89,15 @@ class Profile extends ConsumerWidget {
     if (userId != null) {
       await authInstance.deleteUser(userId, context);
     } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content:  Text("User ID not found in SharedPreferences"),
+      ));
       // Handle the case where userId is null
-      print("User ID not found in SharedPreferences");
     }
   } catch (e) {
-    print("Error initializing SharedPreferences or deleting user: $e");
-  }
+ ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Error SharedPreferences"),
+      ));  }
   
   // test();
 },style: ButtonStyle(

@@ -1,26 +1,16 @@
-import 'dart:convert';
+import 'package:firfir_tera/providers/profile_edit_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firfir_tera/providers/edit_profile_provider.dart'; 
+import 'package:go_router/go_router.dart';
 
 class EditProfile extends ConsumerWidget {
-  const EditProfile({Key? key}) : super(key: key);
-
-  Future<void> _getImage(BuildContext context, WidgetRef ref) async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      final bytes = await pickedImage.readAsBytes();
-      final base64Image = base64Encode(bytes);
-      ref.read(profileNotifierProvider.notifier).setImage(base64Image);
-    }
-  }
-
+  const EditProfile({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileState = ref.watch(profileNotifierProvider);
+    final profileState = ref.watch(profileEditProvider);
+    TextEditingController name = TextEditingController();
+    TextEditingController email = TextEditingController();
+    TextEditingController bio = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -33,63 +23,33 @@ class EditProfile extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () => _getImage(context, ref),
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.orange,
-                  child: profileState.imageData != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image.memory(
-                            base64Decode(profileState.imageData!),
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : const Icon(
-                          Icons.person,
-                          size: 50,
-                          color: Colors.white,
-                        ),
-                ),
-              ),
+             TextField(
+              controller:name,
+              decoration:  InputDecoration(labelText: 'Name'),
             ),
-            const SizedBox(height: 10),
-            const Text("Edit Profile Picture"),
-            const SizedBox(height: 30),
-            TextField(
-              controller: profileState.nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            const SizedBox(height: 20.0),
-            TextField(
-              controller: profileState.emailController,
+            const SizedBox(height: 20.0),         
+            TextField(  
+              controller: email,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
             const SizedBox(height: 20.0),
             TextField(
-              controller: profileState.bioController,
+              controller: bio,
               decoration: const InputDecoration(labelText: 'Bio'),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => ref.read(profileNotifierProvider.notifier).saveChanges(),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.orange),
-                minimumSize: MaterialStateProperty.all(const Size(90, 40)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                )),
-              ),
-              child: const Text('Save Changes'),
-            ),
+            ElevatedButton(onPressed: (){
+
+              ref.read(profileEditProvider.notifier).ovverideAll( {
+                'name': name.text,
+                'email': email.text,
+                'bio': bio.text,
+              }, context);
+            }, child: const Text('data'))
           ],
         ),
       ),
     );
+  
   }
 }
