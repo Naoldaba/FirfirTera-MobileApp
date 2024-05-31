@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 
-const String url = 'https://7f7a-213-55-95-169.ngrok-free.app';
+const String url = 'https://289d-213-55-95-222.ngrok-free.app';
 
 class RecipeServices {
   Future<List<Recipe>> recipes() async {

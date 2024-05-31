@@ -1,21 +1,21 @@
 class Comment {
   final String? id;
   final String userId;
-  final String comment;
+  final String text;
   final String recipeId;
 
   Comment({
     this.id,
     required this.recipeId,
     required this.userId,
-    required this.comment,
+    required this.text,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
       id: json['_id'],
-      userId: json['userId'],
-      comment: json['comment'],
+      userId: json['userId']['_id'],
+      text: json['text'],
       recipeId: json['recipeId'],
     );
   }
@@ -24,8 +24,7 @@ class Comment {
     return {
       'recipeId': recipeId,
       'userId': userId,
-      'comment': comment
+      'text': text
     };
   }
-
 }

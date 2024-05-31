@@ -41,7 +41,7 @@ class CommentScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final comment = comments[index];
                 return ListTile(
-                  title: Text(comment.comment),
+                  title: Text(comment.text),
                   subtitle: Text('User: ${comment.userId}'),
                   trailing: comment.userId == currentUserId
                       ? Row(
@@ -50,7 +50,7 @@ class CommentScreen extends ConsumerWidget {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () {
-                                _commentController.text = comment.comment;
+                                _commentController.text = comment.text;
                                 showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -70,7 +70,7 @@ class CommentScreen extends ConsumerWidget {
                                                 Comment(
                                                   recipeId: comment.recipeId,
                                                   userId: comment.userId,
-                                                  comment:
+                                                  text:
                                                       _commentController.text,
                                                 ),
                                               );
@@ -114,7 +114,7 @@ class CommentScreen extends ConsumerWidget {
                     final newComment = Comment(
                       recipeId: recipeId,
                       userId: currentUserId,
-                      comment: _commentController.text,
+                      text: _commentController.text,
                     );
                     ref
                         .read(commentsProvider(recipeId).notifier)
