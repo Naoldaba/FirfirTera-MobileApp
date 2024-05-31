@@ -1,14 +1,14 @@
 
-
-import 'package:http/http.dart';
-
 class User {
   final String id;
-   final String firstName;
-   String? lastName;
+  final String firstName;
+  String? lastName;
   final String email;
   final String role;
   final String? image;
+  String? createdAt;
+  String? updatedAt;
+  String? version;
 
   User(
       {
@@ -17,7 +17,10 @@ class User {
        this.lastName,
       required this.email,
       required this.role, 
-      this.image  
+      this.image,
+      this.createdAt,
+      this.updatedAt,
+      this.version
     }
     );
 
@@ -28,7 +31,14 @@ class User {
         lastName: json['lastName'],
         email: json['email'],
         role: json['role'][0],
-        image: json['image']
+        image: json['image'],
+        createdAt: json['createdAt'],
+        updatedAt: json['updatedAt'],
+        version: json['__v'].toString()
         );
   }
 }
+
+
+
+
