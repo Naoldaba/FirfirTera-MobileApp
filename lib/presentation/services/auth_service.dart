@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'package:firfir_tera/models/User.dart';
-import 'package:firfir_tera/models/auth_response.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,7 +38,6 @@ class AuthService  {
     await sharedPreferences.setString('token', token);
     await sharedPreferences.setString('role', role);
     await sharedPreferences.setString('userId', userId);
-    print('saved');
   }
   
 
@@ -56,9 +52,11 @@ class AuthService  {
         final responseBody = await response.stream.bytesToString();
         final responseJson = jsonDecode(responseBody);  
         saveUserToSharedPreferences(responseJson['token'], responseJson['role'][0], responseJson['id']);
+        // ignore: use_build_context_synchronously
         context.go('/home');
     }
     else{
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(response.statusCode.toString())),
       );
@@ -66,7 +64,6 @@ class AuthService  {
   }
 
   Future<Map<String, dynamic>> getUser(String userId) async {   
-    print("jere with" + userId); 
   await initializeSharedPreferences();
   final response = await http.get(
     Uri.parse('$baseUrl/user/$userId'),
@@ -110,11 +107,36 @@ Future deleteUser(String? id, BuildContext context) async {
     );
     sharedPreferences.clear();
     // ignore: use_build_context_synchronously
-    context.go('/register_1 ');
-
+    context.go('/');
     return ;
 
 }
+
+Future patchUser (json, context) async {
+  await initializeSharedPreferences();
+  final res = await http.patch(
+    Uri.parse('$baseUrl/user/${sharedPreferences.get('userId')}'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+    },
+    body: jsonEncode(json),
+  );
+
+  if (res.statusCode == 200){
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content:  Text('Profile Updated Succesfully')),
+      );
+      context.go('home');
+  } else {
+     ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content:  Text('Profile Updation  Failed')),
+      );
+
+  
+  }
+}
+
 
 }
 

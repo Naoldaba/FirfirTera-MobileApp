@@ -8,12 +8,10 @@ Map <String ,dynamic>  firstPageMap = {};
 
 @Riverpod()
 class RegisterOne extends _$RegisterOne{
-
   @override
   Map<String, dynamic> build(){
     return firstPageMap;
   }
-
   void addValue(Map<String, dynamic> page){
     firstPageMap = page;
   }
