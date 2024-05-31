@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/comment_provider.dart';
 import 'package:firfir_tera/models/Comment.dart';
-import 'package:firfir_tera/providers/users_provider.dart';
+import 'package:firfir_tera/providers/user_provider.dart';
+import 'package:firfir_tera/models/User.dart';
 
 class CommentScreen extends ConsumerWidget {
   final Recipe recipe;
@@ -15,8 +16,21 @@ class CommentScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recipeId = recipe.id;
-    final user = ref.read(userStateProvider.notifier).state;
-    final currentUserId = user.id.toString();
+    User user = ref.watch(userModelProvider).when(
+        data: (body) {
+          print(body.role);
+          return body;
+        },
+        error: (e, s) => throw (e),
+        loading: () {
+          return User(
+              email: "noemail",
+              id: '2',
+              firstName: "ene",
+              lastName: "das",
+              role: "cook");
+        });
+    final currentUserId = user.id;
     final comments = ref.watch(commentsProvider(recipeId!));
 
     return Scaffold(

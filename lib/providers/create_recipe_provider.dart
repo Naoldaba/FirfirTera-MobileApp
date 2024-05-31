@@ -6,9 +6,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'create_recipe_provider.g.dart';
 
 class Ingredient {
-  final TextEditingController nameController;
+  final TextEditingController ingredientController;
 
-  Ingredient({required this.nameController});
+  Ingredient({required this.ingredientController});
 }
 
 class Step {
@@ -23,19 +23,19 @@ class IngredientsNotifier extends _$IngredientsNotifier {
   @override
   List<Ingredient> build() {
     return [
-      Ingredient(nameController: TextEditingController()),
-      Ingredient(nameController: TextEditingController()),
-      Ingredient(nameController: TextEditingController()),
+      Ingredient(ingredientController: TextEditingController()),
+      Ingredient(ingredientController: TextEditingController()),
+      Ingredient(ingredientController: TextEditingController()),
       
     ];
   }
 
   void addIngredient() {
-    state = [...state, Ingredient(nameController: TextEditingController())];
+    state = [...state, Ingredient(ingredientController: TextEditingController())];
   }
 
   void removeIngredient(int index) {
-    state[index].nameController.dispose();
+    state[index].ingredientController.dispose();
     state = [...state]..removeAt(index);
   }
 }

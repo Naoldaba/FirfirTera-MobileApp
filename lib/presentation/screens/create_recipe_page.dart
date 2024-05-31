@@ -301,7 +301,7 @@ class CreateRecipe extends ConsumerWidget {
                               Expanded(
                                 flex: 3,
                                 child: TextField(
-                                  controller: ingredient.nameController,
+                                  controller: ingredient.ingredientController,
                                   decoration: InputDecoration(
                                     hintText: 'Ingredient ${index + 1}',
                                     border: OutlineInputBorder(
@@ -431,7 +431,7 @@ class CreateRecipe extends ConsumerWidget {
                       type: selectedCategory.toString(),
                       image: File(image.path),
                       ingredients: ingredients
-                          .map((ingredient) => ingredient.nameController.text)
+                          .map((ingredient) => ingredient.ingredientController.text)
                           .toList(),
                       steps: steps
                           .map((step) => step.stepController.text)

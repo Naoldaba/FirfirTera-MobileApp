@@ -383,7 +383,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                     fasting: fastingBoolean,
                     image: File(image.path),
                     ingredients: ingredients
-                        .map((ingredient) => ingredient.nameController.text)
+                        .map((ingredient) => ingredient.ingredientController.text)
                         .toList(),
                     steps:
                         steps.map((step) => step.stepController.text).toList(),
