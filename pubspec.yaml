@@ -50,6 +50,8 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.1.0
   riverpod_generator: ^2.0.0
+  path: ^1.8.0
+  http_parser: ^4.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

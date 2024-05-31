@@ -1,28 +1,38 @@
-import 'package:firfir_tera/models/User.dart';
+
+// Anatoli this is just for mocking, you need to implement the real provider
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:firfir_tera/models/User.dart';
 
 part 'users_provider.g.dart';
 
-List<User> allUsers = [
-  User(id: 1, firstName: "Naol", lastName: "Daba", email: "afaklsdj@gmail.com"),
-  User(
-      id: 2,
-      firstName: "Eyob",
-      lastName: "Derese",
-      email: "afaklsdj@gmail.com"),
-  User(
-      id: 3,
-      firstName: "Anatoli",
-      lastName: "Derese",
-      email: "afaklsdj@gmail.com"),
-  User(
-      id: 4,
-      firstName: "Aregawi",
-      lastName: "Fikre",
-      email: "afaklsdj@gmail.com"),
-];
+@riverpod
+Future<List<User>> allUsers(AllUsersRef ref) async {
+  final response = await http.get(Uri.parse(""));
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body) as List;
+    return data.map((user) => User.fromJson(user)).toList();
+  } else {
+    throw Exception("");
+  }
+}
 
 @riverpod
-List<User> users(ref) {
-  return allUsers;
+class UserState extends _$UserState {
+  @override
+  User build() {
+    return User(
+      id: 1,
+      email: "afdasfds",
+      firstName: "nafga",
+      lastName: "manda",
+      role: "normal",
+    );
+  }
+
+  void setUser(User user) {
+    state = user;
+  }
 }

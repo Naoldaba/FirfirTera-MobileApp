@@ -7,17 +7,19 @@ class User {
   final String email;
   final String role;
 
-  User({required this.id, required this.email , required this.firstName, required this.lastName, this.role = 'normal'});
+  User(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.role});
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      email: json['email'],
-      role: json['role'][0]
-    );
+        id: json['id'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],
+        email: json['email'],
+        role: json['role']);
   }
-
 }
-
-

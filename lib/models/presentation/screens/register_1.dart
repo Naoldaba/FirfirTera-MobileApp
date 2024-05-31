@@ -59,7 +59,7 @@ class _Register_1State extends ConsumerState<Register_1> {
                       const BrandPromo(color: Colors.white),
                       const SizedBox(height: 80),
                       Text(
-                        "Sign Up for free",
+                        "Sign Up for free ",
                         style: GoogleFonts.firaSans(
                           fontSize: 20,
                           fontWeight: FontWeight.normal,

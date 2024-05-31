@@ -11,7 +11,7 @@ class UserDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBanned = ref.watch(isBannedProvider);
+    final IsPromoted = ref.watch(isPromotedProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +24,7 @@ class UserDetails extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            context.go('/home');
           },
         ),
       ),
@@ -54,27 +54,28 @@ class UserDetails extends ConsumerWidget {
                 user.email,
                 style: const TextStyle(fontSize: 18),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
+              SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(isBannedProvider.notifier).toggle();
+                  ref.read(isPromotedProvider.notifier).toggle();
                   _showSnackBar(
                     context,
-                    isBanned
-                        ? "User ${user.firstName} banned"
-                        : "User ${user.firstName} unbanned",
+                    IsPromoted
+                        ? "User ${user.firstName} promoted to admin"
+                        : "User ${user.firstName} demoted to regular user",
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: isBanned ? Colors.red : Colors.green,
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                  primary: IsPromoted ? Colors.red : Colors.green,
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: Text(
-                  isBanned ? 'Unban User' : 'Ban User',
-                  style: const TextStyle(fontSize: 18),
+                  IsPromoted ? 'Demote User' : 'Promote User',
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
               const SizedBox(height: 15),
