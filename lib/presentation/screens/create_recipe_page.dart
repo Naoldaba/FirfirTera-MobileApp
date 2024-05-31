@@ -244,7 +244,7 @@ class CreateRecipe extends ConsumerWidget {
                   return DropdownMenuItem<FoodCategory>(
                     value: category,
                     child: Text(
-                      category.toString(),
+                      category.toString().split('.')[1].toUpperCase(),
                       style: const TextStyle(fontSize: 16),
                     ),
                   );
@@ -437,7 +437,7 @@ class CreateRecipe extends ConsumerWidget {
                           .map((step) => step.stepController.text)
                           .toList(),
                     );
-                    
+
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

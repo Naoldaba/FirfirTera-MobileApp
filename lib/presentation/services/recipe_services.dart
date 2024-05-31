@@ -141,7 +141,6 @@ class RecipeServices {
       print(request.fields);
       print(request.files);
 
-      
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Recipe updated successfully')),
@@ -165,10 +164,10 @@ class RecipeServices {
     required String cookTime,
     required String people,
     required String type,
+    required bool fasting,
     required File image,
     required List<String> ingredients,
     required List<String> steps,
-    required bool fasting,
   }) async {
     if (name.isNotEmpty &&
         description.isNotEmpty &&
@@ -177,9 +176,12 @@ class RecipeServices {
         type.isNotEmpty &&
         ingredients.isNotEmpty &&
         steps.isNotEmpty) {
-      final url = Uri.parse('');
-      final request = http.MultipartRequest('POST', url);
 
+      final request = http.MultipartRequest('POST', Uri.parse('$url/recipes/new'));
+
+      request.headers['Content-Type'] = 'application/json';
+      request.headers['Authorization'] =
+          'Bearer ${sharedPreferences.getString('token')}';
       request.fields['name'] = name;
       request.fields['description'] = description;
       request.fields['cookTime'] = cookTime;
@@ -195,10 +197,10 @@ class RecipeServices {
         contentType: MediaType('image', 'jpeg'),
       ));
 
+      print(request.fields);
+      print(request.files);
+
       final response = await request.send();
-      // print(request.fields);
-      // print(request.fields);
-      // final response = true;
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
