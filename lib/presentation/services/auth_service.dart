@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firfir_tera/models/User.dart';
 import 'package:firfir_tera/models/auth_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AuthService  {
-  final String baseUrl ="https://ee64-196-189-150-186.ngrok-free.app";
+  final String baseUrl ="https://0a8b-213-55-95-236.ngrok-free.app";
   late SharedPreferences sharedPreferences ;
   Future<void> initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -18,13 +19,13 @@ class AuthService  {
   Future<void> login(String email, String password, BuildContext context) async {
     await initializeSharedPreferences();
     final response = await http.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('$baseUrl/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'email': email, 'password': password}),
     ).timeout(const Duration(seconds: 300));
       if (response.statusCode == 201) {
         final responseJson = json.decode(response.body);
-        saveUserToSharedPreferences(responseJson['token'], responseJson['role'], responseJson['id']);
+        saveUserToSharedPreferences(responseJson['token'], responseJson['role'][0], responseJson['id']);
         context.go('/home');
         
     } else {
@@ -64,9 +65,7 @@ class AuthService  {
     }
   }
 
-  Future<Map<String, dynamic>> getUser(String userId) async {
-    print("here with" + userId);
-    
+  Future<Map<String, dynamic>> getUser(String userId) async {    
   await initializeSharedPreferences();
   final response = await http.get(
     Uri.parse('$baseUrl/user/$userId'),
@@ -82,6 +81,35 @@ class AuthService  {
   } else {
     throw Exception('Failed to load user');
   }
+}
+
+
+Future editUser(String? id) async {
+    await initializeSharedPreferences();
+
+  return http.patch(
+    Uri.parse('$baseUrl/user/$id'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+    },
+    body: jsonEncode(json),
+  );
+}
+
+Future deleteUser(String? id, context) async {
+    await initializeSharedPreferences();
+    http.delete(
+      Uri.parse('$baseUrl/user/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+      },
+    );
+    sharedPreferences.clear();
+    context.go('/register ');
+    return ;
+
 }
 
 }

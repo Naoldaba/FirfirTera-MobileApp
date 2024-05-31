@@ -23,8 +23,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/models/Recipe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  // SharedPreferences sp = SharedPreferences.getInstance() as SharedPreferences;
+  // sp.clear();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -254,10 +257,10 @@ class AuthChecker extends ConsumerWidget {
   build(BuildContext context,  ref) {  
     return ref.watch(checkProvider).when(
       data: (data) {
+        
         if (data != null) {
           return const Home();
         } else {
-          print("data mpt");
           return const OnBoarding_1();
         } 
       },

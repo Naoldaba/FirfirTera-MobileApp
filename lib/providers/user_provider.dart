@@ -27,7 +27,7 @@ Future  getSessionJson() async {
     'role': role,
     'id': id
   };
-  
+
 }
 
 
@@ -37,27 +37,9 @@ final userProvider = FutureProvider((ref) async {
   return authInstance.getUser(data!['id']);
 }
 );
-
-final userModelProvider = FutureProvider<User>((ref) async {    
-  User myUserModel = ref.read(userProvider).when(
-    data: (data)
-    { 
-      print(data);
-      return User.fromJson(data);
-      
-    },
-     error: (error, s) {
-      throw error;
-
-     }, 
-     loading:() {
-      return User(email: "noemail", id: '2', firstName: "ene", lastName: "das", role : "normal");
-
-     }
-     
-     );
-     return myUserModel;
-
+final userModelProvider = FutureProvider<User>((ref) async {
+  final userData = await ref.watch(userProvider.future);
+  return User.fromJson(userData);
 });
 
 
