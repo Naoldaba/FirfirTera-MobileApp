@@ -14,6 +14,7 @@ late SharedPreferences sharedPreferences ;
 Future <String?> checkUser() async {
   await initializeSharedPreferences();
   final userString = sharedPreferences.getString('token');
+  print(userString);
   return userString ;
 }
 
