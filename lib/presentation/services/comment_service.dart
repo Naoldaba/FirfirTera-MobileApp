@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import "dart:convert";
 
 class CommentService {
-  final String baseUrl = '####';
+  final String url = 'https://ee64-196-189-150-186.ngrok-free.app';
 
   Future<List<Comment>> fetchComments(String recipeId) async {
     // return [
@@ -12,7 +12,7 @@ class CommentService {
     // ];
 
     final response =
-        await http.get(Uri.parse('$baseUrl/comments?recipeId=$recipeId'));
+        await http.get(Uri.parse('$url/comments/${recipeId}'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -24,7 +24,7 @@ class CommentService {
 
   Future<void> addComment(Comment comment) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/comments'),
+      Uri.parse('$url/comments/${comment.recipeId}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -38,7 +38,7 @@ class CommentService {
 
   Future<void> deleteComment(String commentId) async {
     final response = await http.delete(
-      Uri.parse('$baseUrl/comments/$commentId'),
+      Uri.parse('$url/comments/$commentId'),
     );
 
     if (response.statusCode != 200) {
@@ -48,7 +48,7 @@ class CommentService {
 
   Future<void> updateComment(Comment comment) async {
     final response = await http.put(
-      Uri.parse('$baseUrl/comments/${comment.recipeId}'),
+      Uri.parse('$url/comments/${comment.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
