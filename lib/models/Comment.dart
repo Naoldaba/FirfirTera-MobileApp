@@ -13,7 +13,7 @@ class Comment {
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
-      id: json['id'],
+      id: json['_id'],
       userId: json['userId'],
       comment: json['comment'],
       recipeId: json['recipeId'],
