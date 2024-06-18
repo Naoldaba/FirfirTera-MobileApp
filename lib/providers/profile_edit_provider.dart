@@ -14,10 +14,6 @@ final Map<String, dynamic > json = {
   "bio": "bio",
 };
 
-
-
-
-
 @riverpod
 class ProfileEdit extends _$ProfileEdit {
   @override
@@ -29,13 +25,12 @@ class ProfileEdit extends _$ProfileEdit {
      json['name'] = data['name'];
       json['email'] = data['email'];
       json['bio'] = data['bio'];
-      
       sendPatch(context);
-      
    }
 
    void sendPatch(context){
     AuthService authService = AuthService();
     authService.patchUser(json, context);
    }
+
 }

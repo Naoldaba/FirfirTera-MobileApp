@@ -10,34 +10,30 @@ export class CommentService {
     private commentModel: Model<Comment>,
   ) {}
 
-  // it accept recipe id and return the array of comment object from recipy comment property
   async getComments(recipeId: string): Promise<Comment[]> {
-    const comments = await this.commentModel.find({ recipeId }).populate({
-      path: 'userId',
-      model: 'User',
-      select: 'firstName lastName image _id',
-    });
+    const comments = await this.commentModel.find({ recipeId });
     return comments;
   }
-  // it accept commentId and comment property called text and return the updated comment objext
   async updateComment(commentId: string, text: string): Promise<Comment> {
-    const comment = await this.commentModel.findByIdAndUpdate(
-      commentId,
-      { text: text },
-      { new: true },
+    const this_comment = await this.commentModel.findById(
+      commentId
     );
-
-    return comment;
+    console.log('am here', "new_comment=", text);
+    if(text){
+      this_comment.text=text;
+    }
+    await this_comment.save(); 
+    return this_comment;
   }
-  // it accept commentId and return the deleted comment object
   async deleteComment(commentId: string): Promise<Comment> {
     const comment = await this.commentModel.findByIdAndDelete(commentId);
+    console.log('hereee')
     if (!comment) {
       throw new NotFoundException('comment not found!');
     }
+    console.log('hereee 2222')
     return comment;
   }
-  // it accept recipeId and comment object and return the created comment object
   async createComment(
     recipeId: string,
     comment: string,

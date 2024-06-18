@@ -29,6 +29,7 @@ class UserState extends _$UserState {
       firstName: "nafga",
       lastName: "manda",
       role: "cook",
+      image: "/assets/profile_pic/profile_2.jpg"
     );
   }
 

@@ -22,31 +22,39 @@ class CommentNotifier extends StateNotifier<List<Comment>> {
   Future<void> _fetchComments() async {
     try {
       state = await _service.fetchComments(_recipeId);
-      print('hi');
     } catch (e) {}
   }
 
-  Future<void> addComment(Comment comment) async {
+  Future<bool> addComment(Comment comment) async {
     try {
       await _service.addComment(comment);
       state = [...state, comment];
-    } catch (e) {}
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  Future<void> deleteComment(String commentId) async {
+  Future<bool> deleteComment(String commentId) async {
     try {
       await _service.deleteComment(commentId);
       state = state.where((comment) => comment.id != commentId).toList();
-    } catch (e) {}
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  Future<void> updateComment(Comment updatedComment) async {
+  Future<bool> updateComment(Comment updatedComment) async {
     try {
       await _service.updateComment(updatedComment);
       state = state
           .map((comment) =>
               comment.id == updatedComment.id ? updatedComment : comment)
           .toList();
-    } catch (e) {}
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

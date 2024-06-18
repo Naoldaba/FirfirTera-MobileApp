@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
   Query,
   Headers,
   UseGuards,
@@ -69,7 +68,7 @@ export class RecipeController {
       file.path,
     );
 
-    const serverBaseURL = 'https://c3ed-213-55-95-236.ngrok-free.app/uploads/';
+    const serverBaseURL = 'https://418d-196-189-123-67.ngrok-free.app/uploads/';
     const filePath = `${serverBaseURL}${file.filename}`;
     const createdRecipe = await this.recipeService.insertRecipe(
       {
@@ -122,21 +121,10 @@ export class RecipeController {
     }
   }
 
-  // @Patch(':id')
-  // @Roles(Role.COOK)
-
-  // async updateRecipe(
-  //   @Param('id')
-  //   id: string,
-  //   @Body()
-  //   recipe: updateRecipeDto
-  // ): Promise<Recipe> {
-  //   console.log("the id is-",id)
-  //   return this.recipeService.updateById(id, recipe)
-  // }
-
   @Patch(':id')
-  @Roles(Role.COOK, Role.ADMIN)
+  @UseInterceptors(FileInterceptor('image', multerConfig))
+  @Roles(Role.COOK)
+  @Roles(Role.ADMIN)
   async updateProduct(
     @Param('id') recipeId: string,
     @Body('name') recipeName: string,
@@ -146,23 +134,29 @@ export class RecipeController {
     @Body('steps') steps: string[],
     @Body('ingredients') ings: string[],
     @Body('fasting') fasting: string,
-    @Body('type') type: string,
-    @Body('image') image: string,
+    @Body('type') type: Category,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('the Id is:', recipeId);
-    return await this.recipeService.updateRecipe(
-      recipeId,
-      recipeName,
-      recipeDesc,
-      cooktime,
-      people,
-      steps,
-      ings,
-      fasting,
-      type,
-      image,
-    );
-  }
+
+      this.uploadService.uploadFile(file) 
+      const serverBaseURL = 'https://418d-196-189-123-67.ngrok-free.app/uploads/';
+      const image = `${serverBaseURL}${file.filename}`;
+      console.log('the Id is:', recipeId);
+      console.log('thumbs up')
+
+      await this.recipeService.updateRecipe(
+        recipeId,
+        recipeName,
+        recipeDesc,
+        cooktime,
+        people,
+        steps,
+        ings,
+        fasting,
+        type,
+        image,
+      );
+    }
 
   @Delete(':id')
   @Roles(Role.COOK)

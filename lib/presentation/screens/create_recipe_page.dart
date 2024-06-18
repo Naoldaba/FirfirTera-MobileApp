@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:firfir_tera/providers/recipe_provider.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/create_recipe_provider.dart';
-// import 'package:firfir_tera/presentation/services/recipe_services.dart';
 
 class CreateRecipe extends ConsumerWidget {
   CreateRecipe({super.key});
@@ -421,7 +421,7 @@ class CreateRecipe extends ConsumerWidget {
                       image != null &&
                       ingredients.isNotEmpty &&
                       steps.isNotEmpty) {
-                    await service.sendPostRequest(
+                    bool isSuccess = await service.sendPostRequest(
                       context: context,
                       name: _nameController.text,
                       description: _descriptionController.text,
@@ -431,13 +431,29 @@ class CreateRecipe extends ConsumerWidget {
                       type: selectedCategory.toString(),
                       image: File(image.path),
                       ingredients: ingredients
-                          .map((ingredient) => ingredient.ingredientController.text)
+                          .map((ingredient) =>
+                              ingredient.ingredientController.text)
                           .toList(),
                       steps: steps
                           .map((step) => step.stepController.text)
                           .toList(),
                     );
-
+                    if (isSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Recipe got successfully created'),
+                        ),
+                      );
+                      refreshNotifier.refresh();
+                      context.go('/');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Unable to create recipe, pls try again later'),
+                        ),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

@@ -166,12 +166,12 @@ export class RecipeService {
     type,
     image,
   ) {
-    console.log(recipeId, recipeName);
+    console.log(recipeId, ings, steps);
     let updated;
     try {
       updated = await this.recipeModel.findById(recipeId);
     } catch {
-      throw new NotFoundException('could not find reicpe');
+      throw new NotFoundException('could not find recipe');
     }
     if (recipeName) {
       updated.name = recipeName;
@@ -182,14 +182,14 @@ export class RecipeService {
     if (cooktime) {
       updated.cookTime = cooktime;
     }
-    if (people) {
+    if (people) { 
       updated.people = people;
     }
     if (steps) {
-      updated.steps = steps;
+      updated.steps = JSON.parse(steps);
     }
     if (ings) {
-      updated.ingredients = ings;
+      updated.ingredients = JSON.parse(ings);
     }
     updated.fasting = fasting;
     if (type) {

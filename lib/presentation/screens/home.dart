@@ -6,6 +6,7 @@ import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/home_provider.dart';
+import 'package:go_router/go_router.dart';
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,7 +29,6 @@ class _HomeContent extends ConsumerWidget {
         final List<Widget> _pages = [const Discover()];
 
         final role = user.role;
-        print(role);
 
         final List<BottomNavigationBarItem> _navItems = [
           const BottomNavigationBarItem(
@@ -84,7 +84,51 @@ class _HomeContent extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text('Error: $error')),
+      error: (error, stack) => Container(
+        color: Colors.white,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.network_check,
+                  size: 100,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Oops!',
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Please check your internet connection and try again',
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    fontSize: 18,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.refresh(userProvider);
+                  },
+                  child: Text('Retry'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

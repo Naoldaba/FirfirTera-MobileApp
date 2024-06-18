@@ -9,40 +9,40 @@ import 'package:firfir_tera/presentation/services/recipe_services.dart';
 
 part 'recipe_provider.g.dart';
 
-const url = 'https://c3ed-213-55-95-236.ngrok-free.app';
-
 enum FoodType { fasting, nonfasting }
-enum FoodCategory {breakfast, lunch, dinner}
+
+enum FoodCategory { breakfast, lunch, dinner }
 
 final recipeServiceProvider = Provider((ref) => RecipeServices());
 
-final recipesProvider = FutureProvider<List<Recipe>>((ref) async {
+final recipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
   final service = ref.watch(recipeServiceProvider);
   return service.recipes();
 });
 
-final breakfastRecipesProvider = FutureProvider<List<Recipe>>((ref) async {
+final breakfastRecipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
   final service = ref.watch(recipeServiceProvider);
   return service.breakfastRecipes();
 });
 
-final lunchRecipesProvider = FutureProvider<List<Recipe>>((ref) async {
+final lunchRecipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
   final service = ref.watch(recipeServiceProvider);
   return service.lunchRecipes();
 });
 
-final dinnerRecipesProvider = FutureProvider<List<Recipe>>((ref) async {
+final dinnerRecipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
   final service = ref.watch(recipeServiceProvider);
   return service.dinnerRecipes();
 });
 
-final deleteRecipeProvider = FutureProvider.family<bool, String>((ref, id) async {
+final deleteRecipeProvider =
+    FutureProvider.family<bool, String>((ref, id) async {
   final service = ref.watch(recipeServiceProvider);
   return service.DeleteRecipe(id);
 });
 
-
-final patchRecipeProvider = FutureProvider.family<void, PatchRecipeParams>((ref, params) async {
+final patchRecipeProvider =
+    FutureProvider.family<void, PatchRecipeParams>((ref, params) async {
   final service = ref.watch(recipeServiceProvider);
   await service.sendPatchRequest(
     context: params.context,
@@ -59,8 +59,8 @@ final patchRecipeProvider = FutureProvider.family<void, PatchRecipeParams>((ref,
   );
 });
 
-
-final postRecipeProvider = FutureProvider.family<void, PostRecipeParams>((ref, params) async {
+final postRecipeProvider =
+    FutureProvider.family<void, PostRecipeParams>((ref, params) async {
   final service = ref.watch(recipeServiceProvider);
   await service.sendPostRequest(
     context: params.context,
@@ -76,7 +76,6 @@ final postRecipeProvider = FutureProvider.family<void, PostRecipeParams>((ref, p
   );
 });
 
-
 @riverpod
 class foodType extends _$foodType {
   @override
@@ -88,7 +87,6 @@ class foodType extends _$foodType {
     state = newValue;
   }
 }
-
 
 @riverpod
 class RecipeNotifier extends _$RecipeNotifier {
@@ -135,6 +133,14 @@ class RecipeNotifier extends _$RecipeNotifier {
   }
 }
 
+class RefreshNotifier extends ChangeNotifier {
+  void refresh() {
+    notifyListeners();
+  }
+}
+
+final refreshNotifier = RefreshNotifier();
+
 final selectedFoodTypeProvider = StateProvider<FoodType?>((ref) => null);
 
 final foodTypeBooleanProvider = StateProvider<bool>((ref) {
@@ -142,7 +148,5 @@ final foodTypeBooleanProvider = StateProvider<bool>((ref) {
   return foodType == FoodType.fasting;
 });
 
-final selectedCategoryProvider = StateProvider<FoodCategory>((ref) => FoodCategory.breakfast);
-
-
-
+final selectedCategoryProvider =
+    StateProvider<FoodCategory>((ref) => FoodCategory.breakfast);

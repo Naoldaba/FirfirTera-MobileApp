@@ -7,28 +7,42 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/discover_provider.dart';
 import 'package:go_router/go_router.dart';
 
-class Discover extends ConsumerWidget {
+class Discover extends ConsumerStatefulWidget {
   const Discover({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _DiscoverState createState() => _DiscoverState();
+}
+
+class _DiscoverState extends ConsumerState<Discover> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final selectedOption = ref.read(selectedOptionProvider);
+      ref.refresh(_getRecipeProvider(selectedOption));
+    });
+  }
+
+  AutoDisposeFutureProvider<List<Recipe>> _getRecipeProvider(String selectedOption) {
+    switch (selectedOption) {
+      case 'Breakfast':
+        return breakfastRecipesProvider;
+      case 'Lunch':
+        return lunchRecipesProvider;
+      case 'Dinner':
+        return dinnerRecipesProvider;
+      default:
+        return recipesProvider;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final TextEditingController _searchController = TextEditingController();
     final selectedOption = ref.watch(selectedOptionProvider);
 
-    FutureProvider<List<Recipe>> getRecipeProvider() {
-      switch (selectedOption) {
-        case 'Breakfast':
-          return breakfastRecipesProvider;
-        case 'Lunch':
-          return lunchRecipesProvider;
-        case 'Dinner':
-          return dinnerRecipesProvider;
-        default:
-          return recipesProvider;
-      }
-    }
-
-    final recipeListAsync = ref.watch(getRecipeProvider());
+    final recipeListAsync = ref.watch(_getRecipeProvider(selectedOption));
 
     return SingleChildScrollView(
       child: SafeArea(
@@ -61,7 +75,6 @@ class Discover extends ConsumerWidget {
               ),
               const SizedBox(height: 40),
               Row(
-                
                 children: [
                   buildOptionButton(ref, "All", "food"),
                   buildOptionButton(ref, "Breakfast", "breakfast"),
@@ -111,7 +124,7 @@ class Discover extends ConsumerWidget {
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            ref.invalidate(getRecipeProvider());
+                            ref.invalidate(_getRecipeProvider(selectedOption));
                           },
                           child: Text('Retry'),
                         ),

@@ -18,7 +18,7 @@ describe("RecipeController", () => {
     people: 4,
     ingredients: ["Spaghetti", "Tomato Sauce", "Ground Beef"],
     steps: ["Boil water", "Cook spaghetti", "Prepare Bolognese sauce"],
-    fasting: false,
+    fasting: "false",
     type: Category.DINNER,
     image: "https://example.com/spaghetti-bolognese.jpg",
     cook_id: "someCookId",

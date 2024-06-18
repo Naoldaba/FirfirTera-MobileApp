@@ -56,7 +56,6 @@ class StepsEditNotifier extends StateNotifier<List<TextEditingController>> {
   }
 }
 
-
 class ImageNotifier extends StateNotifier<PickedFile?> {
   ImageNotifier() : super(null);
 
