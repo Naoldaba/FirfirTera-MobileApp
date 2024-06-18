@@ -118,7 +118,7 @@ class AuthService {
   Future<void> logout(BuildContext context) async {
     await initializeSharedPreferences();
     await sharedPreferences.clear();
-    context.go('/onboarding_2');
+    context.go('/login');
   }
 
   Future patchUser(json, context) async {

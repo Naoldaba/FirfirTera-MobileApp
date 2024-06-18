@@ -26,7 +26,7 @@ class CommentScreen extends ConsumerWidget {
       print('loading');
     });
 
-    final currentUserId = user!.id;
+    final currentUserId= user!.id;
     final comments = ref.watch(commentsProvider(recipeId));
 
     return Scaffold(
@@ -128,7 +128,7 @@ class CommentScreen extends ConsumerWidget {
                   onPressed: () async{
                     final newComment = Comment(
                       recipeId: recipeId,
-                      userId: currentUserId,
+                      userId: user.toString(),
                       comment: _commentController.text,
                     );
                     bool res= await ref

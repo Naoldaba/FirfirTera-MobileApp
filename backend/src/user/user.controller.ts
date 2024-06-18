@@ -63,7 +63,7 @@ export class UserController {
 
   // this route only works for admin
   @Get()
-  @Roles(Role.EDIT, Role.CREATE, Role.DELETE)
+  @Roles(Role.EDIT, Role.CREATE, Role.DELETE, Role.ADMIN)
   async getAll(): Promise<User[]> {
     
     return this.userService.getAllUsers();

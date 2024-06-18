@@ -1,7 +1,5 @@
-
-// Anatoli this is just for mocking, you need to implement the real provider
-
 import 'dart:convert';
+import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firfir_tera/models/User.dart';
@@ -10,7 +8,14 @@ part 'users_provider.g.dart';
 
 @riverpod
 Future<List<User>> allUsers(AllUsersRef ref) async {
-  final response = await http.get(Uri.parse(""));
+  await initializeSharedPreferences();
+  const String baseUrl ="https://418d-196-189-123-67.ngrok-free.app";
+  final response = await http.get(Uri.parse('$baseUrl/user'),
+   headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+    },
+  );
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body) as List;
     return data.map((user) => User.fromJson(user)).toList();
@@ -18,6 +23,7 @@ Future<List<User>> allUsers(AllUsersRef ref) async {
     throw Exception("");
   }
 }
+
 
 @riverpod
 class UserState extends _$UserState {

@@ -18,7 +18,6 @@ export class CommentService {
     const this_comment = await this.commentModel.findById(
       commentId
     );
-    console.log('am here', "new_comment=", text);
     if(text){
       this_comment.text=text;
     }

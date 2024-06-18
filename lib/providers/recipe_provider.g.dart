@@ -21,7 +21,7 @@ final foodTypeProvider =
 );
 
 typedef _$foodType = AutoDisposeNotifier<FoodType>;
-String _$recipeNotifierHash() => r'c3fd5719f56f39a60ed06caf1c81d797901aab3d';
+String _$recipeNotifierHash() => r'7e4b7f12b609f3a8eb889a3ae463ddaadb312e5e';
 
 /// See also [RecipeNotifier].
 @ProviderFor(RecipeNotifier)

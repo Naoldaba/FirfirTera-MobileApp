@@ -1,9 +1,11 @@
 import 'package:firfir_tera/presentation/services/auth_service.dart';
+import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/brand_promo.dart';
+
 
 class Login extends ConsumerStatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -12,11 +14,21 @@ class Login extends ConsumerStatefulWidget {
   ConsumerState<Login> createState() => _LoginState();
 }
 
+
 class _LoginState extends ConsumerState<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
+
+  void init(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final selectedOption = ref.read(userProvider);
+      ref.refresh(userProvider);
+    });
+  }
+
 
   @override
   void dispose() {
@@ -31,7 +43,6 @@ class _LoginState extends ConsumerState<Login> {
       String password = _passwordController.text;
       AuthService authService = AuthService();
       authService.login(email, password, context);
-      // final temp = authService.getCurrentUser().then((value) => value);
       return true;
     }
   }

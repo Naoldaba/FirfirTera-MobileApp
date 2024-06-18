@@ -28,7 +28,7 @@ class CommentService {
   }
 
   Future<void> addComment(Comment comment) async {
-    print(comment.comment);
+    print(comment);
     final response = await http.post(
       Uri.parse('$url/comments/${comment.recipeId}'),
       headers: {

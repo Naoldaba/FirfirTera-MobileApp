@@ -6,7 +6,7 @@ part of 'users_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$allUsersHash() => r'd7ce2dd331fe6e5291e0ae9d554bcf4ab15bb5bf';
+String _$allUsersHash() => r'c58869a891d2cf1d688024a965cb80df1a6822fc';
 
 /// See also [allUsers].
 @ProviderFor(allUsers)
@@ -20,7 +20,7 @@ final allUsersProvider = AutoDisposeFutureProvider<List<User>>.internal(
 );
 
 typedef AllUsersRef = AutoDisposeFutureProviderRef<List<User>>;
-String _$userStateHash() => r'0eef5a70dc20a3ca2777739d72151134fef5599a';
+String _$userStateHash() => r'f4b902cf69f11c545077ef6def798ba56c87b6bd';
 
 /// See also [UserState].
 @ProviderFor(UserState)
