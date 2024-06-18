@@ -46,7 +46,7 @@ export class UserController {
   ) {
     // this.uploadService.uploadFile(file);
 
-    const serverBaseURL = 'http://10.0.2.2:3000/uploads/';
+    const serverBaseURL = 'https://2076-213-55-95-177.ngrok-free.app/uploads/';
     // const filePath = `${serverBaseURL}${file.filename}`;
     try {
       this.userService.updateById(userId, firstName, lastName, email);

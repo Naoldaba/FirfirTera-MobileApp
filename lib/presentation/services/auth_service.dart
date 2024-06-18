@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import "package:restart_app/restart_app.dart";
 
 class AuthService {
-  final String baseUrl = "https://418d-196-189-123-67.ngrok-free.app";
+  final String baseUrl = "https://2076-213-55-95-177.ngrok-free.app";
 
   late SharedPreferences sharedPreferences;
   Future<void> initializeSharedPreferences() async {
@@ -32,7 +33,7 @@ class AuthService {
       context.go('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.body)),
+        SnackBar(content: Text("Login failed, check your email or password, network")),
       );
     }
   }

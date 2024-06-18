@@ -21,7 +21,7 @@ class _LoginState extends ConsumerState<Login> {
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
 
-  void init(){
+  void initState(){
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final selectedOption = ref.read(userProvider);

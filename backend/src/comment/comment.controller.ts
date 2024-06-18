@@ -23,9 +23,9 @@ export class CommentController {
   async createComment(
     @Param('recipeId') recipeId: string,
     @Body('comment') comment: string,
-    @Body('userId') userId: string,
+    @Body('user_inf') user_inf: string,
   ): Promise<Comment> {
-    return this.commentService.createComment(recipeId, comment, userId);
+    return this.commentService.createComment(recipeId, comment, user_inf);
   }
 
   @Delete('comments/:commentId')

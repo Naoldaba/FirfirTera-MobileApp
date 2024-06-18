@@ -22,6 +22,7 @@ class CommentNotifier extends StateNotifier<List<Comment>> {
   Future<void> _fetchComments() async {
     try {
       state = await _service.fetchComments(_recipeId);
+      print("state=$state");
     } catch (e) {}
   }
 

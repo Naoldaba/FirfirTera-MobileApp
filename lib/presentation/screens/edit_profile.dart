@@ -45,7 +45,7 @@ class EditProfile extends ConsumerWidget {
                 'email': email.text,
                 'bio': bio.text,
               }, context);
-            }, child: const Text('data'))
+            }, child: const Text('Save'))
           ],
         ),
       ),

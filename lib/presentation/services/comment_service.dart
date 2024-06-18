@@ -7,19 +7,14 @@ import "dart:convert";
 import 'package:flutter/material.dart';
 
 class CommentService {
-  final String url = 'https://418d-196-189-123-67.ngrok-free.app';
+  final String url = 'https://2076-213-55-95-177.ngrok-free.app';
 
   Future<List<Comment>> fetchComments(String recipeId) async {
-    // return [
-    //   Comment(id: '1', recipeId: recipeId, userId: 'user1', comment: 'Great recipe!'),
-    //   Comment(id:'2', recipeId: recipeId, userId: 'user2', comment: 'Loved it!'),
-    // ];
-
     final response = await http.get(Uri.parse('$url/comments/${recipeId}'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-      print("my data = ${data}");
+
       return data.map((item) => Comment.fromJson(item)).toList();
     } else {
       SnackBar(content: Text("Unable to fetch comments, pls try again later"));
@@ -28,7 +23,7 @@ class CommentService {
   }
 
   Future<void> addComment(Comment comment) async {
-    print(comment);
+    print(comment.toJson());
     final response = await http.post(
       Uri.parse('$url/comments/${comment.recipeId}'),
       headers: {

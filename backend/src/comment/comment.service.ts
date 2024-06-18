@@ -36,12 +36,12 @@ export class CommentService {
   async createComment(
     recipeId: string,
     comment: string,
-    userId: string,
+    user_inf: string,
   ): Promise<Comment> {
     const newComment = await this.commentModel.create({
       recipeId: recipeId,
       text: comment,
-      userId: userId,
+      user_inf: user_inf,
     });
 
     return newComment;

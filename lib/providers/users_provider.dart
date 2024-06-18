@@ -9,7 +9,7 @@ part 'users_provider.g.dart';
 @riverpod
 Future<List<User>> allUsers(AllUsersRef ref) async {
   await initializeSharedPreferences();
-  const String baseUrl ="https://418d-196-189-123-67.ngrok-free.app";
+  const String baseUrl ="https://2076-213-55-95-177.ngrok-free.app";
   final response = await http.get(Uri.parse('$baseUrl/user'),
    headers: {
       'Content-Type': 'application/json',

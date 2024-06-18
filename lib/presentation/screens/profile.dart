@@ -12,6 +12,10 @@ class Profile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // final selectedOption = ref.read(userModelProvider);
+      ref.refresh(userModelProvider);
+    });
     User user = ref.watch(userModelProvider).when(
         data: (body) {
           return body;

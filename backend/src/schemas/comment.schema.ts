@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 @Schema({ timestamps: true })
 export class Comment {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  userId: string;
+  user_inf: string;
   @Prop({ required: true })
   recipeId: string;
 

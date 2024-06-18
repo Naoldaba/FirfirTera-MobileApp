@@ -7,10 +7,11 @@ import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 
-const String url = 'https://418d-196-189-123-67.ngrok-free.app';
+const String url = 'https://2076-213-55-95-177.ngrok-free.app';
 
 class RecipeServices {
   Future<List<Recipe>> recipes() async {
+    print("here");
     final response = await http.get(
       Uri.parse("$url/recipes"),
       headers: {
@@ -187,7 +188,8 @@ class RecipeServices {
     request.fields['cookTime'] = cookTime;
     request.fields['people'] = people;
     request.fields['type'] = type.split('.')[1];
-    List<String> new_ing = ingredients.where((element) => element != "").toList();
+    List<String> new_ing =
+        ingredients.where((element) => element != "").toList();
     List<String> new_steps = steps.where((element) => element != "").toList();
     request.fields['ingredients'] = jsonEncode(new_ing);
     request.fields['steps'] = jsonEncode(new_steps);

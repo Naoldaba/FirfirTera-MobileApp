@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +30,7 @@ class CommentScreen extends ConsumerWidget {
 
     final currentUserId= user!.id;
     final comments = ref.watch(commentsProvider(recipeId));
+    print("my data = ${comments}");
 
     return Scaffold(
       appBar: AppBar(
@@ -43,8 +46,12 @@ class CommentScreen extends ConsumerWidget {
                 final comment = comments[index];
                 return ListTile(
                   title: Text(comment.comment),
-                  subtitle: Text('User: ${comment.userId}'),
-                  trailing: comment.userId == currentUserId
+                  leading: CircleAvatar(
+  
+                    child:Image.network(comment.user_inf['image'])
+                  ),
+                  subtitle: Text('User: ${comment.user_inf['firstName']}'),
+                  trailing: comment.user_inf['id'] == currentUserId
                       ? Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -70,7 +77,7 @@ class CommentScreen extends ConsumerWidget {
                                                 Comment(
                                                   id: comment.id,
                                                   recipeId: comment.recipeId,
-                                                  userId: comment.userId,
+                                                  user_inf: comment.user_inf,
                                                   comment:
                                                       _editController.text,
                                                 ),
@@ -128,7 +135,7 @@ class CommentScreen extends ConsumerWidget {
                   onPressed: () async{
                     final newComment = Comment(
                       recipeId: recipeId,
-                      userId: user.toString(),
+                      user_inf: user.toJson(),
                       comment: _commentController.text,
                     );
                     bool res= await ref

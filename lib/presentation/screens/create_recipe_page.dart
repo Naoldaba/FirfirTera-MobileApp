@@ -1,6 +1,6 @@
 import 'dart:io';
+import 'package:firfir_tera/providers/home_provider.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -391,8 +391,8 @@ class CreateRecipe extends ConsumerWidget {
                     ),
                     GestureDetector(
                       onTap: () => ref
-                          .read(ingredientsNotifierProvider.notifier)
-                          .addIngredient(),
+                          .read(stepNotifierProvider.notifier)
+                          .addSteps(),
                       child: const Row(
                         children: [
                           Icon(
@@ -445,7 +445,8 @@ class CreateRecipe extends ConsumerWidget {
                         ),
                       );
                       refreshNotifier.refresh();
-                      context.go('/');
+                      ref.read(selectedIndexProvider.notifier).state = 0;
+                      context.go('/home');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

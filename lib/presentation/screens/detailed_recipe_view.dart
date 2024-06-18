@@ -1,4 +1,5 @@
 import 'package:firfir_tera/models/Recipe.dart';
+import 'package:firfir_tera/providers/home_provider.dart';
 import 'package:firfir_tera/providers/recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,7 @@ class DetailedView extends ConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Successfully deleted the recipe")));
         refreshNotifier.refresh();
+        ref.read(selectedIndexProvider.notifier).state = 0;
         context.go("/home");
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

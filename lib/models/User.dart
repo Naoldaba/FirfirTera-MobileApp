@@ -37,6 +37,19 @@ class User {
         version: json['__v'].toString()
         );
   }
+
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'firstName':firstName,
+      'lastName':lastName,
+      'image':image,
+      'role':role,
+      'email':email
+    };
+  }
+
 }
 
 

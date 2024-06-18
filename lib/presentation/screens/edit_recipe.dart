@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firfir_tera/providers/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -384,6 +385,7 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('successfully updated recipe')));
                   refreshNotifier.refresh();
+                  ref.read(selectedIndexProvider.notifier).state = 0;
                   context.go('/home');
 
                 } else {
