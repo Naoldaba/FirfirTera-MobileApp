@@ -28,7 +28,7 @@ class CommentScreen extends ConsumerWidget {
       print('loading');
     });
 
-    final currentUserId= user!.id;
+    final currentUserId = user!.id;
     final comments = ref.watch(commentsProvider(recipeId));
     print("my data = ${comments}");
 
@@ -47,9 +47,7 @@ class CommentScreen extends ConsumerWidget {
                 return ListTile(
                   title: Text(comment.comment),
                   leading: CircleAvatar(
-  
-                    child:Image.network(comment.user_inf['image'])
-                  ),
+                      child: Image.network(comment.user_inf['image'])),
                   subtitle: Text('User: ${comment.user_inf['firstName']}'),
                   trailing: comment.user_inf['id'] == currentUserId
                       ? Row(
@@ -69,8 +67,8 @@ class CommentScreen extends ConsumerWidget {
                                     ),
                                     actions: [
                                       TextButton(
-                                        onPressed: () async{
-                                          bool res= await ref
+                                        onPressed: () async {
+                                          bool res = await ref
                                               .read(commentsProvider(recipeId)
                                                   .notifier)
                                               .updateComment(
@@ -78,19 +76,23 @@ class CommentScreen extends ConsumerWidget {
                                                   id: comment.id,
                                                   recipeId: comment.recipeId,
                                                   user_inf: comment.user_inf,
-                                                  comment:
-                                                      _editController.text,
+                                                  comment: _editController.text,
                                                 ),
                                               );
-                                              if (res){
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('successfully updated comment')));
-                                              }else{
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(content: Text('Unable to update the comment')));
-                                              }
-                                                Navigator.of(context).pop();
-                                              },
+                                          if (res) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'successfully updated comment')));
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'Unable to update the comment')));
+                                          }
+
+                                          Navigator.of(context).pop();
+                                        },
                                         child: Text('Save'),
                                       ),
                                     ],
@@ -100,17 +102,21 @@ class CommentScreen extends ConsumerWidget {
                             ),
                             IconButton(
                               icon: Icon(Icons.delete),
-                              onPressed: () async{
+                              onPressed: () async {
                                 bool res = await ref
                                     .read(commentsProvider(recipeId).notifier)
                                     .deleteComment(comment.id!);
-                                  if (res){
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('successfully deleted comment')));
-                                  }else{
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Unable to delete the comment')));
-                                  }
+                                if (res) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'successfully deleted comment')));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Unable to delete the comment')));
+                                }
                               },
                             ),
                           ],
@@ -132,24 +138,25 @@ class CommentScreen extends ConsumerWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: () async{
+                  onPressed: () async {
                     final newComment = Comment(
                       recipeId: recipeId,
                       user_inf: user.toJson(),
                       comment: _commentController.text,
                     );
-                    bool res= await ref
+                    bool res = await ref
                         .read(commentsProvider(recipeId).notifier)
                         .addComment(newComment);
                     _commentController.clear();
 
-                    if (res){
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('successfully posted comment')));
-                    }else{
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Unable to post the comment')));
+                    if (res) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('successfully posted comment')));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Unable to post the comment')));
                     }
+                    ref.refresh(commentsProvider(recipeId));
                   },
                 ),
               ],

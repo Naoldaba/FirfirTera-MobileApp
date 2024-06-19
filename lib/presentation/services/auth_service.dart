@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import "package:restart_app/restart_app.dart";
 
 class AuthService {
   final String baseUrl = "https://2076-213-55-95-177.ngrok-free.app";
@@ -33,7 +32,9 @@ class AuthService {
       context.go('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login failed, check your email or password, network")),
+        SnackBar(
+            content:
+                Text("Login failed, check your email or password, network")),
       );
     }
   }
@@ -65,7 +66,7 @@ class AuthService {
       context.go('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.statusCode.toString())),
+        SnackBar(content: Text("Registration failed, check your network")),
       );
     }
   }
@@ -141,6 +142,43 @@ class AuthService {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile Updation  Failed')),
+      );
+    }
+  }
+
+  Future<bool> changeRole(String role, String userId) async {
+    await initializeSharedPreferences();
+    final response = await http.patch(
+      Uri.parse('$baseUrl/user/changeRole/$userId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+      },
+      body: jsonEncode({
+        'role': role,
+      }),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> deleteGivenUser(String id, BuildContext context) async {
+    await initializeSharedPreferences();
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/user/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile Deletion Failed')),
       );
     }
   }

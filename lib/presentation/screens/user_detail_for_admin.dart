@@ -1,3 +1,7 @@
+import 'package:firfir_tera/presentation/services/auth_service.dart';
+import 'package:firfir_tera/providers/discover_provider.dart';
+import 'package:firfir_tera/providers/home_provider.dart';
+import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firfir_tera/models/User.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +15,7 @@ class UserDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final IsPromoted = ref.watch(isPromotedProvider);
+    final IsSuccess = ref.watch(isSuccessProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,14 +40,9 @@ class UserDetails extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.grey[200],
-                child: const Icon(
-                  Icons.person,
-                  size: 50,
-                  color: Colors.grey,
-                ),
-              ),
+                  radius: 50,
+                  backgroundColor: Colors.grey[200],
+                  child: Image.network(user.image)),
               const SizedBox(height: 20),
               Text(
                 '${user.firstName} ${user.lastName}',
@@ -57,35 +56,52 @@ class UserDetails extends ConsumerWidget {
               SizedBox(height: 40),
               SizedBox(height: 15),
               ElevatedButton(
-                onPressed: () {
-                  ref.read(isPromotedProvider.notifier).toggle();
+                onPressed: () async {
+                  AuthService authService = AuthService();
+                  String next = "admin";
+                  if (user.role == "admin") {
+                    next = "normal";
+                  }
+                  bool ans = await authService.changeRole(next, user.id);
+
+                  ref.read(isSuccessProvider.notifier).changeState(ans);
                   _showSnackBar(
                     context,
-                    IsPromoted
-                        ? "User ${user.firstName} promoted to admin"
-                        : "User ${user.firstName} demoted to regular user",
+                    IsSuccess
+                        ? "Successully changed role"
+                        : "Unable to change role",
                   );
+                  ref.refresh(allUsersProvider);
+                  context.go('/home/admin');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: IsPromoted ? Colors.red : Colors.green,
+                  backgroundColor:
+                      user.role == 'admin' ? Colors.red : Colors.green,
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: Text(
-                  IsPromoted ? 'Demote User' : 'Promote User',
+                  user.role == 'admin' ? 'Demote User' : 'Promote User',
                   style: TextStyle(fontSize: 18),
                 ),
               ),
               const SizedBox(height: 15),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   _showSnackBar(context, "User Deleted");
+                  AuthService authService = AuthService();
+                  await authService.deleteGivenUser(user.id, context);
+
+                  ref.read(selectedIndexProvider.notifier).state = 1;
+                  ref.refresh(allUsersProvider);
+                  context.go('/home');
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),

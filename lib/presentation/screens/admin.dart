@@ -1,3 +1,4 @@
+
 import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:firfir_tera/providers/users_provider.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class AdminPanel extends ConsumerWidget {
                             ),
                           ),
                           subtitle: Text(
-                            users[index].email,
+                            users[index].role,
                             style: TextStyle(
                               color: Colors.grey[700],
                             ),
@@ -74,7 +75,7 @@ class AdminPanel extends ConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           AuthService authInstance = AuthService();
           await authInstance.logout(context);
         },

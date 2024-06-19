@@ -45,13 +45,13 @@ class Profile extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                user.firstName,
+                "First Name: ${user.firstName}",
                 style:
                     const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Text(
-                user.email,
+                "Email:${user.email}",
                 style: const TextStyle(fontSize: 20, color: Colors.grey),
               ),
               const SizedBox(height: 30),

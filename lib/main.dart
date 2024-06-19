@@ -77,9 +77,6 @@ final GoRouter _router = GoRouter(refreshListenable: refreshNotifier, routes: [
             builder: (context, state) => AdminPanel(),
             routes: [
               GoRoute(
-                  path: 'add_admin',
-                  builder: (context, state) => const AddAdminDialog()),
-              GoRoute(
                   path: 'user_details',
                   builder: (context, state) {
                     final user = state.extra as User;

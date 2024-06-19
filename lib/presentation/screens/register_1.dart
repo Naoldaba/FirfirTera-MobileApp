@@ -57,7 +57,7 @@ class _Register_1State extends ConsumerState<Register_1> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const BrandPromo(color: Colors.white),
-                      const SizedBox(height: 80),
+                      const SizedBox(height: 15),
                       Text(
                         "Sign Up for free ",
                         style: GoogleFonts.firaSans(

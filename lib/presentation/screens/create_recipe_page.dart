@@ -381,8 +381,8 @@ class CreateRecipe extends ConsumerWidget {
                               IconButton(
                                 icon: const Icon(Icons.remove_circle),
                                 onPressed: () => ref
-                                    .read(ingredientsNotifierProvider.notifier)
-                                    .removeIngredient(index),
+                                    .read(stepNotifierProvider.notifier)
+                                    .removeSteps(index),
                               ),
                             ],
                           );

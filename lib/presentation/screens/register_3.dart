@@ -1,4 +1,3 @@
-
 import 'package:firfir_tera/presentation/services/auth_service.dart';
 import 'package:firfir_tera/providers/registration_provider.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ class _Register_3State extends ConsumerState<Register_3> {
   String? _imageName;
   String? _imagePath;
 
-  Future<String> _getImage() async {
+  Future<void> _getImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
@@ -28,27 +27,35 @@ class _Register_3State extends ConsumerState<Register_3> {
       setState(() {
         _imageData = base64Image;
         _imageName = pickedImage.path.split('/').last;
+        _imagePath = pickedImage.path; // Save the image path
       });
-      return pickedImage.path;
-    }
-    else{
+    } else {
       throw Exception('No image selected');
+    }
+  }
+
+  void prepareData(BuildContext context) async {
+    final firstPage = ref.read(myfirstPageMapProvider);
+    final secondPage = ref.read(mysecondPageMapProvider);
+    Map<String, String> totalData = {...firstPage, ...secondPage};
+
+    if (_imagePath == null) {
+      await _getImage();
+    }
+
+    if (_imagePath != null) {
+      final authInstance = AuthService();
+      authInstance.registerUser(totalData, _imagePath!, context);
+    } else {
+      // Handle the case where no image was selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an image.')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    void prepareData(context) async {
-      final firstPage = ref.read(myfirstPageMapProvider);
-      final secondPage = ref.read(mysecondPageMapProvider);
-      Map<String, String> totalData = {...firstPage, ...secondPage};
-      _imagePath ??= await _getImage();
-      final authInstance = AuthService();     
-      authInstance.registerUser(totalData, _imagePath, context);
-    }
-    
-
     return Scaffold(
       extendBody: true,
       body: Container(
@@ -104,23 +111,19 @@ class _Register_3State extends ConsumerState<Register_3> {
                   child: Container(
                     width: 200,
                     height: 200,
-                    
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: _imageData != null
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 10),
-                              Image.memory(
-                                base64Decode(_imageData!),
-                                width: 150,
-                                height: 150,
-                                fit: BoxFit.cover,
-                              ),
-                            ],
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.memory(
+                              base64Decode(_imageData!),
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
                           )
                         : const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -145,8 +148,7 @@ class _Register_3State extends ConsumerState<Register_3> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                     prepareData(context    );
-                      // Navigator.pushReplacementNamed(context, '/register_2');
+                      prepareData(context);
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.black),
