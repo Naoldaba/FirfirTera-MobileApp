@@ -1,12 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
-
-import { Patch, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
 const path = require('path');
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: '*',
@@ -20,8 +19,13 @@ async function bootstrap() {
     res.send('Welcome');
   });
 
-  await app.listen(3000).then(() => {
-    console.log('the server is starting...');
+  return app;
+}
+
+if (require.main === module) {
+  bootstrap().then(app => {
+    app.listen(3000).then(() => {
+      console.log('The server is starting...');
+    });
   });
 }
-bootstrap();
