@@ -390,9 +390,8 @@ class CreateRecipe extends ConsumerWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => ref
-                          .read(stepNotifierProvider.notifier)
-                          .addSteps(),
+                      onTap: () =>
+                          ref.read(stepNotifierProvider.notifier).addSteps(),
                       child: const Row(
                         children: [
                           Icon(

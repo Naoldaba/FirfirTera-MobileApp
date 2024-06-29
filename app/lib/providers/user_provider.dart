@@ -32,7 +32,7 @@ Future getSessionJson() async {
 final userProvider = FutureProvider.autoDispose((ref) async {
   final data = await getSessionJson();
   AuthService authInstance = AuthService();
-  return authInstance.getUser(data!['id']);
+  return await authInstance.getUser(data!['id']);
 });
 
 final userModelProvider = FutureProvider.autoDispose<User>((ref) async {

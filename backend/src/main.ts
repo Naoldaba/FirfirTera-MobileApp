@@ -17,7 +17,7 @@ async function bootstrap() {
   app.use(express.json({ limit: '10mb' }));
 
   await app.listen(3000).then(() => {
-    'the surver is starting...';
+    console.log('the server is starting...');
   });
 }
 bootstrap();

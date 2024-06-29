@@ -20,17 +20,20 @@ final recipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
   return service.recipes();
 });
 
-final breakfastRecipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
+final breakfastRecipesProvider =
+    FutureProvider.autoDispose<List<Recipe>>((ref) async {
   final service = ref.watch(recipeServiceProvider);
   return service.breakfastRecipes();
 });
 
-final lunchRecipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
+final lunchRecipesProvider =
+    FutureProvider.autoDispose<List<Recipe>>((ref) async {
   final service = ref.watch(recipeServiceProvider);
   return service.lunchRecipes();
 });
 
-final dinnerRecipesProvider = FutureProvider.autoDispose<List<Recipe>>((ref) async {
+final dinnerRecipesProvider =
+    FutureProvider.autoDispose<List<Recipe>>((ref) async {
   final service = ref.watch(recipeServiceProvider);
   return service.dinnerRecipes();
 });

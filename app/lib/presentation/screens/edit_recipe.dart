@@ -351,14 +351,16 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () async{
+            onPressed: () async {
               print('Name: ${_nameController.text}');
               print('Description: ${_descriptionController.text}');
               print('Cook Time: ${_cookTimeController.text}');
               print('People: ${_peopleController.text}');
               print('Image: ${image?.path}');
-              print('Ingredients: ${ingredients.map((controller) => controller.text).toList()}');
-              print('Steps: ${steps.map((controller) => controller.text).toList()}');
+              print(
+                  'Ingredients: ${ingredients.map((controller) => controller.text).toList()}');
+              print(
+                  'Steps: ${steps.map((controller) => controller.text).toList()}');
               if (_nameController.text.isNotEmpty &&
                   _descriptionController.text.isNotEmpty &&
                   _cookTimeController.text.isNotEmpty &&
@@ -387,7 +389,6 @@ class _EditRecipeScreenState extends ConsumerState<EditRecipeScreen> {
                   refreshNotifier.refresh();
                   ref.read(selectedIndexProvider.notifier).state = 0;
                   context.go('/home');
-
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Unable to update the recipe')));

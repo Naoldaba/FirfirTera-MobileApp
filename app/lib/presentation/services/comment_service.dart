@@ -7,7 +7,7 @@ import "dart:convert";
 import 'package:flutter/material.dart';
 
 class CommentService {
-  final String url = 'https://2076-213-55-95-177.ngrok-free.app';
+  final String url = 'https://ac6c-196-188-188-212.ngrok-free.app';
 
   Future<List<Comment>> fetchComments(String recipeId) async {
     final response = await http.get(Uri.parse('$url/comments/${recipeId}'));

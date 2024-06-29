@@ -32,6 +32,7 @@ export class UserController {
 
   @Get(':id')
   async getById(@Param('id') userId: string): Promise<User> {
+    console.log('hi')
     return this.userService.getById(userId);
   }
 
@@ -46,7 +47,7 @@ export class UserController {
   ) {
     // this.uploadService.uploadFile(file);
 
-    const serverBaseURL = 'https://2076-213-55-95-177.ngrok-free.app/uploads/';
+    const serverBaseURL = 'https://ac6c-196-188-188-212.ngrok-free.app/uploads/';
     // const filePath = `${serverBaseURL}${file.filename}`;
     try {
       this.userService.updateById(userId, firstName, lastName, email);

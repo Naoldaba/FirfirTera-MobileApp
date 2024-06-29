@@ -27,7 +27,8 @@ class IngredientAdder extends ConsumerWidget {
                         decoration: InputDecoration(
                           hintText: 'Ingredient ${index ~/ 2 + 1}',
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(color: const Color.fromRGBO(158, 158, 158, 1)),
+                            borderSide: BorderSide(
+                                color: const Color.fromRGBO(158, 158, 158, 1)),
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),

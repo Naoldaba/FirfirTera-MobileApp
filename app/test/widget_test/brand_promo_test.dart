@@ -16,14 +16,14 @@ void main() {
       var brandNameText = tester.widget<Text>(find.text('FirfirTera').first);
       expect(brandNameText.style!.fontSize, 40);
       expect(brandNameText.style!.fontWeight, FontWeight.w600);
-      expect(brandNameText.style!.color, Colors.blue); 
+      expect(brandNameText.style!.color, Colors.blue);
 
       expect(
           find.text('Taste, Share, Create: Recipe Harmony.'), findsOneWidget);
       var taglineText = tester.widget<Text>(
           find.text('Taste, Share, Create: Recipe Harmony.').first);
       expect(taglineText.style!.fontSize, 15);
-      expect(taglineText.style!.color, Colors.blue); 
+      expect(taglineText.style!.color, Colors.blue);
       expect(taglineText.textAlign, TextAlign.center);
     });
   });

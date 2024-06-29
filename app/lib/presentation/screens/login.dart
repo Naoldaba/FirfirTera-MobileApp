@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firfir_tera/presentation/widgets/brand_promo.dart';
 
-
 class Login extends ConsumerStatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -14,21 +13,19 @@ class Login extends ConsumerStatefulWidget {
   ConsumerState<Login> createState() => _LoginState();
 }
 
-
 class _LoginState extends ConsumerState<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
 
-  void initState(){
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final selectedOption = ref.read(userProvider);
       ref.refresh(userProvider);
     });
   }
-
 
   @override
   void dispose() {
@@ -105,7 +102,7 @@ class _LoginState extends ConsumerState<Login> {
                     controller: _passwordController,
                     obscureText: !_passwordVisible,
                     decoration: InputDecoration(
-                      prefixIcon:const  Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       labelText: "Password",
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.horizontal(
@@ -131,8 +128,7 @@ class _LoginState extends ConsumerState<Login> {
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: (){
-                      
+                    onPressed: () {
                       _submit(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -153,7 +149,7 @@ class _LoginState extends ConsumerState<Login> {
                         onTap: () => context.go('/register_1'),
                         child: const MouseRegion(
                           cursor: SystemMouseCursors.click,
-                          child:  Text(
+                          child: Text(
                             "Register",
                             style: TextStyle(
                               color: Colors.orange,

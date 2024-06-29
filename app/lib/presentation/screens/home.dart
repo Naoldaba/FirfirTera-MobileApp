@@ -19,7 +19,7 @@ class Home extends ConsumerWidget {
 
 class _HomeContent extends ConsumerWidget {
   const _HomeContent({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsyncValue = ref.watch(userModelProvider);

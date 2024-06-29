@@ -56,4 +56,3 @@ class RecipeCard extends StatelessWidget {
     );
   }
 }
-

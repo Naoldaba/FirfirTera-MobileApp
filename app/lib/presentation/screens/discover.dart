@@ -24,7 +24,8 @@ class _DiscoverState extends ConsumerState<Discover> {
     });
   }
 
-  AutoDisposeFutureProvider<List<Recipe>> _getRecipeProvider(String selectedOption) {
+  AutoDisposeFutureProvider<List<Recipe>> _getRecipeProvider(
+      String selectedOption) {
     switch (selectedOption) {
       case 'Breakfast':
         return breakfastRecipesProvider;

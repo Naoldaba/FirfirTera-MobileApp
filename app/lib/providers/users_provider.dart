@@ -9,7 +9,7 @@ part 'users_provider.g.dart';
 @riverpod
 Future<List> allUsers(AllUsersRef ref) async {
   await initializeSharedPreferences();
-  const String baseUrl = "https://2076-213-55-95-177.ngrok-free.app";
+  const String baseUrl = "https://ac6c-196-188-188-212.ngrok-free.app";
   final response = await http.get(
     Uri.parse('$baseUrl/user'),
     headers: {
@@ -21,8 +21,8 @@ Future<List> allUsers(AllUsersRef ref) async {
     final data = jsonDecode(response.body) as List;
 
     return data
-        .where(
-            (element) => element['_id'] != sharedPreferences.getString("userId"))
+        .where((element) =>
+            element['_id'] != sharedPreferences.getString("userId"))
         .map((e) => User.fromJson(e))
         .toList();
   } else {

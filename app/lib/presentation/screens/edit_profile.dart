@@ -23,12 +23,12 @@ class EditProfile extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-             TextField(
-              controller:name,
-              decoration:  InputDecoration(labelText: 'Name'),
+            TextField(
+              controller: name,
+              decoration: InputDecoration(labelText: 'Name'),
             ),
-            const SizedBox(height: 20.0),         
-            TextField(  
+            const SizedBox(height: 20.0),
+            TextField(
               controller: email,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
@@ -38,18 +38,18 @@ class EditProfile extends ConsumerWidget {
               decoration: const InputDecoration(labelText: 'Bio'),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: (){
-
-              ref.read(profileEditProvider.notifier).ovverideAll( {
-                'name': name.text,
-                'email': email.text,
-                'bio': bio.text,
-              }, context);
-            }, child: const Text('Save'))
+            ElevatedButton(
+                onPressed: () {
+                  ref.read(profileEditProvider.notifier).ovverideAll({
+                    'name': name.text,
+                    'email': email.text,
+                    'bio': bio.text,
+                  }, context);
+                },
+                child: const Text('Save'))
           ],
         ),
       ),
     );
-  
   }
 }

@@ -7,7 +7,6 @@ import 'package:firfir_tera/presentation/screens/edit_profile.dart';
 import 'package:firfir_tera/presentation/screens/edit_recipe.dart';
 import 'package:firfir_tera/presentation/screens/home.dart';
 import 'package:firfir_tera/presentation/screens/login.dart';
-import 'package:firfir_tera/presentation/screens/new_admin.dart';
 import 'package:firfir_tera/presentation/screens/onboarding_1.dart';
 import 'package:firfir_tera/presentation/screens/onboarding_2.dart';
 import 'package:firfir_tera/presentation/screens/onboarding_3.dart';
@@ -145,7 +144,7 @@ class AuthChecker extends ConsumerWidget {
           return const OnBoarding_1();
         }
       },
-      loading: () { 
+      loading: () {
         return const Scaffold(
             body: Center(child: CircularProgressIndicator.adaptive()));
       },

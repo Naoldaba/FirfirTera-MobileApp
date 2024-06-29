@@ -5,11 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final String baseUrl = "https://2076-213-55-95-177.ngrok-free.app";
+  final String baseUrl = "https://ac6c-196-188-188-212.ngrok-free.app";
 
   late SharedPreferences sharedPreferences;
   Future<void> initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
+    
   }
 
   AuthService();
@@ -17,15 +18,12 @@ class AuthService {
   Future<void> login(
       String email, String password, BuildContext context) async {
     await initializeSharedPreferences();
-    final response = await http
-        .post(
-          Uri.parse('$baseUrl/auth/login'),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({'email': email, 'password': password}),
-        )
-        .timeout(const Duration(seconds: 300));
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'email': email, 'password': password}),
+    );
     if (response.statusCode == 201) {
-      print('am here babe');
       final responseJson = json.decode(response.body);
       await saveUserToSharedPreferences(
           responseJson['token'], responseJson['role'][0], responseJson['id']);
@@ -79,7 +77,7 @@ class AuthService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
       },
-    ).timeout(const Duration(seconds: 300));
+    );
 
     if (response.statusCode == 200) {
       final jsond = jsonDecode(response.body);
