@@ -1,16 +1,5 @@
 import { diskStorage } from 'multer';
 
-// export const multerConfig = {
-//   storage: diskStorage({
-//     destination: 'http://localhost:3000/uploads',
-//     filename: (req, file, callback) => {
-//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-//       const extension = file.originalname.split('.').pop();
-//       callback(null, file.fieldname + '-' + uniqueSuffix + '.' + extension);
-//     },
-//   }),
-// };
-
 const multer = require("multer");
 const path = require("path");
 
@@ -18,10 +7,10 @@ const uploadPath = path.join(__dirname, "..","..", "uploads");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(uploadPath, "/")); // Full path including timestamp folder
+    cb(null, path.join(uploadPath, "/")); 
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Include file extension
+    cb(null, Date.now() + path.extname(file.originalname)); 
   },
 });
 export const multerConfig = multer({
