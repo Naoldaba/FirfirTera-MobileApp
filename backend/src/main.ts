@@ -16,6 +16,10 @@ async function bootstrap() {
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   app.use(express.json({ limit: '10mb' }));
 
+  app.use('/', (req, res) => {
+    res.send('Welcome');
+  });
+
   await app.listen(3000).then(() => {
     console.log('the server is starting...');
   });
