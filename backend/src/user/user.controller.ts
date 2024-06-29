@@ -14,12 +14,12 @@ import { UserService } from '../user/user.service';
 import { User } from '../schemas/user.schema';
 import { updateUserDto } from '../dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Role } from 'src/entities/role.enum';
-import { Roles } from 'src/decorators/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { Role } from '../entities/role.enum';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesGuard } from '../guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../Upload/upload.service';
-import { multerConfig } from 'src/Upload/multer.config';
+import { multerConfig } from '../Upload/multer.config';
 
 @Controller('user')
 

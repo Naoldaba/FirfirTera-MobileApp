@@ -9,7 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { Comment } from 'src/schemas/comment.schema';
+import { Comment } from '../schemas/comment.schema';
 @Controller()
 export class CommentController {
   constructor(private commentService: CommentService) {}
