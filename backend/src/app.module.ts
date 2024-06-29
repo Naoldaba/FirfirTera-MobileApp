@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import * as bodyParser from 'body-parser';
 import { DatabaseModule } from './database/database.module';
 import { CommentModule } from './comment/comment.module';
+import {UploadModule} from './Upload/upload.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
@@ -33,6 +34,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     CommentModule,
     UserModule,
     DatabaseModule,
+    UploadModule,
   ],
   providers: [
     {
