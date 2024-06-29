@@ -3,9 +3,10 @@ import { AppModule } from './app.module';
 import * as express from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
+
 const path = require('path');
 
-export async function bootstrap() {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: '*',
@@ -19,13 +20,8 @@ export async function bootstrap() {
     res.send('Welcome');
   });
 
-  return app;
+  await app.listen(3000).then(()=>{console.log("server running on port ")});
+  return app.getHttpAdapter().getInstance();
 }
 
-if (require.main === module) {
-  bootstrap().then(app => {
-    app.listen(3000).then(() => {
-      console.log('The server is starting...');
-    });
-  });
-}
+export default bootstrap();
