@@ -14,7 +14,7 @@ Future<void> initializeSharedPreferences() async {
 Future<String?> checkUser() async {
   await initializeSharedPreferences();
 
-  // await sharedPreferences.clear();
+  await sharedPreferences.clear();
   final userString = sharedPreferences.getString('token');
 
   print(userString);
