@@ -12,5 +12,10 @@
       "dest": "src/main.ts",
       "methods": ["GET", "POST", "PUT", "DELETE"]
     }
-  ]
+  ],
+  "functions": {
+    "src/main.ts": {
+      "maxDuration": 60 
+    }
+  }
 }
