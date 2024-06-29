@@ -18,7 +18,7 @@ import { Role } from 'src/entities/role.enum';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadService } from 'src/Upload/upload.service';
+import { UploadService } from '../Upload/upload.service';
 import { multerConfig } from 'src/Upload/multer.config';
 
 @Controller('user')

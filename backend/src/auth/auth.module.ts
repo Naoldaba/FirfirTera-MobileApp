@@ -7,7 +7,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserSchema } from '../schemas/user.schema';
-import { UploadService } from 'src/Upload/upload.service';
+import { UploadService } from '../Upload/upload.service';
 
 @Module({
   imports: [

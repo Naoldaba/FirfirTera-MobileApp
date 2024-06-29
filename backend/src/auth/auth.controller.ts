@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { SignUpDto } from '../dto/signup.dto';
 import e from 'express';
-import { UploadService } from 'src/Upload/upload.service';
+import { UploadService } from '../Upload/upload.service';
 import { multerConfig } from 'src/Upload/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { title } from 'process';
