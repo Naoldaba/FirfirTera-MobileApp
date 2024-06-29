@@ -1,4 +1,3 @@
-// upload.service.ts
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { multerConfig } from './multer.config';
 import { diskStorage } from 'multer';
@@ -9,8 +8,6 @@ export class UploadService {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
-
-    console.log('File path:', file.path);
 
     return file.path;
   }

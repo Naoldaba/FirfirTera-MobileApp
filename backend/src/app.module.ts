@@ -15,8 +15,6 @@ import {UploadModule} from './Upload/upload.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
-// import { CorsModule } from '@nestjs/platform-express';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
