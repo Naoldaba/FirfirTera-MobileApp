@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
 import { ValidationPipe } from '@nestjs/common';
-import { join } from 'path';
 
 const path = require('path');
 
@@ -36,4 +35,4 @@ async function bootstrap() {
 }
 
 console.log('Bootstrap process starting...');
-export default bootstrap();
+bootstrap();
