@@ -34,12 +34,14 @@ class _LoginState extends ConsumerState<Login> {
     super.dispose();
   }
 
-  Future<bool?> _submit(context) async {
+  Future<bool?> _submit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
       AuthService authService = AuthService();
       await authService.login(email, password, context);
+      await ref.watch(userProvider.future);
+      context.go('/home');
       return true;
     }
   }

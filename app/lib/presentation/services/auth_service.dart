@@ -29,7 +29,8 @@ class AuthService {
       final responseJson = json.decode(response.body);
       await saveUserToSharedPreferences(
           responseJson['token'], responseJson['role'][0], responseJson['id']);
-      context.go('/home');
+
+      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -84,6 +85,7 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
+      print("returning decoded json obj");
       final jsond = jsonDecode(response.body);
       return jsond;
     } else {

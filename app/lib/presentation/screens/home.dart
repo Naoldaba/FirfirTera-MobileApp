@@ -6,7 +6,6 @@ import 'package:firfir_tera/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firfir_tera/providers/home_provider.dart';
-// import 'package:go_router/go_router.dart';
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,9 +21,7 @@ class _HomeContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userAsyncValue = ref.watch(userModelProvider);
-
-    return userAsyncValue.when(
+    return ref.watch(userModelProvider).when(
       data: (user) {
         final List<Widget> _pages = [const Discover()];
 
