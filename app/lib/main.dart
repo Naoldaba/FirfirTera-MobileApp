@@ -141,7 +141,11 @@ class AuthChecker extends ConsumerWidget {
   build(BuildContext context, ref) {
     return ref.watch(checkProvider).when(
       data: (data) {
-        return const Home();
+        if (data != null) {
+          return const Home();
+        } else {
+          return const OnBoarding_2();
+        }
       },
       loading: () {
         return const Scaffold(

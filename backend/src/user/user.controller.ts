@@ -47,7 +47,7 @@ export class UserController {
   ) {
     // this.uploadService.uploadFile(file);
 
-    const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
+    const serverBaseURL = 'https://firfir-tera-backend.vercel.app';
     // const filePath = `${serverBaseURL}${file.filename}`;
     try {
       this.userService.updateById(userId, firstName, lastName, email);

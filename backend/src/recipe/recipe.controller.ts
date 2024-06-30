@@ -68,7 +68,7 @@ export class RecipeController {
       file.path,
     );
 
-    const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
+    const serverBaseURL = 'https://firfir-tera-backend.vercel.app';
     const filePath = `${serverBaseURL}${file.filename}`;
     const createdRecipe = await this.recipeService.insertRecipe(
       {
@@ -139,7 +139,7 @@ export class RecipeController {
   ) {
 
       this.uploadService.uploadFile(file) 
-      const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
+      const serverBaseURL = 'https://firfir-tera-backend.vercel.app';
       const image = `${serverBaseURL}${file.filename}`;
       console.log('the Id is:', recipeId);
       console.log('thumbs up')
