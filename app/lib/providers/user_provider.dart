@@ -14,10 +14,7 @@ Future<void> initializeSharedPreferences() async {
 Future<String?> checkUser() async {
   await initializeSharedPreferences();
 
-  await sharedPreferences.clear();
   final userString = sharedPreferences.getString('token');
-
-  print(userString);
   return userString;
 }
 
@@ -29,7 +26,7 @@ Future getSessionJson() async {
   return {'token': userString, 'role': role, 'id': id};
 }
 
-final userProvider = FutureProvider.autoDispose((ref) async {
+final userProvider = FutureProvider((ref) async {
   final data = await getSessionJson();
   AuthService authInstance = AuthService();
   return await authInstance.getUser(data!['id']);

@@ -114,7 +114,7 @@ class AuthService {
         'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
       },
     );
-    sharedPreferences.clear();
+    await sharedPreferences.clear();
     context.go('/');
     return;
   }

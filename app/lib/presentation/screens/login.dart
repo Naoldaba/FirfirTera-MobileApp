@@ -39,7 +39,7 @@ class _LoginState extends ConsumerState<Login> {
       String email = _emailController.text;
       String password = _passwordController.text;
       AuthService authService = AuthService();
-      authService.login(email, password, context);
+      await authService.login(email, password, context);
       return true;
     }
   }

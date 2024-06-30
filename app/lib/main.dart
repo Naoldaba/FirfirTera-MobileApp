@@ -28,88 +28,91 @@ void main() {
 }
 
 final GoRouter _router = GoRouter(refreshListenable: refreshNotifier, routes: [
-  GoRoute(path: '/', builder: (context, state) => const AuthChecker(), routes: [
-    GoRoute(
-      path: 'onboarding_2',
-      builder: (context, state) => const OnBoarding_2(),
-    ),
-    GoRoute(
-      path: 'onboarding_3',
-      builder: (context, state) => const OnBoarding_3(),
-    ),
-    GoRoute(
-      path: 'home',
-      builder: (context, state) => const Home(),
+  GoRoute(
+      path: '/',
+      builder: (context, state) => const OnBoarding_1(),
       routes: [
         GoRoute(
-          path: 'detailed_view',
-          builder: (context, state) {
-            final recipe = state.extra as Recipe;
-            return DetailedView(recipe);
-          },
+          path: 'onboarding_2',
+          builder: (context, state) => const OnBoarding_2(),
+        ),
+        GoRoute(
+          path: 'onboarding_3',
+          builder: (context, state) => const OnBoarding_3(),
+        ),
+        GoRoute(
+          path: 'home',
+          builder: (context, state) => const Home(),
           routes: [
             GoRoute(
-              path: 'comment',
+              path: 'detailed_view',
               builder: (context, state) {
                 final recipe = state.extra as Recipe;
-
-                return CommentScreen(
-                  recipe: recipe,
-                );
+                return DetailedView(recipe);
               },
+              routes: [
+                GoRoute(
+                  path: 'comment',
+                  builder: (context, state) {
+                    final recipe = state.extra as Recipe;
+
+                    return CommentScreen(
+                      recipe: recipe,
+                    );
+                  },
+                ),
+                GoRoute(
+                  path: 'edit_recipe',
+                  builder: (context, state) {
+                    final recipe = state.extra as Recipe;
+                    return EditRecipeScreen(recipe: recipe);
+                  },
+                ),
+              ],
             ),
             GoRoute(
-              path: 'edit_recipe',
-              builder: (context, state) {
-                final recipe = state.extra as Recipe;
-                return EditRecipeScreen(recipe: recipe);
-              },
+              path: 'create_recipe',
+              builder: (context, state) => CreateRecipe(),
             ),
+            GoRoute(
+                path: 'admin',
+                builder: (context, state) => AdminPanel(),
+                routes: [
+                  GoRoute(
+                      path: 'user_details',
+                      builder: (context, state) {
+                        final user = state.extra as User;
+                        return UserDetails(user: user);
+                      }),
+                ]),
           ],
         ),
         GoRoute(
-          path: 'create_recipe',
-          builder: (context, state) => CreateRecipe(),
-        ),
-        GoRoute(
-            path: 'admin',
-            builder: (context, state) => AdminPanel(),
+            path: 'edit_profile',
+            builder: (context, state) => const EditProfile(),
             routes: [
               GoRoute(
-                  path: 'user_details',
-                  builder: (context, state) {
-                    final user = state.extra as User;
-                    return UserDetails(user: user);
-                  }),
+                path: 'profile',
+                builder: (context, state) => const Profile(),
+              )
             ]),
-      ],
-    ),
-    GoRoute(
-        path: 'edit_profile',
-        builder: (context, state) => const EditProfile(),
-        routes: [
-          GoRoute(
-            path: 'profile',
-            builder: (context, state) => const Profile(),
-          )
-        ]),
-    GoRoute(
-      path: 'login',
-      builder: (context, state) => const Login(),
-    ),
-    GoRoute(
-      path: 'register_1',
-      builder: (context, state) => const Register_1(),
-    ),
-    GoRoute(
-      path: 'register_2',
-      builder: (context, state) => const Register_2(),
-    ),
-    GoRoute(
-      path: 'register_3',
-      builder: (context, state) => const Register_3(),
-    ),
-  ]),
+        GoRoute(
+          path: 'login',
+          builder: (context, state) => const Login(),
+        ),
+        GoRoute(
+          path: 'register_1',
+          builder: (context, state) => const Register_1(),
+        ),
+        GoRoute(
+          path: 'register_2',
+          builder: (context, state) => const Register_2(),
+        ),
+        GoRoute(
+          path: 'register_3',
+          builder: (context, state) => const Register_3(),
+        ),
+      ]),
 ]);
 
 class CreateComment {
@@ -138,11 +141,7 @@ class AuthChecker extends ConsumerWidget {
   build(BuildContext context, ref) {
     return ref.watch(checkProvider).when(
       data: (data) {
-        if (data != null) {
-          return const Home();
-        } else {
-          return const OnBoarding_1();
-        }
+        return const Home();
       },
       loading: () {
         return const Scaffold(
