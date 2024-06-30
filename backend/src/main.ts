@@ -22,11 +22,6 @@ async function bootstrap() {
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   app.use(express.json({ limit: '10mb' }));
 
-  console.log('Setting up root route...');
-  app.use('/', (req, res) => {
-    res.send('Welcome');
-  });
-
   console.log('Starting the application...');
   await app.listen(3000);
   console.log('Application started.');

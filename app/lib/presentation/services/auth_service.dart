@@ -24,6 +24,7 @@ class AuthService {
     );
     print("successfully sent regitration form");
     print("status-code ${response.statusCode}");
+    print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       await saveUserToSharedPreferences(

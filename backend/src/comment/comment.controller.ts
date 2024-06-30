@@ -14,6 +14,11 @@ import { Comment } from '../schemas/comment.schema';
 export class CommentController {
   constructor(private commentService: CommentService) {}
 
+  @Get()
+  async root(): Promise<string> {
+    return 'Welcome to firfir tera';
+  }
+
   @Get('comments/:recipeId')
   async getComments(@Param('recipeId') recipeId: string): Promise<Comment[]> {
     return this.commentService.getComments(recipeId);
