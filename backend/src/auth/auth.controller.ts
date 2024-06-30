@@ -35,7 +35,7 @@ export class AuthController {
   ): Promise<{ token: string }> {
     this.uploadService.uploadFile(file);
 
-    const serverBaseURL = 'https://ac6c-196-188-188-212.ngrok-free.app/uploads/';
+    const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
     const filePath = `${serverBaseURL}${file.filename}`;
 
     var role1 = [];

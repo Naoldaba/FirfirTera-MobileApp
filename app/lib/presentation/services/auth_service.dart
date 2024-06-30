@@ -5,12 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final String baseUrl = "https://ac6c-196-188-188-212.ngrok-free.app";
+  final String baseUrl = "https://firfir-tera-backend.vercel.app";
 
   late SharedPreferences sharedPreferences;
   Future<void> initializeSharedPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    
   }
 
   AuthService();
@@ -23,7 +22,9 @@ class AuthService {
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'email': email, 'password': password}),
     );
-    if (response.statusCode == 201) {
+    print("successfully sent regitration form");
+    print("status-code ${response.statusCode}");
+    if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       await saveUserToSharedPreferences(
           responseJson['token'], responseJson['role'][0], responseJson['id']);
@@ -56,6 +57,8 @@ class AuthService {
     }
     request.fields.addAll(data);
     final response = await request.send();
+    print("successfully sent regitration form");
+    print("status-code ${response.statusCode}");
     if (response.statusCode == 201) {
       final responseBody = await response.stream.bytesToString();
       final responseJson = jsonDecode(responseBody);

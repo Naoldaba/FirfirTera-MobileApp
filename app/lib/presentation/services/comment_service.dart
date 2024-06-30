@@ -7,7 +7,7 @@ import "dart:convert";
 import 'package:flutter/material.dart';
 
 class CommentService {
-  final String url = 'https://ac6c-196-188-188-212.ngrok-free.app';
+  final String url = 'https://firfir-tera-backend.vercel.app';
 
   Future<List<Comment>> fetchComments(String recipeId) async {
     final response = await http.get(Uri.parse('$url/comments/${recipeId}'));
@@ -32,7 +32,7 @@ class CommentService {
       body: jsonEncode(comment.toJson()),
     );
 
-    if (response.statusCode != 201) {
+    if (response.statusCode != 200) {
       SnackBar(content: Text("Unable to post comment, pls try again later"));
     } else {
       print('success');

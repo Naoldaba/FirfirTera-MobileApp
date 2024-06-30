@@ -7,7 +7,7 @@ import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:firfir_tera/models/Recipe.dart';
 
-const String url = 'https://ac6c-196-188-188-212.ngrok-free.app';
+const String url = 'https://firfir-tera-backend.vercel.app';
 
 class RecipeServices {
   Future<List<Recipe>> recipes() async {
