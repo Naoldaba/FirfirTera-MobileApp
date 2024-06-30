@@ -158,6 +158,9 @@ class RecipeServices {
     print(request.files);
 
     final response = await request.send();
+    print('request sent');
+    print(response.statusCode);
+    // print(response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
