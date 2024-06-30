@@ -180,7 +180,6 @@ class RecipeServices {
     final request =
         http.MultipartRequest('POST', Uri.parse('$url/recipes/new'));
 
-    // request.headers['Content-Type'] = 'application/json';
     request.headers['Authorization'] =
         'Bearer ${sharedPreferences.getString('token')}';
     request.fields['name'] = name;
