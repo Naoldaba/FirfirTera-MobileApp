@@ -37,18 +37,15 @@ export class UserController {
   }
 
   @Patch(':id')
-  // @UseInterceptors(FileInterceptor('image', multerConfig))
+  @UseInterceptors(FileInterceptor('image', multerConfig))
   async updateUser(
     @Param('id') userId: string,
     @Body('firstName') firstName: string,
     @Body('lastName') lastName: string,
     @Body('email') email: string,
-    // @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    // this.uploadService.uploadFile(file);
-
-    const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
-    // const filePath = `${serverBaseURL}${file.filename}`;
+    const imagePath = this.uploadService.uploadFile(file);
     try {
       this.userService.updateById(userId, firstName, lastName, email);
     } catch {

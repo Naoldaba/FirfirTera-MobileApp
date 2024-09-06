@@ -8,9 +8,8 @@ class EditProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileState = ref.watch(profileEditProvider);
-    TextEditingController name = TextEditingController();
-    TextEditingController email = TextEditingController();
-    TextEditingController bio = TextEditingController();
+    TextEditingController firstName = TextEditingController();
+    TextEditingController lastName = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -24,26 +23,20 @@ class EditProfile extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TextField(
-              controller: name,
-              decoration: InputDecoration(labelText: 'Name'),
+              controller: firstName,
+              decoration: InputDecoration(labelText: 'First Name'),
             ),
             const SizedBox(height: 20.0),
             TextField(
-              controller: email,
-              decoration: const InputDecoration(labelText: 'Email'),
+              controller: lastName,
+              decoration: const InputDecoration(labelText: 'Last Name'),
             ),
             const SizedBox(height: 20.0),
-            TextField(
-              controller: bio,
-              decoration: const InputDecoration(labelText: 'Bio'),
-            ),
-            const SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () {
                   ref.read(profileEditProvider.notifier).ovverideAll({
-                    'name': name.text,
-                    'email': email.text,
-                    'bio': bio.text,
+                    'firstName': firstName.text,
+                    'lastName': lastName.text,
                   }, context);
                 },
                 child: const Text('Save'))

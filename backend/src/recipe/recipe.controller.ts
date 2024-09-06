@@ -17,6 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from '../Upload/multer.config';
 import { UploadService } from '../Upload/upload.service';
 import { Category, Recipe } from '../schemas/recipe.schema';
+import { createRecipeDto, updateRecipeDto } from '../dto/recipe.dto';
 import { Roles } from '../decorators/roles.decorator';
 import { RolesGuard } from '../guards/roles.guard';
 import { Query as ExpressQuery } from 'express-serve-static-core';
@@ -67,8 +68,7 @@ export class RecipeController {
       file.path,
     );
 
-    const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
-    const filePath = `${serverBaseURL}${file.filename}`;
+    const filePath = this.uploadService.uploadFile(file);
     const createdRecipe = await this.recipeService.insertRecipe(
       {
         name,
@@ -79,7 +79,7 @@ export class RecipeController {
         steps,
         fasting,
         type,
-        image: filePath,
+        image: await filePath,
         cook_id: '1',
       },
       authorization,
@@ -137,24 +137,20 @@ export class RecipeController {
     @UploadedFile() file: Express.Multer.File,
   ) {
 
-      this.uploadService.uploadFile(file) 
-      const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
-      const image = `${serverBaseURL}${file.filename}`;
-      console.log('the Id is:', recipeId);
-      console.log('thumbs up')
-
-      await this.recipeService.updateRecipe(
-        recipeId,
-        recipeName,
-        recipeDesc,
-        cooktime,
-        people,
-        steps,
-        ings,
-        fasting,
-        type,
-        image,
-      );
+      const filePath = this.uploadService.uploadFile(file);
+    const createdRecipe = await this.recipeService.updateRecipe(
+      recipeId,
+      recipeName,
+      recipeDesc,
+      cooktime,
+      people,
+      ings,
+      steps,
+      fasting,
+      type,
+      await filePath,
+    );
+    return createdRecipe;
     }
 
   @Delete(':id')
