@@ -26,11 +26,9 @@ export class CommentService {
   }
   async deleteComment(commentId: string): Promise<Comment> {
     const comment = await this.commentModel.findByIdAndDelete(commentId);
-    console.log('hereee')
     if (!comment) {
       throw new NotFoundException('comment not found!');
     }
-    console.log('hereee 2222')
     return comment;
   }
   async createComment(

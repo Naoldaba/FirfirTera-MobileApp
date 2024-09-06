@@ -76,7 +76,6 @@ export class UserService {
       throw new NotFoundException('Could not find user');
     }
     if (!user) {
-      console.log(`gfgf`,userId)
       throw new NotFoundException('Could not find user TWO');
     }
     user.role = role;

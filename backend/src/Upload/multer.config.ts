@@ -1,36 +1,33 @@
-import { diskStorage } from 'multer';
+import { v2 as cloudinary } from 'cloudinary'; 
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
-const multer = require("multer");
-const path = require("path");
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
-const uploadPath = path.join(__dirname, "..","..", "uploads");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(uploadPath, "/")); 
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); 
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary, 
+  params: async (req, file) => {
+    return {
+      folder: 'ArtistryNexus',
+      format: 'jpg',
+      public_id: Date.now() + '-' + file.originalname,
+    };
   },
 });
-export const multerConfig = multer({
+
+export const multerConfig = {
   storage: storage,
-  // fileFilter: (req, file, cb) => {
-  //   if (
-  //     file.mimetype == "image/jpg" ||
-  //     file.mimetype == "image/png" ||
-  //     file.mimetype == "image/JPG"
-  //   ) {
-  //     cb(null, true);
-  //   } else {
-  //     console.log("The file type is must be png or jpg");
-  //     cb(null, false);
-  //   }
-  // },
   limits: {
-    fileSize: 1024 * 1024 * 5,
+    fileSize: 1024 * 1024 * 5, 
   },
-});
-
-
-
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  },
+};

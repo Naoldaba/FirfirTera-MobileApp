@@ -14,8 +14,9 @@ Future<void> initializeSharedPreferences() async {
 Future<String?> checkUser() async {
   await initializeSharedPreferences();
 
-  // sharedPreferences.clear();
+  //sharedPreferences.clear();
   final userString = sharedPreferences.getString('token');
+  print("userString = ${userString}");
   return userString;
 }
 
@@ -27,7 +28,8 @@ Future getSessionJson() async {
   return {'token': userString, 'role': role, 'id': id};
 }
 
-final userProvider = FutureProvider.autoDispose<Map<String, dynamic>>((ref) async {
+final userProvider =
+    FutureProvider.autoDispose<Map<String, dynamic>>((ref) async {
   print('userProvider called');
   final data = await getSessionJson();
   AuthService authInstance = AuthService();

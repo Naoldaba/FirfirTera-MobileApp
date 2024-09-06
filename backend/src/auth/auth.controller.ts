@@ -33,48 +33,28 @@ export class AuthController {
     @Body('password') password: string,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<{ token: string }> {
-    this.uploadService.uploadFile(file);
+    const filePath = await this.uploadService.uploadFile(file); 
 
-    const serverBaseURL = 'https://firfir-tera-backend.vercel.app/uploads/';
-    const filePath = `${serverBaseURL}${file.filename}`;
-
-    var role1 = [];
-    if (!role || role == 'normal') {
+    let role1 = [];
+    if (!role || role === 'normal') {
       role1 = ['normal'];
-      console.log('am here');
-      return this.authService.signUp({
-        role: role1,
-        bio,
-        firstName,
-        lastName,
-        email,
-        password,
-        image: filePath,
-      });
-    } else if (role == 'cook') {
+    } else if (role === 'cook') {
       role1 = ['cook'];
-      return this.authService.signUp({
-        role: role1,
-        bio,
-        firstName,
-        lastName,
-        email,
-        password,
-        image: filePath,
-      });
-    } else if (role == 'admin') {
+    } else if (role === 'admin') {
       role1 = ['admin'];
-      return this.authService.signUp({
-        role: role1,
-        bio,
-        firstName,
-        lastName,
-        email,
-        password,
-        image: filePath,
-      });
+    } else {
+      throw new UnauthorizedException('Invalid role');
     }
-    throw new UnauthorizedException('Invalid role');
+
+    return this.authService.signUp({
+      role: role1,
+      bio,
+      firstName,
+      lastName,
+      email,
+      password,
+      image: filePath, 
+    });
   }
 
   @Post('signup/cook')

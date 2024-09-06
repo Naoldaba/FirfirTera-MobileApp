@@ -1,6 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { multerConfig } from './multer.config';
-import { diskStorage } from 'multer';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UploadService {
@@ -9,8 +7,11 @@ export class UploadService {
       throw new BadRequestException('No file provided');
     }
 
-    return file.path;
+    const uploadedFile = (file as any);
+    const url = uploadedFile.secure_url || uploadedFile.path;
+    if (!url) {
+      throw new BadRequestException('Upload failed');
+    }
+    return url;
   }
 }
-
-
