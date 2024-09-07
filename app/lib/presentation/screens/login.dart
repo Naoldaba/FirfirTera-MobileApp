@@ -19,13 +19,6 @@ class _LoginState extends ConsumerState<Login> {
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
 
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final selectedOption = ref.read(userProvider);
-      ref.refresh(userProvider);
-    });
-  }
 
   @override
   void dispose() {
@@ -45,6 +38,7 @@ class _LoginState extends ConsumerState<Login> {
       return true;
     }
   }
+
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {

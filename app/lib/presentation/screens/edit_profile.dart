@@ -24,7 +24,7 @@ class EditProfile extends ConsumerWidget {
           children: [
             TextField(
               controller: firstName,
-              decoration: InputDecoration(labelText: 'First Name'),
+              decoration: const InputDecoration(labelText: 'First Name'),
             ),
             const SizedBox(height: 20.0),
             TextField(

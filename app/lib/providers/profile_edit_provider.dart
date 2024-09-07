@@ -20,8 +20,8 @@ class ProfileEdit extends _$ProfileEdit {
   }
 
   void ovverideAll(Map<String, dynamic> data, BuildContext context) {
-    json['firstName'] = data['firstName'];
-    json['lastName'] = data['lastName'];
+    json["firstName"] = data["firstName"];
+    json["lastName"] = data["lastName"];
     sendPatch(context);
   }
 

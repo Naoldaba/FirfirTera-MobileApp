@@ -30,7 +30,6 @@ export class UserService {
     userId: string,
     firstName: string,
     lastName: string,
-    email: string,
   ) {
     let updated;
     try {
@@ -44,9 +43,6 @@ export class UserService {
     }
     if (lastName) {
       updated.lastName = lastName;
-    }
-    if (email) {
-      updated.email = email;
     }
    
     updated.save();

@@ -100,7 +100,6 @@ class Profile extends ConsumerWidget {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("User ID not found in SharedPreferences"),
                       ));
-                      // Handle the case where userId is null
                     }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

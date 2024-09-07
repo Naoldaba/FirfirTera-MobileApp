@@ -30,7 +30,6 @@ class AuthService {
       await saveUserToSharedPreferences(
           responseJson['token'], responseJson['role'][0], responseJson['id']);
 
-      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

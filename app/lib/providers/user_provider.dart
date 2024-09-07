@@ -20,20 +20,30 @@ Future<String?> checkUser() async {
   return userString;
 }
 
-Future getSessionJson() async {
+Future<Map<String, String?>> getSessionJson() async {
   await initializeSharedPreferences();
   final userString = sharedPreferences.getString('token');
   final role = sharedPreferences.getString('role');
   final id = sharedPreferences.getString('userId');
+  
+  print('Session JSON - token: $userString, role: $role, id: $id');
+  
   return {'token': userString, 'role': role, 'id': id};
 }
 
-final userProvider =
-    FutureProvider.autoDispose<Map<String, dynamic>>((ref) async {
+final userProvider = FutureProvider.autoDispose<Map<String, dynamic>>((ref) async {
   print('userProvider called');
   final data = await getSessionJson();
+
+  final id = data['id'];
+  if (id == null) {
+    throw Exception('User ID is null');
+  }
+
   AuthService authInstance = AuthService();
-  return await authInstance.getUser(data!['id']);
+  final user = await authInstance.getUser(id);
+
+  return user;
 });
 
 final userModelProvider = FutureProvider.autoDispose<User>((ref) async {

@@ -37,17 +37,17 @@ export class UserController {
   }
 
   @Patch(':id')
-  @UseInterceptors(FileInterceptor('image', multerConfig))
+  // @UseInterceptors(FileInterceptor('image', multerConfig))
   async updateUser(
     @Param('id') userId: string,
     @Body('firstName') firstName: string,
     @Body('lastName') lastName: string,
-    @Body('email') email: string,
-    @UploadedFile() file: Express.Multer.File,
+    // @Body('email') email: string,
+    // @UploadedFile() file: Express.Multer.File,
   ) {
-    const imagePath = this.uploadService.uploadFile(file);
+    // const imagePath = this.uploadService.uploadFile(file);
     try {
-      this.userService.updateById(userId, firstName, lastName, email);
+      this.userService.updateById(userId, firstName, lastName);
     } catch {
       throw new Error('could not update user');
     }
