@@ -46,6 +46,7 @@ export class UserService {
     }
    
     updated.save();
+    return updated
   }
 
   async deleteById(id: string): Promise<User> {

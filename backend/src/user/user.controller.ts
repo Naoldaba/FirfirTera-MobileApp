@@ -17,9 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Role } from '../entities/role.enum';
 import { Roles } from '../decorators/roles.decorator';
 import { RolesGuard } from '../guards/roles.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../Upload/upload.service';
-import { multerConfig } from '../Upload/multer.config';
 
 @Controller('user')
 
@@ -37,17 +35,16 @@ export class UserController {
   }
 
   @Patch(':id')
-  // @UseInterceptors(FileInterceptor('image', multerConfig))
+  @Roles(Role.COOK)
+  @Roles(Role.ADMIN)
   async updateUser(
     @Param('id') userId: string,
     @Body('firstName') firstName: string,
     @Body('lastName') lastName: string,
-    // @Body('email') email: string,
-    // @UploadedFile() file: Express.Multer.File,
-  ) {
-    // const imagePath = this.uploadService.uploadFile(file);
+  ) : Promise<User> {
     try {
-      this.userService.updateById(userId, firstName, lastName);
+      const updated = this.userService.updateById(userId, firstName, lastName);
+      return updated
     } catch {
       throw new Error('could not update user');
     }
@@ -55,7 +52,6 @@ export class UserController {
 
   @Delete(':id')
   async deleteUser(@Param('id') userId: string): Promise<User> {
-    console.log(userId);
     return this.userService.deleteById(userId);
   }
 

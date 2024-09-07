@@ -29,7 +29,6 @@ class AuthService {
       final responseJson = json.decode(response.body);
       await saveUserToSharedPreferences(
           responseJson['token'], responseJson['role'][0], responseJson['id']);
-
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -92,18 +91,18 @@ class AuthService {
     }
   }
 
-  Future editUser(String? id) async {
-    await initializeSharedPreferences();
+  // Future editUser(String? id) async {
+  //   await initializeSharedPreferences();
 
-    return http.patch(
-      Uri.parse('$baseUrl/user/$id'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
-      },
-      body: jsonEncode(json),
-    );
-  }
+  //   return http.patch(
+  //     Uri.parse('$baseUrl/user/$id'),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+  //     },
+  //     body: jsonEncode(json),
+  //   );
+  // }
 
   Future deleteUser(String? id, BuildContext context) async {
     await initializeSharedPreferences();
@@ -126,28 +125,40 @@ class AuthService {
     context.go('/login');
   }
 
-  Future patchUser(json, context) async {
+  Future<void> patchUser(Map<String, dynamic> data, BuildContext context) async {
     await initializeSharedPreferences();
+
+    final userId = sharedPreferences.getString('userId');
+    final token = sharedPreferences.getString('token');
+
+    if (userId == null || token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User not authenticated')),
+      );
+      return;
+    }
+
     final res = await http.patch(
-      Uri.parse('$baseUrl/user/${sharedPreferences.get('userId')}'),
+      Uri.parse('$baseUrl/user/$userId'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${sharedPreferences.getString('token')}',
+        'Authorization': 'Bearer $token',
       },
-      body: jsonEncode(json),
+      body: jsonEncode(data), 
     );
 
     if (res.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile Updated Succesfully')),
+        const SnackBar(content: Text('Profile Updated Successfully')),
       );
       context.go('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile Updation  Failed')),
+        SnackBar(content: Text('Profile Updation Failed: ${res.reasonPhrase}')),
       );
     }
   }
+
 
   Future<bool> changeRole(String role, String userId) async {
     await initializeSharedPreferences();
